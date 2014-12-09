@@ -20,7 +20,7 @@ class MongoConfig {
 
     @Bean
     public MongoDbFactory mongoDbFactory() throws UnknownHostException {
-        return new SimpleMongoDbFactory(new Mongo(), "layouts");
+        return new SimpleMongoDbFactory(new Mongo(), "movierater");
     }
 
     @Bean

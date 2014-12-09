@@ -1,4 +1,4 @@
-package thymeleafexamples.layouts.account;
+package org.ubb.cluj.movierater.account;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.*;

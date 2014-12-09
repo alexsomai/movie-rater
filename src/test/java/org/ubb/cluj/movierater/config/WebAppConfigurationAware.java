@@ -1,4 +1,4 @@
-package thymeleafexamples.layouts.config;
+package org.ubb.cluj.movierater.config;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;

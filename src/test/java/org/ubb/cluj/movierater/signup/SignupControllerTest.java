@@ -1,14 +1,13 @@
-package thymeleafexamples.layouts.signup;
+package org.ubb.cluj.movierater.signup;
 
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import thymeleafexamples.layouts.config.WebAppConfigurationAware;
+import org.ubb.cluj.movierater.config.WebAppConfigurationAware;
 
 public class SignupControllerTest extends WebAppConfigurationAware {
     @Test

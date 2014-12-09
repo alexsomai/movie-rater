@@ -1,4 +1,4 @@
-package thymeleafexamples.layouts.account;
+package org.ubb.cluj.movierater.account;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
-import thymeleafexamples.layouts.config.WebSecurityConfigurationAware;
+import org.ubb.cluj.movierater.config.WebSecurityConfigurationAware;
 
 public class UserAuthenticationIntegrationTest extends WebSecurityConfigurationAware {
 
