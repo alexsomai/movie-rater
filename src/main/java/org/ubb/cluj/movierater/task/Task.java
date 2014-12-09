@@ -3,7 +3,6 @@ package org.ubb.cluj.movierater.task;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,15 +23,6 @@ public class Task {
 
     @Version
     private Calendar created = Calendar.getInstance();
-
-    public Calendar getDueTo() {
-        return dueTo;
-    }
-
-    public void setDueTo(Calendar dueTo) {
-        this.dueTo = dueTo;
-    }
-
     private Calendar dueTo;
 
     public Task() {
@@ -42,6 +32,14 @@ public class Task {
         this.title = title;
         this.text = text;
         this.dueTo = toCalendar(date);
+    }
+
+    public Calendar getDueTo() {
+        return dueTo;
+    }
+
+    public void setDueTo(Calendar dueTo) {
+        this.dueTo = dueTo;
     }
 
     private Calendar toCalendar(String dateString) {

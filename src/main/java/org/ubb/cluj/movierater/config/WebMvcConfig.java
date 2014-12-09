@@ -1,7 +1,5 @@
 package org.ubb.cluj.movierater.config;
 
-import static org.springframework.context.annotation.ComponentScan.Filter;
-
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -25,9 +23,10 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
-
 import org.thymeleaf.templateresolver.UrlTemplateResolver;
 import org.ubb.cluj.movierater.Application;
+
+import static org.springframework.context.annotation.ComponentScan.Filter;
 
 @Configuration
 @ComponentScan(basePackageClasses = Application.class, includeFilters = @Filter(Controller.class), useDefaultFilters = false)
@@ -82,8 +81,8 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
     }
 
     /**
-     *  Handles all views except for the ones that are handled by Tiles. This view resolver
-     *  will be executed as first one by Spring.
+     * Handles all views except for the ones that are handled by Tiles. This view resolver
+     * will be executed as first one by Spring.
      */
     @Bean
     public ViewResolver thymeleafViewResolver() {
