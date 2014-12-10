@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--/*  Each token will be replaced by their respective titles in the resulting page. */-->
+    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">Movie Rater</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <link href="../../../resources/css/sticky-footer-navbar.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/sticky-footer-navbar.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<!--/* Standard layout can be mixed with Layout Dialect */-->
+<nav th:replace="fragments/header :: header"></nav>
+<div class="container">
+    <div layout:fragment="content"></div>
+</div>
+<footer class="footer">
+    <div class="modal-footer">
+        <div th:replace="fragments/footer :: footer"></div>
+    </div>
+</footer>
+</body>
+</html>

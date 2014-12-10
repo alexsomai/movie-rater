@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="../../../resources/js/bootstrap.min.js"></script>
-</head>
+<head></head>
 <body>
-
 <!-- Navbar -->
-<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+<nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="header" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">My project</a>
+            <a class="navbar-brand" href="#">
+                <img width="20" src="../../../resources/images/apple.png"/>
+                <!--Movie Rater-->
+            </a>
         </div>
-        <div class="navbar-collapse collapse">
+        <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li th:classappend="${page == 'home' ? 'active' : ''}"><a href="#" th:href="@{/}">Home</a></li>
-                <li th:classappend="${page == 'messages' ? 'active' : ''}"><a href="#" th:href="@{/message}">Messages</a></li>
+                <li th:classappend="${page == 'messages' ? 'active' : ''}"><a href="#"
+                                                                              th:href="@{/message}">Messages</a></li>
                 <li th:classappend="${page == 'tasks' ? 'active' : ''}"><a href="#" th:href="@{/task}">Tasks</a></li>
-                <li th:classappend="${page == 'admin' ? 'active' : ''}"><a href="#" th:href="@{/admin}">Admin page</a></li>
+                <li th:classappend="${page == 'admin' ? 'active' : ''}"><a href="#" th:href="@{/admin}">Admin page</a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li th:if="${#authorization.expression('!isAuthenticated()')}"><a href="/signin" th:href="@{/signin}">Sign in</a></li>
-                <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/logout" th:href="@{/logout}">Logout</a></li>
+                <li th:if="${#authorization.expression('!isAuthenticated()')}"><a href="/signin" th:href="@{/signin}">Sign
+                    in</a></li>
+                <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/logout" th:href="@{/logout}">Logout</a>
+                </li>
             </ul>
         </div>
         <!--/.nav-collapse -->
     </div>
-</div>
+</nav>
 </body>
 </html>

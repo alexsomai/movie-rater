@@ -1,26 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html layout:decorator="fragments/main_layout">
 <head lang="en">
     <title>Admin Page</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
-          th:href="@{/resources/css/bootstrap.min.css}"/>
-    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<!-- Header -->
-<div th:replace="fragments/header :: header"></div>
-<div class="container">
-    <div class="hero-unit">
-        <h1>Admin Page</h1>
+<div layout:fragment="content">
+    <h1>Admin Page</h1>
 
-        <p>
-            Welcome to the Admin Page
-        </p>
-    </div>
-    <div th:replace="fragments/footer :: footer-admin"></div>
+    <p th:text="#{message.welcome.admin.page}"></p>
+
+    <a class="btn btn-success" href="#" th:href="@{/movie/add}">
+        <span th:text="#{add.new.movie}"></span>
+    </a>
 </div>
 </body>
 </html>
