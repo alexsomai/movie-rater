@@ -2,12 +2,13 @@ package org.ubb.cluj.movierater.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.ubb.cluj.movierater.business.services.MovieService;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
-import org.ubb.cluj.movierater.business.entities.repositories.MovieRepository;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -20,11 +21,11 @@ import javax.validation.Valid;
 public class MovieController {
 
     @Autowired
-    private MovieRepository movieRepository;
+    private MovieService movieService;
 
     @PostConstruct
     protected void initialize() {
-//        movieRepository.save(new Movie("title", "desc"));
+//        movieService.save(new Movie("title", "desc"));
     }
 
     @ModelAttribute("page")
@@ -33,7 +34,8 @@ public class MovieController {
     }
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
-    public String index() {
+    public String index(Model movies) {
+        movies.addAttribute("movies", movieService.findAll());
         return "movie/index";
     }
 
@@ -47,8 +49,12 @@ public class MovieController {
         if (errors.hasErrors()) {
             return "movie/add";
         }
-        movieRepository.save(movieCommandObject.createMovie());
+        movieService.save(movieCommandObject);
         return "admin/admin_page";
     }
 
+    @RequestMapping(value = "view", method = RequestMethod.GET)
+    public String add(Long id) {
+        return "movie/view";
+    }
 }

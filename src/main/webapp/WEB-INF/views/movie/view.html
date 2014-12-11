@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html layout:decorator="fragments/main_layout">
+<head>
+    <title>View movie</title>
+    <script>
+        // <![CDATA[
+        jQuery(document).ready(function () {
+            $("#input-21f").rating({
+                starCaptions: function (val) {
+                    if (val < 3) {
+                        return val;
+                    } else {
+                        return 'high';
+                    }
+                },
+                starCaptionClasses: function (val) {
+                    if (val < 3) {
+                        return 'label label-danger';
+                    } else {
+                        return 'label label-success';
+                    }
+                },
+                hoverOnClear: false
+            });
+
+            $('#rating-input').rating({
+                min: 0,
+                max: 5,
+                step: 0.5,
+                size: 'lg'
+            });
+
+            $('#btn-rating-input').on('click', function () {
+                var $a = self.$element.closest('.star-rating');
+                var chk = !$a.hasClass('rating-disabled');
+                $('#rating-input').rating('refresh', {showClear: !chk, disabled: chk});
+            });
+
+            $('#rating-input').on('rating.change', function () {
+                alert($('#rating-input').val());
+            });
+
+
+            $('.rb-rating').rating({
+                'showCaption': true,
+                'stars': '3',
+                'min': '0',
+                'max': '3',
+                'step': '1',
+                'size': 'xs',
+                'starCaptions': {0: 'status:nix', 1: 'status:wackelt', 2: 'status:geht', 3: 'status:laeuft'}
+            });
+        });
+        // ]]>
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    VIew movie
+    <!--<span class="glyphicons shredder" aria-hidden="true"></span>-->
+
+    <button type="button" class="btn btn-default btn-lg">
+        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Star
+    </button>
+
+    <button type="button" class="btn btn-default" aria-label="Left Align">
+        <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+    </button>
+
+    <i class="glyphicon glyphicon-search"></i>
+
+    <span class="glyphicon glyphicon-search"></span>
+    <!--&lt;!&ndash; Carousel-->
+    <!--================================================== &ndash;&gt;-->
+    <!--<div id="myCarousel" class="carousel slide" >-->
+    <!--&lt;!&ndash; Indicators &ndash;&gt;-->
+    <!--<ol class="carousel-indicators">-->
+    <!--<li data-target="#myCarousel" data-slide-to="0" class="active"></li>-->
+    <!--<li data-target="#myCarousel" data-slide-to="1"></li>-->
+    <!--<li data-target="#myCarousel" data-slide-to="2"></li>-->
+    <!--</ol>-->
+    <!--<div class="carousel-inner">-->
+    <!--<div class="item active">-->
+    <!--<img src="data:image/png;base64," data-src="holder.js/100%x500/auto/#777:#7a7a7a/text:First slide" alt="First slide"/>-->
+    <!--<div class="container">-->
+    <!--<div class="carousel-caption">-->
+    <!--<h1>Example headline.</h1>-->
+    <!--<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>-->
+    <!--<p><a class="btn btn-large btn-primary" href="#">Sign up today</a></p>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="item">-->
+    <!--<img src="../../../resources/images/apple.png" data-src="holder.js/100%x500/auto/#777:#7a7a7a/text:Second slide" alt="Second slide"/>-->
+    <!--<div class="container">-->
+    <!--<div class="carousel-caption">-->
+    <!--<h1>Another example headline.</h1>-->
+    <!--<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>-->
+    <!--<p><a class="btn btn-large btn-primary" href="#">Learn more</a></p>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="item">-->
+    <!--<img src="../../../resources/images/apple.png" data-src="holder.js/100%x500/auto/#777:#7a7a7a/text:Third slide" alt="Third slide"/>-->
+    <!--<div class="container">-->
+    <!--<div class="carousel-caption">-->
+    <!--<h1>One more for good measure.</h1>-->
+    <!--<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>-->
+    <!--<p><a class="btn btn-large btn-primary" href="#">Browse gallery</a></p>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>-->
+    <!--<a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>-->
+    <!--</div>&lt;!&ndash; /.carousel &ndash;&gt;-->
+
+    <div class="row featurette">
+        <div class="col-md-5">
+            <!-- Carousel
+          ================================================== -->
+            <div id="myCarousel" class="carousel slide" style="height: 500px; width: 500px;">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img src="data:image/png;base64,"
+                             data-src="holder.js/500x500/auto/#777:#7a7a7a/text:First slide" alt="First slide"/>
+
+                        <div class="container">
+                            <div class="carousel-caption">
+                                <h1>Example headline.</h1>
+
+                                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi
+                                    porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id
+                                    elit.</p>
+
+                                <p><a class="btn btn-large btn-primary" href="#">Sign up today</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img width="500" height="500" src="../../../resources/images/apple.png"
+                             data-src="holder.js/500x500/auto/#777:#7a7a7a/text:Second slide" alt="Second slide"/>
+
+                        <div class="container">
+                            <div class="carousel-caption">
+                                <h1>Another example headline.</h1>
+
+                                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi
+                                    porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id
+                                    elit.</p>
+
+                                <p><a class="btn btn-large btn-primary" href="#">Learn more</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img width="500" height="500" src="../../../resources/images/apple.png"
+                             data-src="holder.js/500x500/auto/#777:#7a7a7a/text:Third slide" alt="Third slide"/>
+
+                        <div class="container">
+                            <div class="carousel-caption">
+                                <h1>One more for good measure.</h1>
+
+                                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi
+                                    porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id
+                                    elit.</p>
+
+                                <p><a class="btn btn-large btn-primary" href="#">Browse gallery</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span
+                        class="glyphicon glyphicon-chevron-left"></span></a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next"><span
+                        class="glyphicon glyphicon-chevron-right"></span></a>
+            </div>
+            <!-- /.carousel -->
+
+            <!--<img class="featurette-image img-responsive" src="data:image/png;base64," data-src="holder.js/500x500/auto"-->
+            <!--alt="Generic placeholder image"/>-->
+        </div>
+        <div class="col-md-7">
+            <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span>
+            </h2>
+
+            <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod
+                semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus
+                commodo.</p>
+        </div>
+    </div>
+
+    <form>
+        <input id="input-21b" value="4"
+               type="number" class="rating" min="0" max="5" step="0.5"
+               data-default-caption="{rating} stars"
+               data-star-captions="{}"/>
+
+        <input id="rating-input" type="number" data-star-captions="{}"/>
+    </form>
+</div>
+</body>
+</html>

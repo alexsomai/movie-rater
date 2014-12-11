@@ -26,8 +26,8 @@ class MessageController {
     }
 
     private void init() {
-        messageRepository.save(new Message("What's up?", "This is a what's up message..."));
-        messageRepository.save(new Message("How is going?", "This is a how's going message..."));
+//        messageRepository.save(new Message("What's up?", "This is a what's up message..."));
+//        messageRepository.save(new Message("How is going?", "This is a how's going message..."));
     }
 
     @ModelAttribute("page")

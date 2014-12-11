@@ -20,19 +20,40 @@ public class Movie {
     @Column(unique = true)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     @NotEmpty
     private String description;
 
-//    private String image;
-//
-//    private Date releaseDate;
+    private String image;
+
+    private Date releaseDate;
+
+    public Movie() {
+
+    }
 
     public Movie(String title, String description) {
         this.title = title;
         this.description = description;
     }
 
-//    public Movie(String title, String description, String image, Date releaseDate) {
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    //    public Movie(String title, String description, String image, Date releaseDate) {
 //        this(title, description);
 //        this.image = image;
 //        this.releaseDate = releaseDate;

@@ -11,11 +11,31 @@ public class MovieCommandObject {
     private static final String TITLE_NOT_BLANK = "{message.movie.title.not.blank}";
     private static final String DESCRIPTION_NOT_BLANK = "{message.movie.description.not.blank}";
 
+    private Long id;
+
     @NotBlank(message = MovieCommandObject.TITLE_NOT_BLANK)
     private String title;
 
     @NotBlank(message = MovieCommandObject.DESCRIPTION_NOT_BLANK)
     private String description;
+
+    private String image;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getTitle() {
         return title;
