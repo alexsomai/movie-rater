@@ -16,6 +16,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.ubb.cluj.movierater.business.entities.Account;
+import org.ubb.cluj.movierater.business.entities.repositories.AccountRepository;
+import org.ubb.cluj.movierater.business.services.UserService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {

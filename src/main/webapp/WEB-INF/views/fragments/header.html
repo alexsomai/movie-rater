@@ -20,17 +20,27 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li th:classappend="${page == 'home' ? 'active' : ''}"><a href="#" th:href="@{/}">Home</a></li>
-                <li th:classappend="${page == 'messages' ? 'active' : ''}"><a href="#"
-                                                                              th:href="@{/message}">Messages</a></li>
-                <li th:classappend="${page == 'tasks' ? 'active' : ''}"><a href="#" th:href="@{/task}">Tasks</a></li>
-                <li th:classappend="${page == 'admin' ? 'active' : ''}"><a href="#" th:href="@{/admin}">Admin page</a>
+                <li th:classappend="${page == 'home' ? 'active' : ''}">
+                    <a href="#" th:href="@{/}">Home</a>
+                </li>
+                <li th:classappend="${page == 'messages' ? 'active' : ''}">
+                    <a href="#" th:href="@{/message}">Messages</a>
+                </li>
+                <li th:classappend="${page == 'tasks' ? 'active' : ''}">
+                    <a href="#" th:href="@{/task}">Tasks</a>
+                </li>
+                <li th:classappend="${page == 'admin' ? 'active' : ''}">
+                    <a href="#" th:href="@{/admin}">Admin page</a>
+                </li>
+                <li th:classappend="${page == 'movies' ? 'active' : ''}">
+                    <a href="#" th:href="@{/movie/index}">Movies</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li th:if="${#authorization.expression('!isAuthenticated()')}"><a href="/signin" th:href="@{/signin}">Sign
-                    in</a></li>
-                <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/logout" th:href="@{/logout}">Logout</a>
+                <li th:if="${#authorization.expression('!isAuthenticated()')}">
+                    <a href="/signin" th:href="@{/signin}">Sign in</a></li>
+                <li th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a href="/logout" th:href="@{/logout}">Logout</a>
                 </li>
             </ul>
         </div>

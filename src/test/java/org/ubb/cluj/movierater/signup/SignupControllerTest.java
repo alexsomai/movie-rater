@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.ubb.cluj.movierater.config.WebAppConfigurationAware;
+import org.ubb.cluj.movierater.business.config.WebAppConfigurationAware;
 
 public class SignupControllerTest extends WebAppConfigurationAware {
     @Test

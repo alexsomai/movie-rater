@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
-import org.ubb.cluj.movierater.config.WebSecurityConfigurationAware;
+import org.ubb.cluj.movierater.business.config.WebSecurityConfigurationAware;
 
 public class UserAuthenticationIntegrationTest extends WebSecurityConfigurationAware {
 
