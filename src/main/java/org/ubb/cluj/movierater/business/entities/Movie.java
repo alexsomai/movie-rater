@@ -3,14 +3,17 @@ package org.ubb.cluj.movierater.business.entities;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by somai on 10.12.2014.
  */
 @Entity
-@Table(name = "movies")
-public class Movie {
+@Table(name = "movie")
+public class Movie implements Serializable{
 
     @Id
     @GeneratedValue
@@ -28,6 +31,20 @@ public class Movie {
 
     private Date releaseDate;
 
+    @Column(name = "no_of_ratings")
+    private Integer numberOfRatings;
+
+    @Column(precision = 2, scale = 2)
+    private Double rate;
+
+
+    //    cascade = CascadeType.ALL)
+//    @JoinTable(name = "movie_account",
+//            joinColumns = {@JoinColumn(name = "MOVIE_ID")},
+//            inverseJoinColumns = {@JoinColumn(name = "ACCOUNT_ID")})
+    @OneToMany(mappedBy = "pk.movie")
+    private Set<MovieAccount> movieAccounts = new HashSet<>(0);
+
     public Movie() {
 
     }
@@ -35,6 +52,30 @@ public class Movie {
     public Movie(String title, String description) {
         this.title = title;
         this.description = description;
+    }
+
+    public Set<MovieAccount> getMovieAccounts() {
+        return movieAccounts;
+    }
+
+    public void setMovieAccounts(Set<MovieAccount> movieAccounts) {
+        this.movieAccounts = movieAccounts;
+    }
+
+    public Integer getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(Integer numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
+    }
+
+    public Double getRate() {
+        return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
     }
 
     public String getImage() {

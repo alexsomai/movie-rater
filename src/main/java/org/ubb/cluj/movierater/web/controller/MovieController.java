@@ -7,6 +7,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.ubb.cluj.movierater.business.entities.Account;
+import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.services.MovieService;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
 
@@ -34,8 +36,8 @@ public class MovieController {
     }
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
-    public String index(Model movies) {
-        movies.addAttribute("movies", movieService.findAll());
+    public String index(Model model) {
+        model.addAttribute("movies", movieService.findAll());
         return "movie/index";
     }
 
@@ -54,7 +56,16 @@ public class MovieController {
     }
 
     @RequestMapping(value = "view", method = RequestMethod.GET)
-    public String add(Long id) {
+    public String view(Model model, Long id) {
+        model.addAttribute("id", id);
         return "movie/view";
     }
+
+    @RequestMapping(value = "rate", method = RequestMethod.POST)
+    public String rate(long id, String stars) {
+        System.out.println("id = " + id);
+        System.out.println("stars = " + stars);
+        return "movie/view";
+    }
+
 }

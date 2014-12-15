@@ -2,189 +2,87 @@
 <html layout:decorator="fragments/main_layout">
 <head>
     <title>View movie</title>
-    <script>
+    <script th:inline="javascript">
         // <![CDATA[
-        jQuery(document).ready(function () {
-            $("#input-21f").rating({
-                starCaptions: function (val) {
-                    if (val < 3) {
-                        return val;
-                    } else {
-                        return 'high';
-                    }
-                },
-                starCaptionClasses: function (val) {
-                    if (val < 3) {
-                        return 'label label-danger';
-                    } else {
-                        return 'label label-success';
-                    }
-                },
-                hoverOnClear: false
-            });
+        $(document).ready(function () {
+            var ratingInput = $('#rating-input');
 
-            $('#rating-input').rating({
+            /*[+
+             var id = [[${id}]];
+             +]*/
+
+            ratingInput.rating({
                 min: 0,
                 max: 5,
-                step: 0.5,
-                size: 'lg'
+                step: 0.5
             });
 
-            $('#btn-rating-input').on('click', function () {
-                var $a = self.$element.closest('.star-rating');
-                var chk = !$a.hasClass('rating-disabled');
-                $('#rating-input').rating('refresh', {showClear: !chk, disabled: chk});
+            ratingInput.on('rating.change', function () {
+                bootbox.confirm("Are you sure do you want to rate this movie with "
+                        + ratingInput.val() + " stars?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "rate",
+                                    method: "POST",
+                                    data: {
+                                        id: id,
+                                        stars: ratingInput.val()
+                                    },
+                                    success: function (result) {
+                                        console.log(result);
+                                        confirmationBox.
+                                                show("You have rated this movie with "
+                                                + ratingInput.val() + " stars");
+                                    },
+                                    error: function () {
+                                        alert('fail');
+                                        $('#rating-form')[0].reset();
+                                        confirmationBox.
+                                                show("An error occured while rating the movie", true);
+                                    }
+                                });
+                            } else {
+                                $('#rating-form')[0].reset();
+                            }
+                        });
             });
 
-            $('#rating-input').on('rating.change', function () {
-                alert($('#rating-input').val());
-            });
+            var confirmationBox = (function () {
+                var elem = $("#confirmation-box"),
+                        hideHandler,
+                        box = {};
+                box.init = function (options) {
+                    elem = $(options.selector);
+                };
+                box.show = function (text, errorOccurred) {
+                    clearTimeout(hideHandler);
 
-
-            $('.rb-rating').rating({
-                'showCaption': true,
-                'stars': '3',
-                'min': '0',
-                'max': '3',
-                'step': '1',
-                'size': 'xs',
-                'starCaptions': {0: 'status:nix', 1: 'status:wackelt', 2: 'status:geht', 3: 'status:laeuft'}
-            });
+                    console.log(elem);
+                    if (errorOccurred) {
+                        elem.attr("class", "bb-alert alert alert-danger");
+                    }
+                    elem.find("span").html(text);
+                    elem.delay(200).fadeIn().delay(2000).fadeOut();
+                };
+                return box;
+            }());
         });
         // ]]>
     </script>
 </head>
 <body>
 <div layout:fragment="content">
-    VIew movie
-    <!--<span class="glyphicons shredder" aria-hidden="true"></span>-->
+    <p th:text="${id}"></p>
 
-    <button type="button" class="btn btn-default btn-lg">
-        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Star
-    </button>
-
-    <button type="button" class="btn btn-default" aria-label="Left Align">
-        <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
-    </button>
-
-    <i class="glyphicon glyphicon-search"></i>
-
-    <span class="glyphicon glyphicon-search"></span>
-    <!--&lt;!&ndash; Carousel-->
-    <!--================================================== &ndash;&gt;-->
-    <!--<div id="myCarousel" class="carousel slide" >-->
-    <!--&lt;!&ndash; Indicators &ndash;&gt;-->
-    <!--<ol class="carousel-indicators">-->
-    <!--<li data-target="#myCarousel" data-slide-to="0" class="active"></li>-->
-    <!--<li data-target="#myCarousel" data-slide-to="1"></li>-->
-    <!--<li data-target="#myCarousel" data-slide-to="2"></li>-->
-    <!--</ol>-->
-    <!--<div class="carousel-inner">-->
-    <!--<div class="item active">-->
-    <!--<img src="data:image/png;base64," data-src="holder.js/100%x500/auto/#777:#7a7a7a/text:First slide" alt="First slide"/>-->
-    <!--<div class="container">-->
-    <!--<div class="carousel-caption">-->
-    <!--<h1>Example headline.</h1>-->
-    <!--<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>-->
-    <!--<p><a class="btn btn-large btn-primary" href="#">Sign up today</a></p>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="item">-->
-    <!--<img src="../../../resources/images/apple.png" data-src="holder.js/100%x500/auto/#777:#7a7a7a/text:Second slide" alt="Second slide"/>-->
-    <!--<div class="container">-->
-    <!--<div class="carousel-caption">-->
-    <!--<h1>Another example headline.</h1>-->
-    <!--<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>-->
-    <!--<p><a class="btn btn-large btn-primary" href="#">Learn more</a></p>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="item">-->
-    <!--<img src="../../../resources/images/apple.png" data-src="holder.js/100%x500/auto/#777:#7a7a7a/text:Third slide" alt="Third slide"/>-->
-    <!--<div class="container">-->
-    <!--<div class="carousel-caption">-->
-    <!--<h1>One more for good measure.</h1>-->
-    <!--<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>-->
-    <!--<p><a class="btn btn-large btn-primary" href="#">Browse gallery</a></p>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>-->
-    <!--<a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>-->
-    <!--</div>&lt;!&ndash; /.carousel &ndash;&gt;-->
+    <div id="confirmation-box" class="bb-alert alert alert-info" style="display: none">
+        <span>message to be replaced</span>
+    </div>
 
     <div class="row featurette">
         <div class="col-md-5">
-            <!-- Carousel
-          ================================================== -->
-            <div id="myCarousel" class="carousel slide" style="height: 500px; width: 500px;">
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                    <li data-target="#myCarousel" data-slide-to="1"></li>
-                    <li data-target="#myCarousel" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <img src="data:image/png;base64,"
-                             data-src="holder.js/500x500/auto/#777:#7a7a7a/text:First slide" alt="First slide"/>
-
-                        <div class="container">
-                            <div class="carousel-caption">
-                                <h1>Example headline.</h1>
-
-                                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi
-                                    porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id
-                                    elit.</p>
-
-                                <p><a class="btn btn-large btn-primary" href="#">Sign up today</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img width="500" height="500" src="../../../resources/images/apple.png"
-                             data-src="holder.js/500x500/auto/#777:#7a7a7a/text:Second slide" alt="Second slide"/>
-
-                        <div class="container">
-                            <div class="carousel-caption">
-                                <h1>Another example headline.</h1>
-
-                                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi
-                                    porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id
-                                    elit.</p>
-
-                                <p><a class="btn btn-large btn-primary" href="#">Learn more</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img width="500" height="500" src="../../../resources/images/apple.png"
-                             data-src="holder.js/500x500/auto/#777:#7a7a7a/text:Third slide" alt="Third slide"/>
-
-                        <div class="container">
-                            <div class="carousel-caption">
-                                <h1>One more for good measure.</h1>
-
-                                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi
-                                    porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id
-                                    elit.</p>
-
-                                <p><a class="btn btn-large btn-primary" href="#">Browse gallery</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span
-                        class="glyphicon glyphicon-chevron-left"></span></a>
-                <a class="right carousel-control" href="#myCarousel" data-slide="next"><span
-                        class="glyphicon glyphicon-chevron-right"></span></a>
-            </div>
-            <!-- /.carousel -->
-
-            <!--<img class="featurette-image img-responsive" src="data:image/png;base64," data-src="holder.js/500x500/auto"-->
-            <!--alt="Generic placeholder image"/>-->
+            <img class="featurette-image img-responsive" src="data:image/png;base64," data-src="holder.js/500x500/auto"
+                 alt="Generic placeholder image"/>
         </div>
         <div class="col-md-7">
             <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span>
@@ -196,13 +94,8 @@
         </div>
     </div>
 
-    <form>
-        <input id="input-21b" value="4"
-               type="number" class="rating" min="0" max="5" step="0.5"
-               data-default-caption="{rating} stars"
-               data-star-captions="{}"/>
-
-        <input id="rating-input" type="number" data-star-captions="{}"/>
+    <form id="rating-form">
+        <input id="rating-input" min="0" max="5" step="0.5" type="number" data-star-captions="{}"/>
     </form>
 </div>
 </body>

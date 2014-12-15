@@ -5,14 +5,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-@SuppressWarnings("serial")
 @Entity
-@Table(name = "accounts")
+@Table(name = "account")
 @NamedQuery(name = Account.FIND_BY_EMAIL, query = "select a from Account a where a.email = :email")
-public class Account implements java.io.Serializable {
+public class Account implements Serializable {
 
     public static final String FIND_BY_EMAIL = "Account.findByEmail";
 
@@ -31,6 +33,10 @@ public class Account implements java.io.Serializable {
 
     private String role = ROLE_USER;
 
+    //    @ManyToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "pk.account")
+    private Set<MovieAccount> movieAccounts = new HashSet<>(0);
+
     protected Account() {
 
     }
@@ -39,6 +45,14 @@ public class Account implements java.io.Serializable {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    public Set<MovieAccount> getMovieAccounts() {
+        return movieAccounts;
+    }
+
+    public void setMovieAccounts(Set<MovieAccount> movieAccounts) {
+        this.movieAccounts = movieAccounts;
     }
 
     public Long getId() {
