@@ -83,10 +83,18 @@ public class MovieRepository {
         return movieAccount;
     }
 
-    public Movie getMovieById(long id) {
+    @Transactional
+    public Movie getMovieById(Long id) {
         return entityManager.find(Movie.class, id);
     }
 
+    @Transactional
+    public void update(Movie movie) {
+        // TODO this should be updated!
+        entityManager.merge(movie);
+    }
+
+    @Transactional
     public List<Movie> findAll() {
         return entityManager.createQuery("SELECT m FROM Movie m", Movie.class).getResultList();
     }

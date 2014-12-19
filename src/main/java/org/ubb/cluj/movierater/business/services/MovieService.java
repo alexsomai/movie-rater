@@ -45,8 +45,16 @@ public class MovieService {
         movieRepository.rate(movieId, accountId, stars);
     }
 
-    public Movie getMovieById(long id) {
+    public Movie getMovieById(Long id) {
         return movieRepository.getMovieById(id);
+    }
+
+    public void update(MovieCommandObject movieCommandObject){
+        Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
+//        movie.setId(movieCommandObject.getId());
+        movie.setTitle(movieCommandObject.getTitle());
+        movie.setDescription(movieCommandObject.getDescription());
+        movieRepository.update(movie);
     }
 
     public List<MovieCommandObject> findAll() {

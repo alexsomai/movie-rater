@@ -100,6 +100,11 @@ public class Movie implements Serializable {
 //        this.releaseDate = releaseDate;
 //    }
 
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

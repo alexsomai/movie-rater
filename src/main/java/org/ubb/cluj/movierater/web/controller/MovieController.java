@@ -81,4 +81,24 @@ public class MovieController {
         return "movie/view";
     }
 
+    @RequestMapping(value = "edit", method = RequestMethod.GET)
+    public String edit(Model model, Long movieId) {
+        Movie movie = movieService.getMovieById(movieId);
+        MovieCommandObject movieCommandObject = new MovieCommandObject();
+        movieCommandObject.setDescription(movie.getDescription());
+        movieCommandObject.setTitle(movie.getTitle());
+        movieCommandObject.setId(movie.getId());
+        model.addAttribute("movieCommandObject", movieCommandObject);
+        return "movie/edit";
+    }
+
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public String update(@Valid @ModelAttribute MovieCommandObject movieCommandObject, Errors errors) {
+        if (errors.hasErrors()) {
+            return "movie/edit";
+        }
+        movieService.update(movieCommandObject);
+        return "admin/admin_page";
+    }
+
 }
