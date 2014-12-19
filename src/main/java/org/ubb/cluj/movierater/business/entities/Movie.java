@@ -13,7 +13,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "movie")
-public class Movie implements Serializable{
+public class Movie implements Serializable {
 
     @Id
     @GeneratedValue
@@ -32,10 +32,10 @@ public class Movie implements Serializable{
     private Date releaseDate;
 
     @Column(name = "no_of_ratings")
-    private Integer numberOfRatings;
+    private Integer numberOfRatings = 0;
 
     @Column(precision = 2, scale = 2)
-    private Double rate;
+    private Double rate = 0.0;
 
 
     //    cascade = CascadeType.ALL)

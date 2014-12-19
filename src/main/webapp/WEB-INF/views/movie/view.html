@@ -8,7 +8,7 @@
             var ratingInput = $('#rating-input');
 
             /*[+
-             var id = [[${id}]];
+             var movieId = [[${movie.id}]];
              +]*/
 
             ratingInput.rating({
@@ -26,7 +26,7 @@
                                     url: "rate",
                                     method: "POST",
                                     data: {
-                                        id: id,
+                                        movieId: movieId,
                                         stars: ratingInput.val()
                                     },
                                     success: function (result) {
@@ -73,7 +73,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <p th:text="${id}"></p>
+    <p th:text="${movie.id}"></p>
 
     <div id="confirmation-box" class="bb-alert alert alert-info" style="display: none">
         <span>message to be replaced</span>
@@ -85,10 +85,10 @@
                  alt="Generic placeholder image"/>
         </div>
         <div class="col-md-7">
-            <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span>
+            <h2 class="featurette-heading" th:text="${movie.title}">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span>
             </h2>
 
-            <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod
+            <p class="lead" th:text="${movie.description}">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod
                 semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus
                 commodo.</p>
         </div>
@@ -97,6 +97,11 @@
     <form id="rating-form">
         <input id="rating-input" min="0" max="5" step="0.5" type="number" data-star-captions="{}"/>
     </form>
+
+    <th:block th:if="${movieAccount.stars != null}">
+        <p th:text="${movieAccount.stars}"></p>
+    </th:block>
+
 </div>
 </body>
 </html>

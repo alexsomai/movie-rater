@@ -2,7 +2,9 @@ package org.ubb.cluj.movierater.business.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.ubb.cluj.movierater.business.entities.Account;
 import org.ubb.cluj.movierater.business.entities.Movie;
+import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import org.ubb.cluj.movierater.business.entities.repositories.MovieRepository;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
 
@@ -22,6 +24,29 @@ public class MovieService {
 
     public Movie save(MovieCommandObject movieCommandObject) {
         return movieRepository.save(movieCommandObject.createMovie());
+    }
+
+    public MovieAccount getRatingInfo(long movieId, long accountId){
+        return movieRepository.getRatingInfo(movieId,accountId);
+    }
+
+    public void rate(long movieId, long accountId, double stars) {
+//        Movie movie = movieRepository.getMovieById(movieId);
+//        if (movie.getNumberOfRatings() == null) {
+//            movie.setNumberOfRatings(1);
+//        } else {
+//            movie.setNumberOfRatings(movie.getNumberOfRatings() + 1);
+//        }
+//        if (movie.getRate() == null) {
+//            movie.setRate((double) 0);
+//        } else {
+//            movie.setRate((movie.getRate() + stars) / 2);
+//        }
+        movieRepository.rate(movieId, accountId, stars);
+    }
+
+    public Movie getMovieById(long id) {
+        return movieRepository.getMovieById(id);
     }
 
     public List<MovieCommandObject> findAll() {

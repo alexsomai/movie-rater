@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
         return new User(account);
     }
 
-    private static class User extends org.springframework.security.core.userdetails.User {
+    public static class User extends org.springframework.security.core.userdetails.User {
 
         private final Account account;
 
