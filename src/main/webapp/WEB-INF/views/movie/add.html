@@ -24,6 +24,19 @@
                 }
 
             });
+
+            $('#date-picker').datepicker({
+                format: 'dd-mm-yyyy'
+            });
+
+            $('#main-actors').multiselect({
+                enableCaseInsensitiveFiltering: true,
+                maxHeight: 300,
+                buttonWidth: 400,
+                numberDisplayed: 5,
+                nonSelectedText: 'Choose main actors'
+            });
+
         });
         // ]]>
     </script>
@@ -69,6 +82,33 @@
                     <span class="help-block" th:if="${#fields.hasErrors('description')}"
                           th:errors="*{description}"></span>
             </div>
+            <div class="row">
+                <div class='col-sm-6'>
+                    <div class="form-group">
+                        <label for="date-picker" th:text="#{label.movie.releaseDate}"></label>
+                        <input id="date-picker" type="text" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="main-actors" th:text="#{label.movie.actors}"></label>
+                <select id="main-actors" multiple="multiple">
+                    <option value="a">Option 1</option>
+                    <option value="b">Option 2</option>
+                    <option value="c">Option 3</option>
+                    <option value="d">Option 4</option>
+                    <option value="e">Option 5</option>
+                    <option value="f">Option 6</option>
+                    <option value="g">Option 7</option>
+                    <option value="h">Option 8</option>
+                    <option value="i">Option 9</option>
+                    <option value="j">Option 10</option>
+                    <option value="k">Option 11</option>
+                    <option value="l">Option 12</option>
+                    <option value="m">Option 13</option>
+                    <option value="n">Option 14</option>
+                </select>
+            </div>
             <div class="form-group" th:classappend="${posterErrMsg != null} ? 'has-error'">
                 <label for="poster" class="control-label"
                        th:text="#{label.movie.poster}">
@@ -104,25 +144,6 @@
             </div>
         </fieldset>
     </form>
-
-    <div class="container">
-        <div class="row">
-            <div class='col-sm-6'>
-                <div class="form-group">
-                    <div class='input-group date' id='datetimepicker1'>
-                        <input type='text' class="form-control"/>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                    </div>
-                </div>
-            </div>
-            <script type="text/javascript">
-                $(function () {
-                    $('#datetimepicker1').datetimepicker();
-                });
-            </script>
-        </div>
-    </div>
 </div>
 </body>
 </html>
