@@ -5,19 +5,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import org.ubb.cluj.movierater.business.services.MovieService;
+import org.ubb.cluj.movierater.business.services.PosterService;
 import org.ubb.cluj.movierater.business.services.UserService;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
 import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * Created by somai on 10.12.2014.
@@ -28,6 +30,9 @@ public class MovieController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private PosterService posterService;
 
     @PostConstruct
     protected void initialize() {
@@ -51,12 +56,43 @@ public class MovieController {
     }
 
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public String save(@Valid @ModelAttribute MovieCommandObject movieCommandObject, Errors errors) {
-        if (errors.hasErrors()) {
+    public String save(@Valid @ModelAttribute MovieCommandObject movieCommandObject, Errors errors,
+                       Model model, @RequestParam("poster") MultipartFile poster) {
+        String posterErrorMessage = posterService.validatePoster(poster);
+        if (errors.hasErrors() || posterErrorMessage != null) {
+            model.addAttribute("posterErrMsg", posterErrorMessage);
             return "movie/add";
         }
+
+        String posterFileName = posterService.savePoster(poster);
+        movieCommandObject.setPosterFileName(posterFileName);
         movieService.save(movieCommandObject);
         return "admin/admin_page";
+    }
+
+    @RequestMapping(value = "/singleSave", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String singleSave(@RequestParam("file") MultipartFile file, @RequestParam("desc") String desc) {
+        System.out.println("File Description:" + desc);
+        String fileName = null;
+        if (!file.isEmpty()) {
+            try {
+                fileName = file.getOriginalFilename();
+                byte[] bytes = file.getBytes();
+                File rootFile = new File("/home/somai");
+                System.out.println("rootFile = " + rootFile.getAbsolutePath());
+                BufferedOutputStream buffStream =
+                        new BufferedOutputStream(new FileOutputStream(new File(rootFile.getAbsolutePath(), fileName)));
+                buffStream.write(bytes);
+                buffStream.close();
+                return "You have successfully uploaded " + fileName;
+            } catch (Exception e) {
+                return "You failed to upload " + fileName + ": " + e.getMessage();
+            }
+        } else {
+            return "Unable to upload. File is empty.";
+        }
     }
 
     @RequestMapping(value = "view", method = RequestMethod.GET)

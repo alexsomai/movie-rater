@@ -19,7 +19,15 @@ public class MovieCommandObject {
     @NotBlank(message = MovieCommandObject.DESCRIPTION_NOT_BLANK)
     private String description;
 
-    private String image;
+    private String posterFileName;
+
+    public String getPosterFileName() {
+        return posterFileName;
+    }
+
+    public void setPosterFileName(String posterFileName) {
+        this.posterFileName = posterFileName;
+    }
 
     public Long getId() {
         return id;
@@ -27,14 +35,6 @@ public class MovieCommandObject {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public String getTitle() {
@@ -54,6 +54,6 @@ public class MovieCommandObject {
     }
 
     public Movie createMovie() {
-        return new Movie(getTitle(), getDescription());
+        return new Movie(title, description, posterFileName);
     }
 }

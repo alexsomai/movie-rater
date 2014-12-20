@@ -28,7 +28,8 @@ public class Movie implements Serializable {
     @NotEmpty
     private String description;
 
-    private String image;
+    @NotEmpty
+    private String poster;
 
     private Date releaseDate;
 
@@ -50,9 +51,10 @@ public class Movie implements Serializable {
 
     }
 
-    public Movie(String title, String description) {
-        this.title = title;
+    public Movie(String title, String description, String poster) {
         this.description = description;
+        this.title = title;
+        this.poster = poster;
     }
 
     public Set<MovieAccount> getMovieAccounts() {
@@ -79,12 +81,12 @@ public class Movie implements Serializable {
         this.rate = rate;
     }
 
-    public String getImage() {
-        return image;
+    public String getPoster() {
+        return poster;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 
     public Date getReleaseDate() {

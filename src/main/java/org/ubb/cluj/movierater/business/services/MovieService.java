@@ -22,8 +22,9 @@ import java.util.List;
 public class MovieService {
 
     private static final int DESC_MAX_LENGTH = 100;
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy HH:mm");
-    private static final DecimalFormat df = new DecimalFormat("0.00");
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("MMMM dd, yyyy HH:mm");
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
+
     @Autowired
     private MovieRepository movieRepository;
 
@@ -47,9 +48,9 @@ public class MovieService {
             return movieRateResponse;
         }
         movieRateResponse.setSuccess(true);
-        movieRateResponse.setRatedAt(sdf.format(movieAccount.getRatedAt()));
-        movieRateResponse.setMovieRate(df.format(movieAccount.getMovie().getRate()));
-        movieRateResponse.setUserRate(df.format(movieAccount.getStars()));
+        movieRateResponse.setRatedAt(SIMPLE_DATE_FORMAT.format(movieAccount.getRatedAt()));
+        movieRateResponse.setMovieRate(DECIMAL_FORMAT.format(movieAccount.getMovie().getRate()));
+        movieRateResponse.setUserRate(DECIMAL_FORMAT.format(movieAccount.getStars()));
         movieRateResponse.setRatings(movieAccount.getMovie().getNumberOfRatings());
         return movieRateResponse;
     }
@@ -82,7 +83,6 @@ public class MovieService {
             description = description.substring(0, DESC_MAX_LENGTH) + " ...";
         }
         movieCommandObject.setDescription(description);
-        movieCommandObject.setImage(movie.getImage());
         movieCommandObject.setId(movie.getId());
         return movieCommandObject;
     }

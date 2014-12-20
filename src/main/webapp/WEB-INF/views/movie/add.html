@@ -2,10 +2,46 @@
 <html layout:decorator="fragments/main_layout">
 <head>
     <title>Add new movie</title>
+    <script>
+        // <![CDATA[
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        $(document).ready(function () {
+            $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+
+                var input = $(this).parents('.input-group').find(':text'),
+                        log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                if (input.length) {
+                    input.val(log);
+                } else {
+                    if (log) alert(log);
+                }
+
+            });
+        });
+        // ]]>
+    </script>
 </head>
 <body>
 <div layout:fragment="content">
-    <form class="form-narrow form-horizontal" method="post"
+
+    <!--<h1>Single File Upload</h1>-->
+
+    <!--<form method="post" enctype="multipart/form-data" action="../movie/singleSave">-->
+    <!--Upload File: <input type="file" name="file"/>-->
+    <!--<br/><br/>-->
+    <!--Description: <input type="text" name="desc"/>-->
+    <!--<br/><br/><input type="submit" value="Upload"/>-->
+    <!--</form>-->
+
+    <!--enctype="multipart/form-data"-->
+    <form class="form-narrow form-horizontal" method="POST" enctype="multipart/form-data"
           th:action="@{/movie/save}" th:object="${movieCommandObject}">
 
         <!--/* Show general error task when form contains errors */-->
@@ -21,7 +57,7 @@
                 <label for="title" class="control-label" th:text="#{label.movie.title}"></label>
                 <input type="text" class="form-control" id="title" th:field="*{title}"/>
                     <span class="help-block" th:if="${#fields.hasErrors('title')}"
-                          th:errors="*{title}" th:text="#{message.movie.title.incorrect}">
+                          th:errors="*{title}">
                     </span>
             </div>
             <div class="form-group" th:classappend="${#fields.hasErrors('description')}? 'has-error'">
@@ -31,12 +67,34 @@
                     <textarea class="form-control" id="description"
                               th:field="*{description}"></textarea>
                     <span class="help-block" th:if="${#fields.hasErrors('description')}"
-                          th:errors="*{description}">Incorrect description</span>
+                          th:errors="*{description}"></span>
+            </div>
+            <div class="form-group" th:classappend="${posterErrMsg != null} ? 'has-error'">
+                <label for="poster" class="control-label"
+                       th:text="#{label.movie.poster}">
+                </label>
+
+                <div class="input-group">
+                    <input type="text" class="form-control" readonly="readonly"/>
+                <span class="input-group-btn">
+                    <span class="btn btn-primary btn-file">
+                        Browse&hellip; <input id="poster" name="poster" type="file"/>
+                    </span>
+                </span>
+                </div>
+                <span class="help-block" th:if="${posterErrMsg != null}"
+                      th:text="${posterErrMsg}"></span>
+
+                <span class="help-block" th:if="${posterErrMsg == null}">
+                    Choose image file (.jpg, .gif, .png, .bmp and max 5MB) to be uploaded as a poster.
+                </span>
+            </div>
+            <div class="col-lg-6 col-sm-6 col-12">
             </div>
             <div class="form-group">
                 <div class="text-right">
                     <button type="submit" class="btn btn-success">Add Movie</button>
-                    <button type="submit" class="btn btn-danger">Reset</button>
+                    <button type="reset" class="btn btn-danger">Reset</button>
                 </div>
             </div>
             <div class="form-group">
@@ -46,6 +104,25 @@
             </div>
         </fieldset>
     </form>
+
+    <div class="container">
+        <div class="row">
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control"/>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    $('#datetimepicker1').datetimepicker();
+                });
+            </script>
+        </div>
+    </div>
 </div>
 </body>
 </html>
