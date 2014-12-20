@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,8 +35,8 @@ public class Movie implements Serializable {
     @Column(name = "no_of_ratings")
     private Integer numberOfRatings = 0;
 
-    @Column(precision = 2, scale = 2)
-    private Double rate = 0.0;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal rate = new BigDecimal(0);
 
 
     //    cascade = CascadeType.ALL)
@@ -70,11 +71,11 @@ public class Movie implements Serializable {
         this.numberOfRatings = numberOfRatings;
     }
 
-    public Double getRate() {
+    public BigDecimal getRate() {
         return rate;
     }
 
-    public void setRate(Double rate) {
+    public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
 
@@ -100,13 +101,12 @@ public class Movie implements Serializable {
 //        this.releaseDate = releaseDate;
 //    }
 
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getTitle() {

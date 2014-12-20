@@ -6,9 +6,11 @@ import org.ubb.cluj.movierater.business.entities.Account;
 import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.entities.MovieAccount;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -49,27 +51,28 @@ public class MovieRepository {
     }
 
     @Transactional
-    public void rate(long movieId, long accountId, double stars) {
+    public MovieAccount rate(long movieId, long accountId, double stars) throws EntityExistsException {
         Account account = entityManager.find(Account.class, accountId);
 
         Movie movie = entityManager.find(Movie.class, movieId);
 
         if (movie.getNumberOfRatings() == 0) {
-            movie.setRate(stars);
+            movie.setRate(BigDecimal.valueOf(stars));
         } else {
-            movie.setRate((movie.getRate() + stars) / 2);
+            movie.setRate(BigDecimal.valueOf((movie.getRate().doubleValue() + stars) / 2));
         }
         movie.setNumberOfRatings(movie.getNumberOfRatings() + 1);
 
         MovieAccount movieAccount = new MovieAccount();
         movieAccount.setAccount(account);
         movieAccount.setMovie(movie);
-        movieAccount.setStars(stars);
+        movieAccount.setStars(BigDecimal.valueOf(stars));
         movieAccount.setRatedAt(new Date());
         account.getMovieAccounts().add(movieAccount);
 
         entityManager.persist(movie);
         entityManager.persist(movieAccount);
+        return movieAccount;
     }
 
     @Transactional

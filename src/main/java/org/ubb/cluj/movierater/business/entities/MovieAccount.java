@@ -2,6 +2,7 @@ package org.ubb.cluj.movierater.business.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -20,8 +21,8 @@ public class MovieAccount implements Serializable {
     public static final String GET_RATING_INFO = "MovieAccount.getRating";
     private MovieAccountId pk = new MovieAccountId();
 
-    @Column(name = "stars", precision = 1, scale = 1)
-    private Double stars;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal stars;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "RATED_AT", nullable = false, length = 10)
@@ -54,11 +55,11 @@ public class MovieAccount implements Serializable {
         getPk().setMovie(movie);
     }
 
-    public Double getStars() {
+    public BigDecimal getStars() {
         return stars;
     }
 
-    public void setStars(Double stars) {
+    public void setStars(BigDecimal stars) {
         this.stars = stars;
     }
 

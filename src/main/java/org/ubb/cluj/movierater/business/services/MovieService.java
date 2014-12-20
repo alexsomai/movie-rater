@@ -7,7 +7,11 @@ import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import org.ubb.cluj.movierater.business.entities.repositories.MovieRepository;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
+import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
 
+import javax.persistence.EntityExistsException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +22,8 @@ import java.util.List;
 public class MovieService {
 
     private static final int DESC_MAX_LENGTH = 100;
-
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy HH:mm");
+    private static final DecimalFormat df = new DecimalFormat("0.00");
     @Autowired
     private MovieRepository movieRepository;
 
@@ -31,19 +36,22 @@ public class MovieService {
                 .getRatingInfo(movieRepository.getMovieById(movieId), account);
     }
 
-    public void rate(long movieId, long accountId, double stars) {
-//        Movie movie = movieRepository.getMovieById(movieId);
-//        if (movie.getNumberOfRatings() == null) {
-//            movie.setNumberOfRatings(1);
-//        } else {
-//            movie.setNumberOfRatings(movie.getNumberOfRatings() + 1);
-//        }
-//        if (movie.getRate() == null) {
-//            movie.setRate((double) 0);
-//        } else {
-//            movie.setRate((movie.getRate() + stars) / 2);
-//        }
-        movieRepository.rate(movieId, accountId, stars);
+    public MovieRateResponse rate(long movieId, long accountId, double stars) {
+        MovieRateResponse movieRateResponse = new MovieRateResponse();
+
+        MovieAccount movieAccount;
+        try {
+            movieAccount = movieRepository.rate(movieId, accountId, stars);
+        } catch (EntityExistsException e) {
+            movieRateResponse.setSuccess(false);
+            return movieRateResponse;
+        }
+        movieRateResponse.setSuccess(true);
+        movieRateResponse.setRatedAt(sdf.format(movieAccount.getRatedAt()));
+        movieRateResponse.setMovieRate(df.format(movieAccount.getMovie().getRate()));
+        movieRateResponse.setUserRate(df.format(movieAccount.getStars()));
+        movieRateResponse.setRatings(movieAccount.getMovie().getNumberOfRatings());
+        return movieRateResponse;
     }
 
     public Movie getMovieById(Long id) {

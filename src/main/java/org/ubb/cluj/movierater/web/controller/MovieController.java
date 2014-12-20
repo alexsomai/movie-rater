@@ -14,6 +14,7 @@ import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import org.ubb.cluj.movierater.business.services.MovieService;
 import org.ubb.cluj.movierater.business.services.UserService;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
+import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -68,13 +69,11 @@ public class MovieController {
         return "movie/view";
     }
 
-    @RequestMapping(value = "rate", method = RequestMethod.POST)
+    @RequestMapping(value = "rate", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String rate(Model model, long movieId, double stars) {
+    public MovieRateResponse rate(long movieId, double stars) {
         UserService.User user = (UserService.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        movieService.rate(movieId, user.getAccount().getId(), stars);
-
-        return String.valueOf(movieId);
+        return movieService.rate(movieId, user.getAccount().getId(), stars);
     }
 
     @RequestMapping(value = "edit", method = RequestMethod.GET)

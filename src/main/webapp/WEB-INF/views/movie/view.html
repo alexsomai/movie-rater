@@ -33,15 +33,35 @@
                                     success: function (result) {
                                         console.log(result);
 //                                       ratingForm.remove();
-                                        confirmationBox
-                                                .show("You have rated this movie with "
-                                                + ratingInput.val() + " stars");
+                                        if (result.success) {
+                                            confirmationBox
+                                                    .show("You have rated this movie with "
+                                                    + result.userRate + " stars");
+
+                                            populateMovieRateInfo(result.movieRate, result.ratings);
+                                            populateUserRateInfo(result.userRate, result.ratedAt);
+                                            $('#movie-rate-info')
+                                                    .html("Rate: <br/>" +
+                                                    result.movieRate +
+                                                    "<span class=\"text-muted\"> /5</span>" +
+                                                    " <span class=\"glyphicon glyphicon-star\"></span>" +
+                                                    " (" + result.ratings + " votes)");
+                                            $("#user-rate-info")
+                                                    .html("<p class=\"top1\"> You have rated this movie with " +
+                                                    "<strong>" + result.userRate + "</strong>" +
+                                                    " <span class=\"glyphicon glyphicon-star\"></span>" +
+                                                    " on <strong>" + result.ratedAt + "</strong></p>");
+                                        } else {
+                                            ratingForm.reset();
+                                            confirmationBox
+                                                    .show("You have already rated this movie!", true);
+                                        }
                                     },
                                     error: function () {
                                         alert('fail');
                                         ratingForm.reset();
                                         confirmationBox
-                                                .show("An error occured while rating the movie", true);
+                                                .show("An error occurred while rating the movie", true);
                                     }
                                 });
                             } else {
@@ -74,7 +94,21 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <p th:text="${movie.id}"></p>
+    <!--<p th:text="${movie.id}"></p>-->
+
+    <p id="movie-rate-info" class="lead" th:inline="text">
+        Rate:
+        <br/>
+        [[${movie.rate}]]
+        <span class="text-muted">/5</span> <span class="glyphicon glyphicon-star"></span>
+        ([[${movie.numberOfRatings}]] votes)
+    </p>
+
+    <p>
+        <a class="btn btn-default" href="#" th:href="@{/movie/index}">
+            &laquo; Back to movies
+        </a>
+    </p>
 
     <div id="confirmation-box" class="bb-alert alert alert-info" style="display: none">
         <span>message to be replaced</span>
@@ -85,9 +119,11 @@
             <img class="featurette-image img-responsive" src="data:image/png;base64," data-src="holder.js/500x500/auto"
                  alt="Generic placeholder image"/>
         </div>
+
         <div class="col-md-7">
-            <h2 class="featurette-heading" th:text="${movie.title}">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span>
-            </h2>
+            <legend><h2 class="featurette-heading" th:text="${movie.title}">Oh yeah, it's that good. <span
+                    class="text-muted">See for yourself.</span>
+            </h2></legend>
 
             <p class="lead" th:text="${movie.description}">Donec ullamcorper nulla non metus auctor fringilla.
                 Vestibulum id ligula porta felis euismod
@@ -96,15 +132,19 @@
         </div>
     </div>
 
-    <form id="rating-form">
-        <input id="rating-input" min="0" max="5" step="0.5" type="number" data-star-captions="{}"/>
-    </form>
+    <div id="user-rate-info" th:switch="${movieAccount}">
+        <form th:case="null" id="rating-form">
+            <input id="rating-input" min="0" max="5" step="0.5" type="number" data-star-captions="{}"/>
+        </form>
 
-    <th:block th:if="${movieAccount != null}">
-        <p th:text="${movieAccount.stars}"></p>
-
-        <p th:text="${#dates.format(movieAccount.ratedAt, 'MMMM dd, yyyy HH:mm')}"></p>
-    </th:block>
+        <p th:case="*" th:inline="text" class="top1">You have rated this movie with
+            <strong> [[${movieAccount.stars}]] </strong>
+            <span class="glyphicon glyphicon-star"></span>
+            on <strong>
+                [[${#dates.format(movieAccount.ratedAt, 'MMMM dd, yyyy HH:mm')}]]
+            </strong>
+        </p>
+    </div>
 
 </div>
 </body>
