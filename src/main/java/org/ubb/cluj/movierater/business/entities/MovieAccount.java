@@ -13,8 +13,10 @@ import java.io.Serializable;
                 joinColumns = @JoinColumn(name = "ACCOUNT_ID")),
         @AssociationOverride(name = "pk.movies",
                 joinColumns = @JoinColumn(name = "MOVIE_ID"))})
-public class MovieAccount implements Serializable{
+@NamedQuery(name = MovieAccount.GET_RATING_INFO, query = "SELECT ma FROM MovieAccount ma WHERE ma.pk.account = :account AND ma.pk.movie = :movie")
+public class MovieAccount implements Serializable {
 
+    public static final String GET_RATING_INFO = "MovieAccount.getRating";
     private MovieAccountId pk = new MovieAccountId();
 
     @Column(name = "stars", precision = 1, scale = 1)

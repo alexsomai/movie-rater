@@ -26,8 +26,9 @@ public class MovieService {
         return movieRepository.save(movieCommandObject.createMovie());
     }
 
-    public MovieAccount getRatingInfo(long movieId, long accountId){
-        return movieRepository.getRatingInfo(movieId,accountId);
+    public MovieAccount getRatingInfo(long movieId, Account account) {
+        return movieRepository
+                .getRatingInfo(movieRepository.getMovieById(movieId), account);
     }
 
     public void rate(long movieId, long accountId, double stars) {
@@ -49,7 +50,7 @@ public class MovieService {
         return movieRepository.getMovieById(id);
     }
 
-    public void update(MovieCommandObject movieCommandObject){
+    public void update(MovieCommandObject movieCommandObject) {
         Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
 //        movie.setId(movieCommandObject.getId());
         movie.setTitle(movieCommandObject.getTitle());

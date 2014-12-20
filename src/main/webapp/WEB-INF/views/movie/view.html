@@ -5,7 +5,8 @@
     <script th:inline="javascript">
         // <![CDATA[
         $(document).ready(function () {
-            var ratingInput = $('#rating-input');
+            var ratingInput = $('#rating-input'),
+                    ratingForm = $('#rating-form')[0];
 
             /*[+
              var movieId = [[${movie.id}]];
@@ -31,19 +32,20 @@
                                     },
                                     success: function (result) {
                                         console.log(result);
-                                        confirmationBox.
-                                                show("You have rated this movie with "
+//                                       ratingForm.remove();
+                                        confirmationBox
+                                                .show("You have rated this movie with "
                                                 + ratingInput.val() + " stars");
                                     },
                                     error: function () {
                                         alert('fail');
-                                        $('#rating-form')[0].reset();
-                                        confirmationBox.
-                                                show("An error occured while rating the movie", true);
+                                        ratingForm.reset();
+                                        confirmationBox
+                                                .show("An error occured while rating the movie", true);
                                     }
                                 });
                             } else {
-                                $('#rating-form')[0].reset();
+                                ratingForm.reset();
                             }
                         });
             });
@@ -58,7 +60,6 @@
                 box.show = function (text, errorOccurred) {
                     clearTimeout(hideHandler);
 
-                    console.log(elem);
                     if (errorOccurred) {
                         elem.attr("class", "bb-alert alert alert-danger");
                     }
@@ -88,7 +89,8 @@
             <h2 class="featurette-heading" th:text="${movie.title}">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span>
             </h2>
 
-            <p class="lead" th:text="${movie.description}">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod
+            <p class="lead" th:text="${movie.description}">Donec ullamcorper nulla non metus auctor fringilla.
+                Vestibulum id ligula porta felis euismod
                 semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus
                 commodo.</p>
         </div>
@@ -98,7 +100,7 @@
         <input id="rating-input" min="0" max="5" step="0.5" type="number" data-star-captions="{}"/>
     </form>
 
-    <th:block th:if="${movieAccount.stars != null}">
+    <th:block th:if="${movieAccount != null}">
         <p th:text="${movieAccount.stars}"></p>
     </th:block>
 

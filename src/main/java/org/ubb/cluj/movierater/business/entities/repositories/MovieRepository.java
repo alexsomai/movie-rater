@@ -8,6 +8,7 @@ import org.ubb.cluj.movierater.business.entities.MovieAccount;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
@@ -42,7 +43,6 @@ public class MovieRepository {
 //        entityManager.persist(account);
 //        entityManager.persist(movie2);
 //        entityManager.persist(movieAccount);
-
         entityManager.persist(movie);
         return movie;
     }
@@ -72,14 +72,16 @@ public class MovieRepository {
     }
 
     @Transactional
-    public MovieAccount getRatingInfo(long movieId, long accountId) {
-        // TODO add a named query
-        MovieAccount movieAccount = new MovieAccount();
-        movieAccount.setStars(1.1);
-//        return entityManager.createQuery("SELECT ma FROM MovieAccountId ma WHERE ma.account_id = 2", MovieAccount.class)
-//                .setParameter("accountId", accountId)
-//                .setParameter("movieId", movieId)
-//                .getSingleResult();
+    public MovieAccount getRatingInfo(Movie movie, Account account) {
+        TypedQuery<MovieAccount> queryResult = entityManager
+                .createNamedQuery(MovieAccount.GET_RATING_INFO, MovieAccount.class)
+                .setParameter("account", account)
+                .setParameter("movie", movie);
+        MovieAccount movieAccount = null;
+        if (queryResult.getResultList().size() > 0) {
+            movieAccount = queryResult.getSingleResult();
+        }
+
         return movieAccount;
     }
 
@@ -90,7 +92,6 @@ public class MovieRepository {
 
     @Transactional
     public void update(Movie movie) {
-        // TODO this should be updated!
         entityManager.merge(movie);
     }
 

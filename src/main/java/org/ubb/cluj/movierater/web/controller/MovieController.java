@@ -8,6 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import org.ubb.cluj.movierater.business.services.MovieService;
@@ -61,24 +62,19 @@ public class MovieController {
     public String view(Model model, Long id) {
         UserService.User user = (UserService.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Movie movie = movieService.getMovieById(id);
-        MovieAccount movieAccount = movieService.getRatingInfo(id, user.getAccount().getId());
+        MovieAccount movieAccount = movieService.getRatingInfo(id, user.getAccount());
         model.addAttribute("movie", movie);
         model.addAttribute("movieAccount", movieAccount);
         return "movie/view";
     }
 
     @RequestMapping(value = "rate", method = RequestMethod.POST)
+    @ResponseBody
     public String rate(Model model, long movieId, double stars) {
         UserService.User user = (UserService.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        movieService.rate(movieId, user.getAccount().getId(), stars);
+//        movieService.rate(movieId, user.getAccount().getId(), stars);
 
-        // TODO add a general method for this!
-        Movie movie = movieService.getMovieById(movieId);
-        MovieAccount movieAccount = movieService.getRatingInfo(movieId, user.getAccount().getId());
-        model.addAttribute("movie", movie);
-        model.addAttribute("movieAccount", movieAccount);
-
-        return "movie/view";
+        return String.valueOf(movieId);
     }
 
     @RequestMapping(value = "edit", method = RequestMethod.GET)
