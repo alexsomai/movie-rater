@@ -9,6 +9,7 @@ import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,11 +65,11 @@ public class MovieRepository {
         movieAccount.setAccount(account);
         movieAccount.setMovie(movie);
         movieAccount.setStars(stars);
+        movieAccount.setRatedAt(new Date());
         account.getMovieAccounts().add(movieAccount);
 
         entityManager.persist(movie);
         entityManager.persist(movieAccount);
-        System.out.println("\"\" = " + "");
     }
 
     @Transactional

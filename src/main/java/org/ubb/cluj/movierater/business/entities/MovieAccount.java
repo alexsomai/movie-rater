@@ -2,6 +2,7 @@ package org.ubb.cluj.movierater.business.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by somai on 14.12.2014.
@@ -21,6 +22,10 @@ public class MovieAccount implements Serializable {
 
     @Column(name = "stars", precision = 1, scale = 1)
     private Double stars;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "RATED_AT", nullable = false, length = 10)
+    private Date ratedAt;
 
     @EmbeddedId
     public MovieAccountId getPk() {
@@ -55,6 +60,14 @@ public class MovieAccount implements Serializable {
 
     public void setStars(Double stars) {
         this.stars = stars;
+    }
+
+    public Date getRatedAt() {
+        return ratedAt;
+    }
+
+    public void setRatedAt(Date ratedAt) {
+        this.ratedAt = ratedAt;
     }
 
     public boolean equals(Object o) {

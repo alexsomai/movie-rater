@@ -72,7 +72,7 @@ public class MovieController {
     @ResponseBody
     public String rate(Model model, long movieId, double stars) {
         UserService.User user = (UserService.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        movieService.rate(movieId, user.getAccount().getId(), stars);
+        movieService.rate(movieId, user.getAccount().getId(), stars);
 
         return String.valueOf(movieId);
     }

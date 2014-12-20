@@ -52,7 +52,6 @@ public class MovieService {
 
     public void update(MovieCommandObject movieCommandObject) {
         Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
-//        movie.setId(movieCommandObject.getId());
         movie.setTitle(movieCommandObject.getTitle());
         movie.setDescription(movieCommandObject.getDescription());
         movieRepository.update(movie);

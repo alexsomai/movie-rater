@@ -102,6 +102,8 @@
 
     <th:block th:if="${movieAccount != null}">
         <p th:text="${movieAccount.stars}"></p>
+
+        <p th:text="${#dates.format(movieAccount.ratedAt, 'MMMM dd, yyyy HH:mm')}"></p>
     </th:block>
 
 </div>
