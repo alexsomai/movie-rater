@@ -14,6 +14,7 @@ import org.ubb.cluj.movierater.business.services.PosterService;
 import org.ubb.cluj.movierater.business.services.UserService;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
 import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
+import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -45,9 +46,16 @@ public class MovieController {
     }
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
-    public String index(@RequestParam(value = "srch-term", required = false) String title, Model model) {
-        model.addAttribute("movies", movieService.findAll(title));
-        model.addAttribute("title", title);
+    public String index(SearchFilter searchFilter, Model model) {
+        int numberOfPages = movieService.getNumberOfPages(searchFilter.getTitle());
+        searchFilter.setNoPages(numberOfPages);
+        if (searchFilter.getPage() < 0) {
+            searchFilter.setPage(0);
+        }
+        if (searchFilter.getPage() > numberOfPages - 1) {
+            searchFilter.setPage(numberOfPages - 1);
+        }
+        model.addAttribute("movies", movieService.findAll(searchFilter));
         return "movie/index";
     }
 

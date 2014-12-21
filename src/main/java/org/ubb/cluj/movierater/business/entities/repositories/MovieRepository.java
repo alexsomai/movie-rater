@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ubb.cluj.movierater.business.entities.Account;
 import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.entities.MovieAccount;
+import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
@@ -28,6 +29,8 @@ public class MovieRepository {
 //    @Autowired
 //    private SessionFactory mySessionFactory;
 //
+    private static final int LIMIT_ITEMS_PER_PAGE = 3;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -107,7 +110,20 @@ public class MovieRepository {
     }
 
     @Transactional
-    public List<Movie> findAll(String title) {
+    public List<Movie> findAll(SearchFilter searchFilter) {
+        TypedQuery<Movie> query = createQuery(searchFilter.getTitle());
+
+        addPagination(query, searchFilter.getPage());
+
+        return query.getResultList();
+    }
+
+    @Transactional
+    public int getNumberOfPages(String title) {
+        return (int) Math.ceil((double) createQuery(title).getResultList().size() / LIMIT_ITEMS_PER_PAGE);
+    }
+
+    private TypedQuery<Movie> createQuery(String title) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Movie> criteriaQuery = criteriaBuilder.createQuery(Movie.class);
@@ -119,7 +135,12 @@ public class MovieRepository {
             criteriaQuery.where(criteriaBuilder.like(movieRoot.<String>get("title"), "%" + title + "%"));
         }
 
-        TypedQuery<Movie> query = entityManager.createQuery(criteriaQuery);
-        return query.getResultList();
+        return entityManager.createQuery(criteriaQuery);
     }
+
+    private void addPagination(TypedQuery<Movie> query, int page) {
+        query.setMaxResults(LIMIT_ITEMS_PER_PAGE);
+        query.setFirstResult(page * LIMIT_ITEMS_PER_PAGE);
+    }
+
 }

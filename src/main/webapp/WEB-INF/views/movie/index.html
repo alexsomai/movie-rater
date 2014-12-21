@@ -5,6 +5,10 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <div th:replace="fragments/pagination :: pagination
+    (page=${searchFilter.page}, noPages=${searchFilter.noPages}, title=${searchFilter.title})">
+    </div>
+
     <div class="col-sm-6 col-md-4 top3" th:each="movie : ${movies}">
         <div class="thumbnail">
             <div>

@@ -8,6 +8,7 @@ import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import org.ubb.cluj.movierater.business.entities.repositories.MovieRepository;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
 import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
+import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
 import javax.persistence.EntityExistsException;
 import java.text.DecimalFormat;
@@ -68,9 +69,13 @@ public class MovieService {
         movieRepository.update(movie);
     }
 
-    public List<MovieCommandObject> findAll(String title) {
+    public int getNumberOfPages(String title) {
+        return movieRepository.getNumberOfPages(title);
+    }
+
+    public List<MovieCommandObject> findAll(SearchFilter searchFilter) {
         List<MovieCommandObject> movieCommandObjects = new ArrayList<>();
-        List<Movie> movieEntities = movieRepository.findAll(title);
+        List<Movie> movieEntities = movieRepository.findAll(searchFilter);
         for (Movie movie : movieEntities) {
             movieCommandObjects.add(convertMovieEntityToCommandObject(movie));
         }
