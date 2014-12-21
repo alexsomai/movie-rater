@@ -68,9 +68,9 @@ public class MovieService {
         movieRepository.update(movie);
     }
 
-    public List<MovieCommandObject> findAll() {
+    public List<MovieCommandObject> findAll(String title) {
         List<MovieCommandObject> movieCommandObjects = new ArrayList<>();
-        List<Movie> movieEntities = movieRepository.findAll();
+        List<Movie> movieEntities = movieRepository.findAll(title);
         for (Movie movie : movieEntities) {
             movieCommandObjects.add(convertMovieEntityToCommandObject(movie));
         }

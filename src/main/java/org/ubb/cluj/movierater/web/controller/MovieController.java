@@ -45,8 +45,9 @@ public class MovieController {
     }
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
-    public String index(Model model) {
-        model.addAttribute("movies", movieService.findAll());
+    public String index(@RequestParam(value = "srch-term", required = false) String title, Model model) {
+        model.addAttribute("movies", movieService.findAll(title));
+        model.addAttribute("title", title);
         return "movie/index";
     }
 

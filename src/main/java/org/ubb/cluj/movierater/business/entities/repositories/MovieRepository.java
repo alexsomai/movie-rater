@@ -10,6 +10,9 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +24,10 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class MovieRepository {
 
+    //
+//    @Autowired
+//    private SessionFactory mySessionFactory;
+//
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -100,7 +107,19 @@ public class MovieRepository {
     }
 
     @Transactional
-    public List<Movie> findAll() {
-        return entityManager.createQuery("SELECT m FROM Movie m", Movie.class).getResultList();
+    public List<Movie> findAll(String title) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<Movie> criteriaQuery = criteriaBuilder.createQuery(Movie.class);
+        Root<Movie> movieRoot = criteriaQuery.from(Movie.class);
+
+        criteriaQuery.select(movieRoot);
+
+        if (title != null) {
+            criteriaQuery.where(criteriaBuilder.like(movieRoot.<String>get("title"), "%" + title + "%"));
+        }
+
+        TypedQuery<Movie> query = entityManager.createQuery(criteriaQuery);
+        return query.getResultList();
     }
 }
