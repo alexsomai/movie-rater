@@ -18,9 +18,6 @@ import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 
 /**
  * Created by somai on 10.12.2014.
@@ -47,7 +44,7 @@ public class MovieController {
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
     public String index(SearchFilter searchFilter, Model model) {
-        int numberOfPages = movieService.getNumberOfPages(searchFilter.getTitle());
+        int numberOfPages = movieService.getNumberOfPages(searchFilter);
         searchFilter.setNoPages(numberOfPages);
         if (searchFilter.getPage() < 0) {
             searchFilter.setPage(0);
@@ -77,31 +74,6 @@ public class MovieController {
         movieCommandObject.setPosterFile(posterFileName);
         movieService.save(movieCommandObject);
         return "admin/admin_page";
-    }
-
-    @RequestMapping(value = "/singleSave", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    String singleSave(@RequestParam("file") MultipartFile file, @RequestParam("desc") String desc) {
-        System.out.println("File Description:" + desc);
-        String fileName = null;
-        if (!file.isEmpty()) {
-            try {
-                fileName = file.getOriginalFilename();
-                byte[] bytes = file.getBytes();
-                File rootFile = new File("/home/somai");
-                System.out.println("rootFile = " + rootFile.getAbsolutePath());
-                BufferedOutputStream buffStream =
-                        new BufferedOutputStream(new FileOutputStream(new File(rootFile.getAbsolutePath(), fileName)));
-                buffStream.write(bytes);
-                buffStream.close();
-                return "You have successfully uploaded " + fileName;
-            } catch (Exception e) {
-                return "You failed to upload " + fileName + ": " + e.getMessage();
-            }
-        } else {
-            return "Unable to upload. File is empty.";
-        }
     }
 
     @RequestMapping(value = "view", method = RequestMethod.GET)

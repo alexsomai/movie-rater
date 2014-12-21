@@ -8,6 +8,24 @@ public class SearchFilter {
     private int noPages;
     private int page;
     private String title;
+    private String sort;
+    private String order;
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
 
     public int getNoPages() {
         return noPages;

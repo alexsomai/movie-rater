@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,37 +26,18 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class MovieRepository {
 
-    //
-//    @Autowired
-//    private SessionFactory mySessionFactory;
-//
     private static final int LIMIT_ITEMS_PER_PAGE = 3;
+    private static final String SORTING_ASC = "asc";
+    private static final String SORTING_DESC = "desc";
+    private static final List<String> AVAILABLE_SORTERS = new ArrayList<String>() {{
+        add("rate");
+    }};
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Transactional
     public Movie save(Movie movie) {
-//        Movie movie2 = entityManager.find(Movie.class, (long) 1);
-//        movie2.setNumberOfRatings(22);
-//        new Movie("test many" + RandomStringUtils.randomAlphanumeric(6), "test many");
-//        Account account = entityManager.find(Account.class, (long) 1);
-//                new Account("test acc" + RandomStringUtils.randomAlphanumeric(6), "test acc", "ROLE_USER");
-//        entityManager.persist(account);
-
-//        MovieAccount movieAccount = new MovieAccount();
-//        account.getMovieAccounts().add(movieAccount);
-//        movieAccount.setAccount(account);
-//        movie2.getMovieAccounts().add(movieAccount);
-//        movieAccount.setMovie(movie2);
-//        movieAccount.setStars(2.2);
-
-//        movie2.getMovieAccounts().add(movieAccount);
-
-//                movie2.getAccounts().add(account);
-//        entityManager.persist(account);
-//        entityManager.persist(movie2);
-//        entityManager.persist(movieAccount);
         entityManager.persist(movie);
         return movie;
     }
@@ -111,7 +93,7 @@ public class MovieRepository {
 
     @Transactional
     public List<Movie> findAll(SearchFilter searchFilter) {
-        TypedQuery<Movie> query = createQuery(searchFilter.getTitle());
+        TypedQuery<Movie> query = createQuery(searchFilter);
 
         addPagination(query, searchFilter.getPage());
 
@@ -119,20 +101,29 @@ public class MovieRepository {
     }
 
     @Transactional
-    public int getNumberOfPages(String title) {
-        return (int) Math.ceil((double) createQuery(title).getResultList().size() / LIMIT_ITEMS_PER_PAGE);
+    public int getNumberOfPages(SearchFilter searchFilter) {
+        return (int) Math.ceil((double) createQuery(searchFilter).getResultList().size() / LIMIT_ITEMS_PER_PAGE);
     }
 
-    private TypedQuery<Movie> createQuery(String title) {
+    private TypedQuery<Movie> createQuery(SearchFilter searchFilter) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Movie> criteriaQuery = criteriaBuilder.createQuery(Movie.class);
         Root<Movie> movieRoot = criteriaQuery.from(Movie.class);
 
         criteriaQuery.select(movieRoot);
+        if (searchFilter.getSort() != null && searchFilter.getOrder() != null
+                && AVAILABLE_SORTERS.contains(searchFilter.getSort())) {
+            if (searchFilter.getOrder().equals(SORTING_ASC)) {
+                criteriaQuery.orderBy(criteriaBuilder.asc(movieRoot.get(searchFilter.getSort())));
+            }
+            if (searchFilter.getOrder().equals(SORTING_DESC)) {
+                criteriaQuery.orderBy(criteriaBuilder.desc(movieRoot.get(searchFilter.getSort())));
+            }
+        }
 
-        if (title != null) {
-            criteriaQuery.where(criteriaBuilder.like(movieRoot.<String>get("title"), "%" + title + "%"));
+        if (searchFilter.getTitle() != null) {
+            criteriaQuery.where(criteriaBuilder.like(movieRoot.<String>get("title"), "%" + searchFilter.getTitle() + "%"));
         }
 
         return entityManager.createQuery(criteriaQuery);

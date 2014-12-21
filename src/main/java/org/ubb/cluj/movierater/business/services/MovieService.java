@@ -69,8 +69,8 @@ public class MovieService {
         movieRepository.update(movie);
     }
 
-    public int getNumberOfPages(String title) {
-        return movieRepository.getNumberOfPages(title);
+    public int getNumberOfPages(SearchFilter searchFilter) {
+        return movieRepository.getNumberOfPages(searchFilter);
     }
 
     public List<MovieCommandObject> findAll(SearchFilter searchFilter) {
