@@ -65,7 +65,7 @@ public class MovieController {
         }
 
         String posterFileName = posterService.savePoster(poster);
-        movieCommandObject.setPosterFileName(posterFileName);
+        movieCommandObject.setPosterFile(posterFileName);
         movieService.save(movieCommandObject);
         return "admin/admin_page";
     }

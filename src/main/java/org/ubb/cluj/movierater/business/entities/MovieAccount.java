@@ -9,11 +9,11 @@ import java.util.Date;
  * Created by somai on 14.12.2014.
  */
 @Entity
-@Table(name = "movie_account")
+@Table(name = "movies_to_accounts")
 @AssociationOverrides({
-        @AssociationOverride(name = "pk.accounts",
+        @AssociationOverride(name = "pk.account",
                 joinColumns = @JoinColumn(name = "ACCOUNT_ID")),
-        @AssociationOverride(name = "pk.movies",
+        @AssociationOverride(name = "pk.movie",
                 joinColumns = @JoinColumn(name = "MOVIE_ID"))})
 @NamedQuery(name = MovieAccount.GET_RATING_INFO, query = "SELECT ma FROM MovieAccount ma WHERE ma.pk.account = :account AND ma.pk.movie = :movie")
 public class MovieAccount implements Serializable {

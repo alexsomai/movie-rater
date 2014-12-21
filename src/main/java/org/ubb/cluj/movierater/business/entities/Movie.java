@@ -14,7 +14,7 @@ import java.util.Set;
  * Created by somai on 10.12.2014.
  */
 @Entity
-@Table(name = "movie")
+@Table(name = "movies")
 public class Movie implements Serializable {
 
     @Id

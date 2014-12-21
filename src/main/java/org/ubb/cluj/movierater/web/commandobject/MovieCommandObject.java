@@ -18,7 +18,6 @@ public class MovieCommandObject {
     private static final String RELEASE_DATE_NOT_BLANK = "{message.movie.releaseDate.not.blank}";
     private static final String RELEASE_DATE_NOT_PAST = "{message.movie.releaseDate.not.past}";
 
-
     private Long id;
 
     @NotBlank(message = MovieCommandObject.TITLE_NOT_BLANK)
@@ -27,14 +26,35 @@ public class MovieCommandObject {
     @NotBlank(message = MovieCommandObject.DESCRIPTION_NOT_BLANK)
     private String description;
 
-    private String posterFileName;
+    private String posterFile;
+
     @NotNull(message = MovieCommandObject.RELEASE_DATE_NOT_BLANK)
     @Past(message = MovieCommandObject.RELEASE_DATE_NOT_PAST)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date releaseDate;
 
+    private Integer numberOfRatings;
+
+    private String rate;
+
     public MovieCommandObject() {
         super();
+    }
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    public Integer getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(Integer numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
     }
 
     public Date getReleaseDate() {
@@ -45,12 +65,12 @@ public class MovieCommandObject {
         this.releaseDate = releaseDate;
     }
 
-    public String getPosterFileName() {
-        return posterFileName;
+    public String getPosterFile() {
+        return posterFile;
     }
 
-    public void setPosterFileName(String posterFileName) {
-        this.posterFileName = posterFileName;
+    public void setPosterFile(String posterFile) {
+        this.posterFile = posterFile;
     }
 
     public Long getId() {
@@ -78,6 +98,6 @@ public class MovieCommandObject {
     }
 
     public Movie createMovie() {
-        return new Movie(title, description, posterFileName, releaseDate);
+        return new Movie(title, description, posterFile, releaseDate);
     }
 }

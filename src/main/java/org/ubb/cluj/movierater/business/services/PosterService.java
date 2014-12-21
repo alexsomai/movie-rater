@@ -1,8 +1,10 @@
 package org.ubb.cluj.movierater.business.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -14,9 +16,11 @@ import java.util.regex.Pattern;
 @Service
 public class PosterService {
 
-    private static final String MOVIE_POSTER_PATH = "/var/app/movie-rater/poster";
     private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
     private static final long MAX_FILE_SIZE = 5096000;
+
+    @Autowired
+    ServletContext servletContext;
 
     private Pattern pattern;
 
@@ -24,7 +28,18 @@ public class PosterService {
         pattern = Pattern.compile(IMAGE_PATTERN);
     }
 
+    public static String getRelativeSavingFolder() {
+        return File.separator + "resources" + File.separator + "images" +
+                File.separator + "movie-poster" + File.separator;
+    }
+
     public String validatePoster(MultipartFile poster) {
+
+        // TODO
+//        BufferedImage image = ImageIO.read(poster.getInputStream());
+//        Integer width = image.getWidth();
+//        Integer height = image.getHeight();
+        // if width and height doesn't match, will return an error
         if (poster.isEmpty()) {
             return "Poster file may not be empty!";
         }
@@ -42,23 +57,23 @@ public class PosterService {
 
     public String savePoster(MultipartFile poster) {
         String fileName = System.nanoTime() + "_" + poster.getOriginalFilename();
+        String webAppRoot = servletContext.getRealPath("/");
+
+        File savingDirectory = new File(webAppRoot, getRelativeSavingFolder());
+        if (!savingDirectory.exists()) {
+            savingDirectory.mkdirs();
+        }
+
+        File savingFile = new File(savingDirectory, fileName);
+
         try {
-            poster.transferTo(new File(MOVIE_POSTER_PATH, fileName));
+            poster.transferTo(savingFile);
         } catch (IOException e) {
             // if any error occurs while saving the file, set a default file to be used
             e.printStackTrace();
-            return "default_file";
+            return "default_poster";
         }
         return fileName;
-//        try {
-//            byte[] bytes = poster.getBytes();
-//            BufferedOutputStream buffStream =
-//                    new BufferedOutputStream(new FileOutputStream(new File(MOVIE_POSTER_PATH, fileName)));
-//            buffStream.write(bytes);
-//            buffStream.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     /**

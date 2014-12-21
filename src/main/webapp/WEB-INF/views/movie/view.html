@@ -38,8 +38,6 @@
                                                     .show("You have rated this movie with "
                                                     + result.userRate + " stars");
 
-                                            populateMovieRateInfo(result.movieRate, result.ratings);
-                                            populateUserRateInfo(result.userRate, result.ratedAt);
                                             $('#movie-rate-info')
                                                     .html("Rate: <br/>" +
                                                     result.movieRate +
@@ -116,8 +114,12 @@
 
     <div class="row featurette">
         <div class="col-md-5">
-            <img class="featurette-image img-responsive" src="data:image/png;base64," data-src="holder.js/500x500/auto"
-                 alt="Generic placeholder image"/>
+            <img class="featurette-image img-responsive" src=""
+                 onError="this.src='/resources/images/default_poster.jpg'"
+                 th:attr="src=${movie.poster}"/>
+            <!--<img class="featurette-image img-responsive"-->
+            <!--src="data:image/png;base64," data-src="holder.js/500x500/auto"-->
+            <!--alt="Generic placeholder image"/>-->
         </div>
 
         <div class="col-md-7">

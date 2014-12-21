@@ -56,7 +56,9 @@ public class MovieService {
     }
 
     public Movie getMovieById(Long id) {
-        return movieRepository.getMovieById(id);
+        Movie movie = movieRepository.getMovieById(id);
+        movie.setPoster(PosterService.getRelativeSavingFolder() + movie.getPoster());
+        return movie;
     }
 
     public void update(MovieCommandObject movieCommandObject) {
@@ -84,6 +86,10 @@ public class MovieService {
         }
         movieCommandObject.setDescription(description);
         movieCommandObject.setId(movie.getId());
+        movieCommandObject.setPosterFile(PosterService.getRelativeSavingFolder() + movie.getPoster());
+        movieCommandObject.setReleaseDate(movie.getReleaseDate());
+        movieCommandObject.setNumberOfRatings(movie.getNumberOfRatings());
+        movieCommandObject.setRate(DECIMAL_FORMAT.format(movie.getRate().doubleValue()));
         return movieCommandObject;
     }
 }

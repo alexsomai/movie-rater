@@ -5,13 +5,31 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="col-xs-6 col-md-4 top3" th:each="movie : ${movies}">
+    <div class="col-sm-6 col-md-4 top3" th:each="movie : ${movies}">
         <div class="thumbnail">
-            <img data-src="holder.js/100%x180" alt="..."/>
-
+            <div>
+                <img class="thumbnail-image"
+                     src="" onError="this.src='/resources/images/default_poster.jpg'"
+                     width="160"
+                     th:attr="src=${movie.posterFile}"/>
+                <!--<img data-src="holder.js/100%x180" alt="..."/>-->
+                <div th:inline="text" class="display-inline">
+                    <legend><strong>
+                        [[${movie.title}]]
+                    </strong></legend>
+                    <!--<p th:inline="text" style="display:inline-block;">-->
+                    <h4><em>Rate</em></h4>
+                    <!--<br/>-->
+                    [[${movie.rate}]]
+                    <span class="text-muted">/5</span> <span class="glyphicon glyphicon-star"></span>
+                    ([[${movie.numberOfRatings}]] votes)
+                    <h4><em>Release date</em></h4>
+                    [[${#dates.format(movie.releaseDate, 'MMMM dd, yyyy')}]]
+                </div>
+            </div>
             <div class="caption">
 
-                <h3 th:text="${movie.title}"></h3>
+                <!--<h3 th:text="${movie.title}"></h3>-->
 
                 <p th:text="${movie.description}"></p>
 
