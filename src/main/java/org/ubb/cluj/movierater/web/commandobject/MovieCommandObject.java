@@ -1,7 +1,12 @@
 package org.ubb.cluj.movierater.web.commandobject;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.ubb.cluj.movierater.business.entities.Movie;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import java.util.Date;
 
 /**
  * Created by somai on 10.12.2014.
@@ -10,6 +15,9 @@ public class MovieCommandObject {
 
     private static final String TITLE_NOT_BLANK = "{message.movie.title.not.blank}";
     private static final String DESCRIPTION_NOT_BLANK = "{message.movie.description.not.blank}";
+    private static final String RELEASE_DATE_NOT_BLANK = "{message.movie.releaseDate.not.blank}";
+    private static final String RELEASE_DATE_NOT_PAST = "{message.movie.releaseDate.not.past}";
+
 
     private Long id;
 
@@ -20,6 +28,22 @@ public class MovieCommandObject {
     private String description;
 
     private String posterFileName;
+    @NotNull(message = MovieCommandObject.RELEASE_DATE_NOT_BLANK)
+    @Past(message = MovieCommandObject.RELEASE_DATE_NOT_PAST)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date releaseDate;
+
+    public MovieCommandObject() {
+        super();
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
     public String getPosterFileName() {
         return posterFileName;
@@ -54,6 +78,6 @@ public class MovieCommandObject {
     }
 
     public Movie createMovie() {
-        return new Movie(title, description, posterFileName);
+        return new Movie(title, description, posterFileName, releaseDate);
     }
 }

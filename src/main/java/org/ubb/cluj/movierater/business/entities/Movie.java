@@ -3,9 +3,10 @@ package org.ubb.cluj.movierater.business.entities;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,6 +32,7 @@ public class Movie implements Serializable {
     @NotEmpty
     private String poster;
 
+    @NotNull
     private Date releaseDate;
 
     @Column(name = "no_of_ratings")
@@ -51,10 +53,11 @@ public class Movie implements Serializable {
 
     }
 
-    public Movie(String title, String description, String poster) {
+    public Movie(String title, String description, String poster, Date releaseDate) {
         this.description = description;
         this.title = title;
         this.poster = poster;
+        this.releaseDate = releaseDate;
     }
 
     public Set<MovieAccount> getMovieAccounts() {

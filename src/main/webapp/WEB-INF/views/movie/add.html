@@ -26,7 +26,7 @@
             });
 
             $('#date-picker').datepicker({
-                format: 'dd-mm-yyyy'
+                format: 'dd/mm/yyyy'
             });
 
             $('#main-actors').multiselect({
@@ -84,14 +84,17 @@
             </div>
             <div class="row">
                 <div class='col-sm-6'>
-                    <div class="form-group">
-                        <label for="date-picker" th:text="#{label.movie.releaseDate}"></label>
-                        <input id="date-picker" type="text" class="form-control"/>
+                    <div class="form-group" th:classappend="${#fields.hasErrors('releaseDate')} ? 'has-error'">
+                        <label for="date-picker" class="control-label" th:text="#{label.movie.releaseDate}"></label>
+                        <input th:field="*{releaseDate}" name="releaseDate" id="date-picker"
+                               type="text" class="form-control"/>
+                         <span class="help-block" th:if="${#fields.hasErrors('releaseDate')}"
+                               th:errors="*{releaseDate}"></span>
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <label for="main-actors" th:text="#{label.movie.actors}"></label>
+                <label for="main-actors" class="control-label" th:text="#{label.movie.actors}"></label>
                 <select id="main-actors" multiple="multiple">
                     <option value="a">Option 1</option>
                     <option value="b">Option 2</option>
