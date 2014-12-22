@@ -2,7 +2,7 @@
 <html>
 <body>
 <div th:fragment="pagination (searchFilter)" class="text-center">
-    <ul class="pagination" th:if="${searchFilter.noPages ne 0}">
+    <ul class="pagination" th:if="${searchFilter.noPages ge 2}">
         <li th:classappend="${searchFilter.page eq 0} ? 'disabled'">
             <a href="#" th:if="${searchFilter.page gt 0}"
                th:href="@{/movie/index(page=${searchFilter.page - 1}, title=${searchFilter.title},

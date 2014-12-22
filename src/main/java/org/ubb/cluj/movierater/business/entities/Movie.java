@@ -44,7 +44,12 @@ public class Movie implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.movie", cascade = CascadeType.ALL)
     private Set<MovieAccount> movieAccounts = new HashSet<>(0);
 
-//    private Set<Category> categories = new HashSet<>(0);
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "movies_to_categories", joinColumns = {
+            @JoinColumn(name = "movie_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "category_id",
+                    nullable = false, updatable = false)})
+    private Set<Category> categories = new HashSet<>(0);
 
     public Movie() {
 
@@ -55,6 +60,10 @@ public class Movie implements Serializable {
         this.title = title;
         this.poster = poster;
         this.releaseDate = releaseDate;
+    }
+
+    public Movie(Set<Category> categories) {
+        this.categories = categories;
     }
 
     public Set<MovieAccount> getMovieAccounts() {
@@ -121,15 +130,11 @@ public class Movie implements Serializable {
         this.description = description;
     }
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "movies_to_categories",
-//            joinColumns = {@JoinColumn(name = "category_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "movie_id")})
-//    public Set<Category> getCategories() {
-//        return categories;
-//    }
-//
-//    public void setCategories(Set<Category> categories) {
-//        this.categories = categories;
-//    }
+    public Set<Category> getCategories() {
+        return this.categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
 }

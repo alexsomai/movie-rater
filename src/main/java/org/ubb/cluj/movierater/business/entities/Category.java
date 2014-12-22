@@ -4,67 +4,54 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 public class Category implements java.io.Serializable {
 
-    private Integer categoryId;
-    private String name;
-    private String desc;
-    private Set<Stock> stocks = new HashSet<Stock>(0);
+    @Id
+    @GeneratedValue
+    private Integer id;
+
+    @Column(length = 32)
+    private String genre;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
+    private Set<Movie> movies = new HashSet<>(0);
 
     public Category() {
     }
 
-    public Category(String name, String desc) {
-        this.name = name;
-        this.desc = desc;
+    public Category(String genre) {
+        this.genre = genre;
     }
 
-    public Category(String name, String desc, Set<Stock> stocks) {
-        this.name = name;
-        this.desc = desc;
-        this.stocks = stocks;
+    public Category(String genre, Set<Movie> movies) {
+        this.genre = genre;
+        this.movies = movies;
     }
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "CATEGORY_ID", unique = true, nullable = false)
-    public Integer getCategoryId() {
-        return this.categoryId;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
-    @Column(name = "NAME", nullable = false, length = 10)
-    public String getName() {
-        return this.name;
+    public Integer getId() {
+        return this.id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    @Column(name = "[DESC]", nullable = false)
-    public String getDesc() {
-        return this.desc;
+    public Set<Movie> getMovies() {
+        return this.movies;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
-    public Set<Stock> getStocks() {
-        return this.stocks;
-    }
-
-    public void setStocks(Set<Stock> stocks) {
-        this.stocks = stocks;
+    public void setMovies(Set<Movie> movies) {
+        this.movies = movies;
     }
 
 }
