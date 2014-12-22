@@ -6,147 +6,141 @@
         // <![CDATA[
         $(document).ready(function () {
             $.getJSON("/category/getAll", function (result) {
-                var categories = $('#categories');
+                var categories = $('#categories'),
+                        categoryUrlId = getUrlParameter("category"),
+                        categoryIdArray = [];
+                if (categoryUrlId) {
+                    categoryIdArray = categoryUrlId.split(',').map(Number);
+                }
                 $.each(result, function (index, item) {
                     var color = '#d9534f';
                     if (item.id % 2 == 0) {
                         color = '#f0ad4e';
                     }
                     if (item.id % 3 == 0) {
-                        color = '#428bca';
+                        color = '#446e9b';
                     }
                     if (item.id % 4 == 0) {
                         color = '#5cb85c';
                     }
-                    categories.append($("<li id='category-" + item.id + "' class='label-filter-item' >" +
-                            "<a href='/movie/index?category=" + item.id +
+
+
+                    var activeCategory = checkIfCategoryIsActive(item.id, categoryIdArray);
+                    categories.append($("<li id='category-" +
+                            item.id + "' class='label-filter-item " + activeCategory.active + "' >" +
+                            "<a href='/movie/index?category=" + createCategoryUrl(item.id, categoryIdArray) +
                             "'><span class='label color-label' " +
-                            "style='font-size: 14px; background:" + color + "; color:#FFF'>" +
-                            item.genre + "</span></a></li>"
-                    ))
-                    ;
+                            "style='font-size: 12px; background:" + color + "; color:#FFF'>" +
+                            item.genre + "</span>" + activeCategory.extraDiv + "</a></li>"
+                    ));
                 });
             });
         });
+
+        function checkIfCategoryIsActive(categoryId, categoryIdArray) {
+            var activeCategory = {};
+            if ($.inArray(categoryId, categoryIdArray) != -1) {
+                activeCategory.active = "active";
+                activeCategory.extraDiv = "<div class='pull-right'>" +
+                "<i class='glyphicon glyphicon-remove'></div>"
+            } else {
+                activeCategory.active = "light";
+                activeCategory.extraDiv = "";
+            }
+            return activeCategory;
+        }
+
+        function createCategoryUrl(categoryId, categoryIdArray) {
+            var categoryIndex = $.inArray(categoryId, categoryIdArray);
+            console.log("index: " + categoryIndex + " for elem " + categoryId + " array: " + categoryIdArray);
+            if (categoryIndex == -1) {
+                if (categoryIdArray.length > 0) {
+                    return categoryIdArray + "," + categoryId;
+                } else {
+                    return categoryId;
+                }
+            } else {
+                var categoryIdArrayRemoveItems = categoryIdArray.slice();
+                categoryIdArrayRemoveItems.splice(categoryIndex, 1);
+                return categoryIdArrayRemoveItems;
+            }
+        }
+
+        function getUrlParameter(name) {
+            if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
+                return decodeURIComponent(name[1]);
+        }
         // ]]>
     </script>
 </head>
 <body>
 <div layout:fragment="content">
-    <table>
-        <tbody>
-        <tr>
-            <td>
-                <legend>Categories</legend>
-                <ul id="categories" class="nav nav-pills nav-stacked nav-small labels-filter">
-                    <li class="label-filter-item active">
-                        <a href="#">
-                            <span
-                                    class="label color-label" style="background:#d9534f;color:#FFF">bug
-                            </span>
+    <div class="row">
+        <div class="col-xs-2">
+            <legend>Categories</legend>
+            <ul id="categories" class="nav nav-pills nav-stacked nav-small labels-filter">
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <div th:replace="fragments/pagination :: pagination(searchFilter = ${searchFilter})">
+            </div>
+            <div class="col-sm-6 col-md-4 top3" th:each="movie : ${movies}">
+                <div class="thumbnail">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <img class="thumbnail-image"
+                                     src="" onError="this.src='/resources/images/default_poster.jpg'"
+                                     width="120"
+                                     th:attr="src=${movie.posterFile}"/>
+                                <!--<img data-src="holder.js/100%x180" alt="..."/>-->
+                            </td>
+                            <td>
+                                <div th:inline="text">
+                                    <h3>
+                                        <strong>
+                                            [[${movie.title}]]
+                                        </strong>
+                                    </h3>
+                                    <h4><em>Rate</em></h4>
+                                    [[${movie.rate}]]
+                                    <span class="text-muted">/5</span> <span
+                                        class="glyphicon glyphicon-star"></span>
+                                    ([[${movie.numberOfRatings}]] votes)
+                                    <h4><em>Release date</em></h4>
+                                    [[${#dates.format(movie.releaseDate, 'MMMM dd, yyyy')}]]
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="caption">
+                        <h4><em>Genre</em></h4>
+                        <ul>
+                            <li th:each="genre : ${movie.genreNames}" th:text="${genre}"></li>
+                        </ul>
+                        <h4><em>Description</em></h4>
 
-                            <div class="pull-right">
-                                <i class="glyphicon glyphicon-remove"></i>
-                            </div>
-                        </a></li>
-                    <li class="label-filter-item active">
-                        <a href="#">
-                            <span
-                                    class="label color-label" style="font-size: 14px; background:#d9534f;color:#FFF">confirmed
-                            </span>
+                        <p th:text="${movie.description}"></p>
 
-                            <div class="pull-right">
-                                <i class="glyphicon glyphicon-remove"></i>
-                            </div>
-                        </a></li>
-                    <li class="label-filter-item light">
-                        <a href="#"><span
-                                class="label color-label" style="background:#d9534f;color:#FFF">critical</span>
-                        </a></li>
-                    <li class="label-filter-item light">
-                        <a href="#"><span
-                                class="label color-label" style="background:#428bca;color:#FFF">discussion</span>
-                        </a></li>
-                    <li class="label-filter-item light">
-                        <a href="#"><span
-                                class="label color-label" style="font-size: 14px; background:#f0ad4e;color:#FFF">documentation</span>
-                        </a></li>
-                    <li class="label-filter-item light">
-                        <a href="#"><span
-                                class="label color-label" style="background:#5cb85c;color:#FFF">enhancement</span>
-                        </a></li>
-                    <li class="label-filter-item light">
-                        <a href="#"><span
-                                class="label color-label" style="background:#428bca;color:#FFF">suggestion</span>
-                        </a></li>
-                    <li class="label-filter-item light">
-                        <a href="#"><span
-                                class="label color-label" style="background:#f0ad4e;color:#FFF">support</span>
-                        </a></li>
-                </ul>
-            </td>
-            <td>
-                <div th:replace="fragments/pagination :: pagination(searchFilter = ${searchFilter})">
-                </div>
-                <div class="col-sm-6 col-md-4 top3" th:each="movie : ${movies}">
-                    <div class="thumbnail">
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <img class="thumbnail-image"
-                                         src="" onError="this.src='/resources/images/default_poster.jpg'"
-                                         width="120"
-                                         th:attr="src=${movie.posterFile}"/>
-                                    <!--<img data-src="holder.js/100%x180" alt="..."/>-->
-                                </td>
-                                <td>
-                                    <div th:inline="text">
-                                        <h3>
-                                            <strong>
-                                                [[${movie.title}]]
-                                            </strong>
-                                        </h3>
-                                        <h4><em>Rate</em></h4>
-                                        [[${movie.rate}]]
-                                        <span class="text-muted">/5</span> <span
-                                            class="glyphicon glyphicon-star"></span>
-                                        ([[${movie.numberOfRatings}]] votes)
-                                        <h4><em>Release date</em></h4>
-                                        [[${#dates.format(movie.releaseDate, 'MMMM dd, yyyy')}]]
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="caption">
-                            <h4><em>Genre</em></h4>
-                            <ul>
-                                <li th:each="genre : ${movie.genreNames}" th:text="${genre}"></li>
-                            </ul>
-                            <h4><em>Description</em></h4>
+                        <p>
+                            <a href="#" th:href="@{/movie/edit(movieId=${movie.id})}"
+                               class="btn btn-primary" role="button">Edit
+                            </a>
+                            <a href="#" class="btn btn-danger" role="button">Delete</a>
+                        </p>
 
-                            <p th:text="${movie.description}"></p>
-
-                            <p>
-                                <a href="#" th:href="@{/movie/edit(movieId=${movie.id})}"
-                                   class="btn btn-primary" role="button">Edit
-                                </a>
-                                <a href="#" class="btn btn-danger" role="button">Delete</a>
-                            </p>
-
-                            <p>
-                                <a class="btn btn-default" href="#" th:href="@{/movie/view(id=${movie.id})}">
-                                    View details &raquo;
-                                </a>
-                            </p>
-                        </div>
+                        <p>
+                            <a class="btn btn-default" href="#" th:href="@{/movie/view(id=${movie.id})}">
+                                View details &raquo;
+                            </a>
+                        </p>
                     </div>
                 </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
