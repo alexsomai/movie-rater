@@ -33,8 +33,7 @@ public class Account implements Serializable {
 
     private String role = ROLE_USER;
 
-    //    @ManyToMany(mappedBy = "account")
-    @OneToMany(mappedBy = "pk.account")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.account")
     private Set<MovieAccount> movieAccounts = new HashSet<>(0);
 
     protected Account() {
@@ -91,4 +90,5 @@ public class Account implements Serializable {
     public boolean isAdmin() {
         return ROLE_ADMIN.equals(getRole());
     }
+
 }

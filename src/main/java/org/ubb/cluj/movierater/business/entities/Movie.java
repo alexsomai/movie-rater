@@ -41,13 +41,10 @@ public class Movie implements Serializable {
     @Column(precision = 10, scale = 2)
     private BigDecimal rate = new BigDecimal(0);
 
-
-    //    cascade = CascadeType.ALL)
-//    @JoinTable(name = "movie_account",
-//            joinColumns = {@JoinColumn(name = "MOVIE_ID")},
-//            inverseJoinColumns = {@JoinColumn(name = "ACCOUNT_ID")})
-    @OneToMany(mappedBy = "pk.movie")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.movie", cascade = CascadeType.ALL)
     private Set<MovieAccount> movieAccounts = new HashSet<>(0);
+
+//    private Set<Category> categories = new HashSet<>(0);
 
     public Movie() {
 
@@ -100,12 +97,6 @@ public class Movie implements Serializable {
         this.releaseDate = releaseDate;
     }
 
-    //    public Movie(String title, String description, String image, Date releaseDate) {
-//        this(title, description);
-//        this.image = image;
-//        this.releaseDate = releaseDate;
-//    }
-
     public Long getId() {
         return id;
     }
@@ -130,19 +121,15 @@ public class Movie implements Serializable {
         this.description = description;
     }
 
-//    public String getImage() {
-//        return image;
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "movies_to_categories",
+//            joinColumns = {@JoinColumn(name = "category_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "movie_id")})
+//    public Set<Category> getCategories() {
+//        return categories;
 //    }
 //
-//    public void setImage(String image) {
-//        this.image = image;
-//    }
-//
-//    public Date getReleaseDate() {
-//        return releaseDate;
-//    }
-//
-//    public void setReleaseDate(Date releaseDate) {
-//        this.releaseDate = releaseDate;
+//    public void setCategories(Set<Category> categories) {
+//        this.categories = categories;
 //    }
 }
