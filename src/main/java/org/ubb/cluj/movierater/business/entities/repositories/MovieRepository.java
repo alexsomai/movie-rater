@@ -142,7 +142,7 @@ public class MovieRepository {
 
         criteriaQuery.select(categoryRoot);
 
-        criteriaQuery.where(categoryRoot.<Long[]>get("id").in((Object[]) categoryIds));
+        criteriaQuery.where(categoryRoot.get("id").in(categoryIds));
         TypedQuery<Category> query = entityManager.createQuery(criteriaQuery);
         return new HashSet<>(query.getResultList());
     }

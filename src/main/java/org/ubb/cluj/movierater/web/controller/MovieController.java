@@ -44,6 +44,9 @@ public class MovieController {
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
     public String index(SearchFilter searchFilter, Model model) {
+        for (String cati : searchFilter.getCategory()) {
+            System.out.println("cati = " + cati);
+        }
         int numberOfPages = movieService.getNumberOfPages(searchFilter);
         searchFilter.setNoPages(numberOfPages);
         if (searchFilter.getPage() > numberOfPages - 1) {

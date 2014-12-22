@@ -2,6 +2,34 @@
 <html layout:decorator="fragments/main_layout">
 <head>
     <title>View movies</title>
+    <script>
+        // <![CDATA[
+        $(document).ready(function () {
+            $.getJSON("/category/getAll", function (result) {
+                var categories = $('#categories');
+                $.each(result, function (index, item) {
+                    var color = '#d9534f';
+                    if (item.id % 2 == 0) {
+                        color = '#f0ad4e';
+                    }
+                    if (item.id % 3 == 0) {
+                        color = '#428bca';
+                    }
+                    if (item.id % 4 == 0) {
+                        color = '#5cb85c';
+                    }
+                    categories.append($("<li id='category-" + item.id + "' class='label-filter-item' >" +
+                            "<a href='/movie/index?category=" + item.id +
+                            "'><span class='label color-label' " +
+                            "style='font-size: 14px; background:" + color + "; color:#FFF'>" +
+                            item.genre + "</span></a></li>"
+                    ))
+                    ;
+                });
+            });
+        });
+        // ]]>
+    </script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -10,7 +38,7 @@
         <tr>
             <td>
                 <legend>Categories</legend>
-                <ul class="nav nav-pills nav-stacked nav-small labels-filter">
+                <ul id="categories" class="nav nav-pills nav-stacked nav-small labels-filter">
                     <li class="label-filter-item active">
                         <a href="#">
                             <span
@@ -24,7 +52,7 @@
                     <li class="label-filter-item active">
                         <a href="#">
                             <span
-                                    class="label color-label" style="background:#d9534f;color:#FFF">confirmed
+                                    class="label color-label" style="font-size: 14px; background:#d9534f;color:#FFF">confirmed
                             </span>
 
                             <div class="pull-right">
@@ -41,7 +69,7 @@
                         </a></li>
                     <li class="label-filter-item light">
                         <a href="#"><span
-                                class="label color-label" style="background:#f0ad4e;color:#FFF">documentation</span>
+                                class="label color-label" style="font-size: 14px; background:#f0ad4e;color:#FFF">documentation</span>
                         </a></li>
                     <li class="label-filter-item light">
                         <a href="#"><span
