@@ -60,7 +60,7 @@ public class MovieRepository {
         movieAccount.setMovie(movie);
         movieAccount.setStars(BigDecimal.valueOf(stars));
         movieAccount.setRatedAt(new Date());
-        account.getMovieAccounts().add(movieAccount);
+        movie.getMovieAccounts().add(movieAccount);
 
         entityManager.persist(movie);
         entityManager.persist(movieAccount);
