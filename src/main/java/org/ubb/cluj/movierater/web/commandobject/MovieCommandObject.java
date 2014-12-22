@@ -8,6 +8,7 @@ import org.ubb.cluj.movierater.business.entities.Movie;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by somai on 10.12.2014.
@@ -40,18 +41,28 @@ public class MovieCommandObject {
     private String rate;
 
     @NotEmpty(message = MovieCommandObject.GENRES_NOT_EMPTY)
-    private Long[] genres;
+    private Long[] genreIds;
+
+    private List<String> genreNames;
 
     public MovieCommandObject() {
         super();
     }
 
-    public Long[] getGenres() {
-        return genres;
+    public List<String> getGenreNames() {
+        return genreNames;
     }
 
-    public void setGenres(Long[] genres) {
-        this.genres = genres;
+    public void setGenreNames(List<String> genreNames) {
+        this.genreNames = genreNames;
+    }
+
+    public Long[] getGenreIds() {
+        return genreIds;
+    }
+
+    public void setGenreIds(Long[] genreIds) {
+        this.genreIds = genreIds;
     }
 
     public String getRate() {

@@ -3,6 +3,7 @@ package org.ubb.cluj.movierater.business.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ubb.cluj.movierater.business.entities.Account;
+import org.ubb.cluj.movierater.business.entities.Category;
 import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import org.ubb.cluj.movierater.business.entities.repositories.MovieRepository;
@@ -14,6 +15,7 @@ import javax.persistence.EntityExistsException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,7 +32,7 @@ public class MovieService {
     private MovieRepository movieRepository;
 
     public Movie save(MovieCommandObject movieCommandObject) {
-        return movieRepository.save(movieCommandObject.createMovie(), movieCommandObject.getGenres());
+        return movieRepository.save(movieCommandObject.createMovie(), movieCommandObject.getGenreIds());
     }
 
     public MovieAccount getRatingInfo(long movieId, Account account) {
@@ -95,6 +97,14 @@ public class MovieService {
         movieCommandObject.setReleaseDate(movie.getReleaseDate());
         movieCommandObject.setNumberOfRatings(movie.getNumberOfRatings());
         movieCommandObject.setRate(DECIMAL_FORMAT.format(movie.getRate().doubleValue()));
+
+        List<String> genreList = new ArrayList<>();
+        for (Category category : movie.getCategories()) {
+            genreList.add(category.getGenre());
+        }
+        Collections.sort(genreList);
+        movieCommandObject.setGenreNames(genreList);
+
         return movieCommandObject;
     }
 }

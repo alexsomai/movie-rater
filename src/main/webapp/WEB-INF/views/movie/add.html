@@ -35,7 +35,7 @@
             var genres = $("#genres");
 
             /*[+
-             var submittedGenres = [[${movieCommandObject.genres}]];
+             var submittedGenres = [[${movieCommandObject.genreIds}]];
              +]*/
 
             $.each(result, function (index, item) {
@@ -99,11 +99,11 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group" th:classappend="${#fields.hasErrors('genres')} ? 'has-error'">
+            <div class="form-group" th:classappend="${#fields.hasErrors('genreIds')} ? 'has-error'">
                 <label for="genres" class="control-label" th:text="#{label.movie.genres}"></label>
-                <select id="genres" name="genres" multiple="multiple" th:field="*{genres}"></select>
-                         <span class="help-block" th:if="${#fields.hasErrors('genres')}"
-                               th:errors="*{genres}"></span>
+                <select id="genres" name="genreIds" multiple="multiple" th:field="*{genreIds}"></select>
+                         <span class="help-block" th:if="${#fields.hasErrors('genreIds')}"
+                               th:errors="*{genreIds}"></span>
             </div>
             <div class="form-group" th:classappend="${posterErrMsg != null} ? 'has-error'">
                 <label for="poster" class="control-label"

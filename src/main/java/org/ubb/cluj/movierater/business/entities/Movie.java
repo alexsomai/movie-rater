@@ -44,7 +44,7 @@ public class Movie implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.movie", cascade = CascadeType.ALL)
     private Set<MovieAccount> movieAccounts = new HashSet<>(0);
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "movies_to_categories", joinColumns = {
             @JoinColumn(name = "movie_id", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "category_id",
