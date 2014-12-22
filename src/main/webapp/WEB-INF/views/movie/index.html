@@ -5,53 +5,108 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <legend>Categories</legend>
+                <ul class="nav nav-pills nav-stacked nav-small labels-filter">
+                    <li class="label-filter-item active">
+                        <a href="#">
+                            <span
+                                    class="label color-label" style="background:#d9534f;color:#FFF">bug
+                            </span>
 
-    <div th:replace="fragments/pagination :: pagination(searchFilter = ${searchFilter})">
-    </div>
+                            <div class="pull-right">
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </div>
+                        </a></li>
+                    <li class="label-filter-item active">
+                        <a href="#">
+                            <span
+                                    class="label color-label" style="background:#d9534f;color:#FFF">confirmed
+                            </span>
 
-    <div class="col-sm-6 col-md-4 top3" th:each="movie : ${movies}">
-        <div class="thumbnail">
-            <div>
-                <img class="thumbnail-image"
-                     src="" onError="this.src='/resources/images/default_poster.jpg'"
-                     width="160"
-                     th:attr="src=${movie.posterFile}"/>
-                <!--<img data-src="holder.js/100%x180" alt="..."/>-->
-                <div th:inline="text" class="display-inline">
-                    <legend><strong>
-                        [[${movie.title}]]
-                    </strong></legend>
-                    <!--<p th:inline="text" style="display:inline-block;">-->
-                    <h4><em>Rate</em></h4>
-                    <!--<br/>-->
-                    [[${movie.rate}]]
-                    <span class="text-muted">/5</span> <span class="glyphicon glyphicon-star"></span>
-                    ([[${movie.numberOfRatings}]] votes)
-                    <h4><em>Release date</em></h4>
-                    [[${#dates.format(movie.releaseDate, 'MMMM dd, yyyy')}]]
+                            <div class="pull-right">
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </div>
+                        </a></li>
+                    <li class="label-filter-item light">
+                        <a href="#"><span
+                                class="label color-label" style="background:#d9534f;color:#FFF">critical</span>
+                        </a></li>
+                    <li class="label-filter-item light">
+                        <a href="#"><span
+                                class="label color-label" style="background:#428bca;color:#FFF">discussion</span>
+                        </a></li>
+                    <li class="label-filter-item light">
+                        <a href="#"><span
+                                class="label color-label" style="background:#f0ad4e;color:#FFF">documentation</span>
+                        </a></li>
+                    <li class="label-filter-item light">
+                        <a href="#"><span
+                                class="label color-label" style="background:#5cb85c;color:#FFF">enhancement</span>
+                        </a></li>
+                    <li class="label-filter-item light">
+                        <a href="#"><span
+                                class="label color-label" style="background:#428bca;color:#FFF">suggestion</span>
+                        </a></li>
+                    <li class="label-filter-item light">
+                        <a href="#"><span
+                                class="label color-label" style="background:#f0ad4e;color:#FFF">support</span>
+                        </a></li>
+                </ul>
+            </td>
+            <td>
+                <div th:replace="fragments/pagination :: pagination(searchFilter = ${searchFilter})">
                 </div>
-            </div>
-            <div class="caption">
+                <div class="col-sm-6 col-md-4 top3" th:each="movie : ${movies}">
+                    <div class="thumbnail">
+                        <div>
+                            <img class="thumbnail-image"
+                                 src="" onError="this.src='/resources/images/default_poster.jpg'"
+                                 width="120"
+                                 th:attr="src=${movie.posterFile}"/>
+                            <!--<img data-src="holder.js/100%x180" alt="..."/>-->
+                            <div th:inline="text" class="display-inline">
+                                <legend>
+                                    <strong>
+                                        [[${movie.title}]]
+                                    </strong>
+                                </legend>
+                                <!--<p th:inline="text" style="display:inline-block;">-->
+                                <h4><em>Rate</em></h4>
+                                <!--<br/>-->
+                                [[${movie.rate}]]
+                                <span class="text-muted">/5</span> <span class="glyphicon glyphicon-star"></span>
+                                ([[${movie.numberOfRatings}]] votes)
+                                <h4><em>Release date</em></h4>
+                                [[${#dates.format(movie.releaseDate, 'MMMM dd, yyyy')}]]
+                            </div>
+                        </div>
+                        <div class="caption">
+                            <!--<h3 th:text="${movie.title}"></h3>-->
+                            <p th:text="${movie.description}"></p>
 
-                <!--<h3 th:text="${movie.title}"></h3>-->
+                            <p>
+                                <a href="#" th:href="@{/movie/edit(movieId=${movie.id})}"
+                                   class="btn btn-primary" role="button">Edit
+                                </a>
+                                <a href="#" class="btn btn-danger" role="button">Delete</a>
+                            </p>
 
-                <p th:text="${movie.description}"></p>
-
-                <p>
-                    <a href="#" th:href="@{/movie/edit(movieId=${movie.id})}"
-                       class="btn btn-primary" role="button">Edit
-                    </a>
-                    <a href="#" class="btn btn-danger" role="button">Delete</a>
-                </p>
-
-                <p>
-                    <a class="btn btn-default" href="#" th:href="@{/movie/view(id=${movie.id})}">
-                        View details &raquo;
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
+                            <p>
+                                <a class="btn btn-default" href="#" th:href="@{/movie/view(id=${movie.id})}">
+                                    View details &raquo;
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
