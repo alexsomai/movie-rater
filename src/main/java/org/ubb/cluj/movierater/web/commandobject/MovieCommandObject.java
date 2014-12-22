@@ -1,6 +1,7 @@
 package org.ubb.cluj.movierater.web.commandobject;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.ubb.cluj.movierater.business.entities.Movie;
 
@@ -17,6 +18,7 @@ public class MovieCommandObject {
     private static final String DESCRIPTION_NOT_BLANK = "{message.movie.description.not.blank}";
     private static final String RELEASE_DATE_NOT_BLANK = "{message.movie.releaseDate.not.blank}";
     private static final String RELEASE_DATE_NOT_PAST = "{message.movie.releaseDate.not.past}";
+    private static final String GENRES_NOT_EMPTY = "{message.movie.genres.not.empty}";
 
     private Long id;
 
@@ -37,8 +39,19 @@ public class MovieCommandObject {
 
     private String rate;
 
+    @NotEmpty(message = MovieCommandObject.GENRES_NOT_EMPTY)
+    private Long[] genres;
+
     public MovieCommandObject() {
         super();
+    }
+
+    public Long[] getGenres() {
+        return genres;
+    }
+
+    public void setGenres(Long[] genres) {
+        this.genres = genres;
     }
 
     public String getRate() {

@@ -10,7 +10,7 @@ public class Category implements java.io.Serializable {
 
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     @Column(length = 32)
     private String genre;
@@ -38,12 +38,8 @@ public class Category implements java.io.Serializable {
         this.genre = genre;
     }
 
-    public Integer getId() {
-        return this.id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     public Set<Movie> getMovies() {

@@ -2,7 +2,7 @@
 <html layout:decorator="fragments/main_layout">
 <head>
     <title>Add new movie</title>
-    <script>
+    <script th:inline="javascript">
         // <![CDATA[
         $(document).on('change', '.btn-file :file', function () {
             var input = $(this),
@@ -29,31 +29,37 @@
                 format: 'dd/mm/yyyy'
             });
 
-            $('#main-actors').multiselect({
-                enableCaseInsensitiveFiltering: true,
-                maxHeight: 300,
-                buttonWidth: 400,
-                numberDisplayed: 5,
-                nonSelectedText: 'Choose main actors'
+        });
+
+        $.getJSON("/category/getAll", function (result) {
+            var genres = $("#genres");
+
+            /*[+
+             var submittedGenres = [[${movieCommandObject.genres}]];
+             +]*/
+
+            $.each(result, function (index, item) {
+                if ($.inArray(item.id, submittedGenres) != -1) {
+                    genres.append($("<option selected='selected'/>").val(item.id).text(item.genre));
+                } else {
+                    genres.append($("<option />").val(item.id).text(item.genre));
+                }
             });
 
+            genres.multiselect({
+                enableCaseInsensitiveFiltering: true,
+                maxHeight: 300,
+                numberDisplayed: 5,
+                nonSelectedText: 'Choose genre(s)'
+            });
         });
+
         // ]]>
     </script>
 </head>
 <body>
 <div layout:fragment="content">
 
-    <!--<h1>Single File Upload</h1>-->
-
-    <!--<form method="post" enctype="multipart/form-data" action="../movie/singleSave">-->
-    <!--Upload File: <input type="file" name="file"/>-->
-    <!--<br/><br/>-->
-    <!--Description: <input type="text" name="desc"/>-->
-    <!--<br/><br/><input type="submit" value="Upload"/>-->
-    <!--</form>-->
-
-    <!--enctype="multipart/form-data"-->
     <form class="form-narrow form-horizontal" method="POST" enctype="multipart/form-data"
           th:action="@{/movie/save}" th:object="${movieCommandObject}">
 
@@ -93,24 +99,11 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="main-actors" class="control-label" th:text="#{label.movie.actors}"></label>
-                <select id="main-actors" multiple="multiple">
-                    <option value="a">Option 1</option>
-                    <option value="b">Option 2</option>
-                    <option value="c">Option 3</option>
-                    <option value="d">Option 4</option>
-                    <option value="e">Option 5</option>
-                    <option value="f">Option 6</option>
-                    <option value="g">Option 7</option>
-                    <option value="h">Option 8</option>
-                    <option value="i">Option 9</option>
-                    <option value="j">Option 10</option>
-                    <option value="k">Option 11</option>
-                    <option value="l">Option 12</option>
-                    <option value="m">Option 13</option>
-                    <option value="n">Option 14</option>
-                </select>
+            <div class="form-group" th:classappend="${#fields.hasErrors('genres')} ? 'has-error'">
+                <label for="genres" class="control-label" th:text="#{label.movie.genres}"></label>
+                <select id="genres" name="genres" multiple="multiple" th:field="*{genres}"></select>
+                         <span class="help-block" th:if="${#fields.hasErrors('genres')}"
+                               th:errors="*{genres}"></span>
             </div>
             <div class="form-group" th:classappend="${posterErrMsg != null} ? 'has-error'">
                 <label for="poster" class="control-label"

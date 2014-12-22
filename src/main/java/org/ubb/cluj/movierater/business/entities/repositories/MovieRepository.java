@@ -3,6 +3,7 @@ package org.ubb.cluj.movierater.business.entities.repositories;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.ubb.cluj.movierater.business.entities.Account;
+import org.ubb.cluj.movierater.business.entities.Category;
 import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
@@ -15,9 +16,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by somai on 10.12.2014.
@@ -37,7 +36,8 @@ public class MovieRepository {
     private EntityManager entityManager;
 
     @Transactional
-    public Movie save(Movie movie) {
+    public Movie save(Movie movie, Long[] categoryIds) {
+        movie.setCategories(getCategoriesByIds(categoryIds));
         entityManager.persist(movie);
         return movie;
     }
@@ -132,6 +132,19 @@ public class MovieRepository {
     private void addPagination(TypedQuery<Movie> query, int page) {
         query.setMaxResults(LIMIT_ITEMS_PER_PAGE);
         query.setFirstResult(page * LIMIT_ITEMS_PER_PAGE);
+    }
+
+    private Set<Category> getCategoriesByIds(Long[] categoryIds) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<Category> criteriaQuery = criteriaBuilder.createQuery(Category.class);
+        Root<Category> categoryRoot = criteriaQuery.from(Category.class);
+
+        criteriaQuery.select(categoryRoot);
+
+        criteriaQuery.where(categoryRoot.<Long[]>get("id").in((Object[]) categoryIds));
+        TypedQuery<Category> query = entityManager.createQuery(criteriaQuery);
+        return new HashSet<>(query.getResultList());
     }
 
 }

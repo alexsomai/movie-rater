@@ -30,7 +30,7 @@ public class MovieService {
     private MovieRepository movieRepository;
 
     public Movie save(MovieCommandObject movieCommandObject) {
-        return movieRepository.save(movieCommandObject.createMovie());
+        return movieRepository.save(movieCommandObject.createMovie(), movieCommandObject.getGenres());
     }
 
     public MovieAccount getRatingInfo(long movieId, Account account) {
