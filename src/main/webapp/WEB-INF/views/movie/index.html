@@ -7,11 +7,21 @@
         $(document).ready(function () {
             $.getJSON("/category/getAll", function (result) {
                 var categories = $('#categories'),
-                        categoriesArray = [];
+                        categoriesArray = [],
+                        title, sort, order;
 
                 /*[+
                  categoriesArray = [[${#arrays.toArray(searchFilter.category)}]];
+                 title = [[${searchFilter?.title}]];
+                 sort = [[${searchFilter?.sort}]];
+                 order = [[${searchFilter?.order}]];
                  +]*/
+
+                if (title == null) {
+                    title = "";
+                }
+
+                categoriesArray = categoriesArray.filter(Number);
 
                 $.each(result, function (index, item) {
                     var color = '#d9534f';
@@ -30,6 +40,7 @@
                     categories.append($("<li id='category-" +
                             item.id + "' class='label-filter-item " + categoriesList.active + "' >" +
                             "<a href='/movie/index?category=" + categoriesList.categoriesArrayUrl +
+                            "&title=" + title + "&sort=" + sort + "&order=" + order +
                             "'><span class='label color-label' " +
                             "style='font-size: 12px; background:" + color + "; color:#FFF'>" +
                             item.genre + "</span>" + categoriesList.extraDiv + "</a></li>"
@@ -70,6 +81,44 @@
             </ul>
         </div>
         <div class="col-md-8">
+            <div class="row">
+                <div class="dropdown prepend-left-15">
+                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="text-muted">sort:</span>
+                        <span th:text="${searchFilter.sort eq 'rate'} ? (${searchFilter.order eq 'asc'} ? 'Lowest rate' : 'Highest rate') : ''"></span>
+                        <span th:text="${searchFilter.sort eq 'numberOfRatings'} ? (${searchFilter.order eq 'asc'} ? 'Less voted' : 'Most voted') : ''"></span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#"
+                               th:href="@{/movie/index(title=${searchFilter?.title},
+                                               page=${searchFilter?.page}, sort='rate', order='desc',
+                                               category=${#arrays.toArray(searchFilter?.category)})}">
+                                <i class="glyphicon glyphicon-circle-arrow-up"></i> Highest rate
+                            </a>
+                            <a href="#"
+                               th:href="@{/movie/index(title=${searchFilter?.title},
+                                               page=${searchFilter?.page}, sort='rate', order='asc',
+                                               category=${#arrays.toArray(searchFilter?.category)})}">
+                                Lowest rate <i class="glyphicon glyphicon-circle-arrow-down"></i>
+                            </a>
+                            <a href="#"
+                               th:href="@{/movie/index(title=${searchFilter?.title},
+                                               page=${searchFilter?.page}, sort='numberOfRatings', order='desc',
+                                               category=${#arrays.toArray(searchFilter?.category)})}">
+                                <i class="glyphicon glyphicon-circle-arrow-up"></i> Most voted
+                            </a>
+                            <a href="#"
+                               th:href="@{/movie/index(title=${searchFilter?.title},
+                                               page=${searchFilter?.page}, sort='numberOfRatings', order='asc',
+                                               category=${#arrays.toArray(searchFilter?.category)})}">
+                                Less voted <i class="glyphicon glyphicon-circle-arrow-down"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-6 col-md-4 top3" th:each="movie : ${movies}">
                     <div class="thumbnail">

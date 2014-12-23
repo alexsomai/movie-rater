@@ -26,7 +26,7 @@ public class MovieRepository {
     private static final int LIMIT_ITEMS_PER_PAGE = 3;
     private static final String SORTING_ASC = "asc";
     private static final String SORTING_DESC = "desc";
-    private static final List<String> AVAILABLE_SORTERS = Arrays.asList("rate");
+    private static final List<String> AVAILABLE_SORTERS = Arrays.asList("rate", "numberOfRatings");
 
     @PersistenceContext
     private EntityManager entityManager;

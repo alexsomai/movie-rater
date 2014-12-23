@@ -10,7 +10,7 @@ public class SearchFilter {
     private String title;
     private String sort;
     private String order;
-    private Long[] category;
+    private Long[] category = {};
 
     public Long[] getCategory() {
         return category;

@@ -133,3 +133,7 @@ img.thumbnail-image {
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+
+.prepend-left-15 {
+    margin-left: 15px;
+}
