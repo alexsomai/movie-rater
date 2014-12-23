@@ -15,7 +15,6 @@ import javax.persistence.EntityExistsException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -102,9 +101,9 @@ public class MovieService {
         for (Category category : movie.getCategories()) {
             genreList.add(category.getGenre());
         }
-        Collections.sort(genreList);
         movieCommandObject.setGenreNames(genreList);
 
         return movieCommandObject;
     }
+
 }

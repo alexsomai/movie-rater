@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by somai on 10.12.2014.
@@ -49,7 +50,8 @@ public class Movie implements Serializable {
             @JoinColumn(name = "movie_id", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "category_id",
                     nullable = false, updatable = false)})
-    private Set<Category> categories = new HashSet<>(0);
+    @OrderBy("genre asc")
+    private Set<Category> categories = new TreeSet<>();
 
     public Movie() {
 
@@ -137,4 +139,5 @@ public class Movie implements Serializable {
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
+
 }
