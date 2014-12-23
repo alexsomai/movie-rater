@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.*;
@@ -124,6 +125,11 @@ public class MovieRepository {
 
         if (searchFilter.getTitle() != null) {
             criteriaQuery.where(criteriaBuilder.like(movieRoot.<String>get("title"), "%" + searchFilter.getTitle() + "%"));
+        }
+
+        if (searchFilter.getCategory().length > 0) {
+            Join<Movie, Category> products = movieRoot.join("categories");
+            criteriaQuery.where(criteriaBuilder.equal(products.get("id"), 1L));
         }
 
         return entityManager.createQuery(criteriaQuery);
