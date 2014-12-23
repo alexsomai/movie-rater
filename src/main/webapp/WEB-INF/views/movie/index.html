@@ -20,6 +20,12 @@
                 if (title == null) {
                     title = "";
                 }
+                if (sort == null) {
+                    sort = "";
+                }
+                if (order == null) {
+                    order = "";
+                }
 
                 categoriesArray = categoriesArray.filter(Number);
 
@@ -82,6 +88,11 @@
         </div>
         <div class="col-md-8">
             <div class="row">
+                <a class="cgray prepend-left-15" href="#" th:href="@{/movie/index}"><i
+                        class="glyphicon glyphicon-remove"></i>
+                    <strong>Clear filters</strong>
+                </a>
+
                 <div class="dropdown prepend-left-15">
                     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                         <span class="text-muted">sort:</span>
@@ -122,43 +133,29 @@
             <div class="row">
                 <div class="col-sm-6 col-md-4 top3" th:each="movie : ${movies}">
                     <div class="thumbnail">
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <img class="thumbnail-image"
-                                         src="" onError="this.src='/resources/images/default_poster.jpg'"
-                                         width="120"
-                                         th:attr="src=${movie.posterFile}"/>
-                                    <!--<img data-src="holder.js/100%x180" alt="..."/>-->
-                                </td>
-                                <td>
-                                    <div th:inline="text">
-                                        <h3>
-                                            <strong>
-                                                [[${movie.title}]]
-                                            </strong>
-                                        </h3>
-                                        <h4><em>Rate</em></h4>
-                                        [[${movie.rate}]]
-                                        <span class="text-muted">/5</span> <span
-                                            class="glyphicon glyphicon-star"></span>
-                                        ([[${movie.numberOfRatings}]] votes)
-                                        <h4><em>Release date</em></h4>
-                                        [[${#dates.format(movie.releaseDate, 'MMMM dd, yyyy')}]]
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <img class="thumbnail-image" src="" onError="this.src='/resources/images/default_poster.jpg'"
+                             th:attr="src=${movie.posterFile}"/>
+                        <!--<img data-src="holder.js/100%x180" alt="..."/>-->
                         <div class="caption">
-                            <h4><em>Genre</em></h4>
-                            <ul>
-                                <li th:each="genre : ${movie.genreNames}" th:text="${genre}"></li>
-                            </ul>
-                            <h4><em>Description</em></h4>
+                            <h4><b th:text="${movie.title}"></b>
+                            </h4>
 
-                            <p th:text="${movie.description}"></p>
+                            <p th:inline="text">
+                                <strong>Rate:</strong>
+                                [[${movie.rate}]]
+                                <span class="text-muted">/5</span> <span class="glyphicon glyphicon-star"></span>
+                                ([[${movie.numberOfRatings}]] votes)
+                            </p>
+
+                            <p>
+                                <span><strong>Genre:</strong></span>
+                                <span th:each="genre : ${movie.genreNames}" th:text="${genre}+'; '"></span>
+                            </p>
+
+                            <p>
+                                <span><strong>Description:</strong></span>
+                                <span th:text="${movie.description}"></span>
+                            </p>
 
                             <p>
                                 <a href="#" th:href="@{/movie/edit(movieId=${movie.id})}"

@@ -92,7 +92,6 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <!--<p th:text="${movie.id}"></p>-->
 
     <p id="movie-rate-info" class="lead" th:inline="text">
         Rate:
@@ -103,7 +102,7 @@
     </p>
 
     <p>
-        <a class="btn btn-default" href="#" th:href="@{/movie/index}">
+        <a class="btn btn-default" href="javascript:history.back();">
             &laquo; Back to movies
         </a>
     </p>
@@ -114,23 +113,31 @@
 
     <div class="row featurette">
         <div class="col-md-5">
-            <img class="featurette-image img-responsive" src=""
+            <img class="featurette-image" src=""
                  onError="this.src='/resources/images/default_poster.jpg'"
                  th:attr="src=${movie.poster}"/>
             <!--<img class="featurette-image img-responsive"-->
-            <!--src="data:image/png;base64," data-src="holder.js/500x500/auto"-->
-            <!--alt="Generic placeholder image"/>-->
+            <!--src="data:image/png;base64," data-src="holder.js/500x500/auto"/>-->
         </div>
 
         <div class="col-md-7">
-            <legend><h2 class="featurette-heading" th:text="${movie.title}">Oh yeah, it's that good. <span
-                    class="text-muted">See for yourself.</span>
-            </h2></legend>
+            <legend><h2 class="featurette-heading" th:text="${movie.title}"></h2></legend>
 
-            <p class="lead" th:text="${movie.description}">Donec ullamcorper nulla non metus auctor fringilla.
-                Vestibulum id ligula porta felis euismod
-                semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus
-                commodo.</p>
+            <p>
+                <span><strong>Release Date:</strong></span>
+                <span th:text="${#dates.format(movie.releaseDate, 'MMMM dd, yyyy')}"></span>
+            </p>
+
+            <p>
+                <span><strong>Genre:</strong></span>
+                <span th:each="category : ${movie.categories}" th:text="${category.genre}+'; '"></span>
+            </p>
+
+            <p>
+                <span><strong>Description:</strong></span>
+                <span th:text="${movie.description}"></span>
+            </p>
+
         </div>
     </div>
 

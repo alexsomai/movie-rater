@@ -76,12 +76,6 @@ a.no-underline {
     display: block;
 }
 
-img.thumbnail-image {
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 10px;
-}
-
 .display-inline {
     display: inline-block;
 }
@@ -136,4 +130,20 @@ img.thumbnail-image {
 
 .prepend-left-15 {
     margin-left: 15px;
+}
+
+.cgray {
+    color: gray;
+}
+
+img.thumbnail-image {
+    max-height: 280px;
+    width: 100%;
+}
+
+img.featurette-image {
+    min-height: 650px;
+    max-height: 650px;
+    min-width: 400px;
+    max-width: 400px;
 }
