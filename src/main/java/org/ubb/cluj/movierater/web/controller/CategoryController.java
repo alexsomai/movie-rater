@@ -21,9 +21,9 @@ public class CategoryController {
     CategoryService categoryService;
 
     @RequestMapping(value = "getAll", method = RequestMethod.GET, headers = "Accept=application/json")
-
     @ResponseBody
     public List<CategoryCommandObject> getCategories() {
         return categoryService.getAllCategories();
     }
+
 }

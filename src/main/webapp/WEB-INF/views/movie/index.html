@@ -2,16 +2,17 @@
 <html layout:decorator="fragments/main_layout">
 <head>
     <title>View movies</title>
-    <script>
+    <script th:inline="javascript">
         // <![CDATA[
         $(document).ready(function () {
             $.getJSON("/category/getAll", function (result) {
                 var categories = $('#categories'),
-                        categoryUrlId = getUrlParameter("category"),
-                        categoryIdArray = [];
-                if (categoryUrlId) {
-                    categoryIdArray = categoryUrlId.split(',').map(Number);
-                }
+                        categoriesArray = [];
+
+                /*[+
+                 categoriesArray = [[${#arrays.toArray(searchFilter.category)}]];
+                 +]*/
+
                 $.each(result, function (index, item) {
                     var color = '#d9534f';
                     if (item.id % 2 == 0) {
@@ -24,52 +25,39 @@
                         color = '#5cb85c';
                     }
 
+                    var categoriesList = createCategoriesList(item.id, categoriesArray);
 
-                    var activeCategory = checkIfCategoryIsActive(item.id, categoryIdArray);
                     categories.append($("<li id='category-" +
-                            item.id + "' class='label-filter-item " + activeCategory.active + "' >" +
-                            "<a href='/movie/index?category=" + createCategoryUrl(item.id, categoryIdArray) +
+                            item.id + "' class='label-filter-item " + categoriesList.active + "' >" +
+                            "<a href='/movie/index?category=" + categoriesList.categoriesArrayUrl +
                             "'><span class='label color-label' " +
                             "style='font-size: 12px; background:" + color + "; color:#FFF'>" +
-                            item.genre + "</span>" + activeCategory.extraDiv + "</a></li>"
+                            item.genre + "</span>" + categoriesList.extraDiv + "</a></li>"
                     ));
                 });
             });
         });
 
-        function checkIfCategoryIsActive(categoryId, categoryIdArray) {
-            var activeCategory = {};
-            if ($.inArray(categoryId, categoryIdArray) != -1) {
-                activeCategory.active = "active";
-                activeCategory.extraDiv = "<div class='pull-right'>" +
-                "<i class='glyphicon glyphicon-remove'></div>"
-            } else {
-                activeCategory.active = "light";
-                activeCategory.extraDiv = "";
-            }
-            return activeCategory;
-        }
-
-        function createCategoryUrl(categoryId, categoryIdArray) {
-            var categoryIndex = $.inArray(categoryId, categoryIdArray);
-            console.log("index: " + categoryIndex + " for elem " + categoryId + " array: " + categoryIdArray);
+        function createCategoriesList(categoryId, categoriesArray) {
+            var categoryIndex = $.inArray(categoryId, categoriesArray),
+                    categoriesArrayUrl = categoriesArray.slice(),
+                    category = {
+                        active: "light",
+                        extraDiv: "",
+                        categoriesArrayUrl: categoriesArrayUrl
+                    };
             if (categoryIndex == -1) {
-                if (categoryIdArray.length > 0) {
-                    return categoryIdArray + "," + categoryId;
-                } else {
-                    return categoryId;
-                }
+                categoriesArrayUrl.push(categoryId);
             } else {
-                var categoryIdArrayRemoveItems = categoryIdArray.slice();
-                categoryIdArrayRemoveItems.splice(categoryIndex, 1);
-                return categoryIdArrayRemoveItems;
+                categoriesArrayUrl.splice(categoryIndex, 1);
+                category.active = "active";
+                category.extraDiv = "<div class='pull-right'>" +
+                "<i class='glyphicon glyphicon-remove'></div>";
             }
+
+            return category;
         }
 
-        function getUrlParameter(name) {
-            if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
-                return decodeURIComponent(name[1]);
-        }
         // ]]>
     </script>
 </head>
