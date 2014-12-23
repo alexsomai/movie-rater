@@ -12,10 +12,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -29,9 +26,7 @@ public class MovieRepository {
     private static final int LIMIT_ITEMS_PER_PAGE = 3;
     private static final String SORTING_ASC = "asc";
     private static final String SORTING_DESC = "desc";
-    private static final List<String> AVAILABLE_SORTERS = new ArrayList<String>() {{
-        add("rate");
-    }};
+    private static final List<String> AVAILABLE_SORTERS = Arrays.asList("rate");
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -107,32 +102,35 @@ public class MovieRepository {
     }
 
     private TypedQuery<Movie> createQuery(SearchFilter searchFilter) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Movie> cq = cb.createQuery(Movie.class);
+        Root<Movie> mr = cq.from(Movie.class);
+        Predicate p = cb.conjunction();
 
-        CriteriaQuery<Movie> criteriaQuery = criteriaBuilder.createQuery(Movie.class);
-        Root<Movie> movieRoot = criteriaQuery.from(Movie.class);
-
-        criteriaQuery.select(movieRoot);
-        if (searchFilter.getSort() != null && searchFilter.getOrder() != null
-                && AVAILABLE_SORTERS.contains(searchFilter.getSort())) {
-            if (searchFilter.getOrder().equals(SORTING_ASC)) {
-                criteriaQuery.orderBy(criteriaBuilder.asc(movieRoot.get(searchFilter.getSort())));
-            }
-            if (searchFilter.getOrder().equals(SORTING_DESC)) {
-                criteriaQuery.orderBy(criteriaBuilder.desc(movieRoot.get(searchFilter.getSort())));
-            }
-        }
+        cq.select(mr);
 
         if (searchFilter.getTitle() != null) {
-            criteriaQuery.where(criteriaBuilder.like(movieRoot.<String>get("title"), "%" + searchFilter.getTitle() + "%"));
+            p = cb.and(p, cb.like(mr.<String>get("title"), "%" + searchFilter.getTitle() + "%"));
         }
 
         if (searchFilter.getCategory().length > 0) {
-            Join<Movie, Category> products = movieRoot.join("categories");
-            criteriaQuery.where(criteriaBuilder.equal(products.get("id"), 1L));
+            Join<Movie, Category> categories = mr.join("categories");
+            cq.distinct(true);
+            p = cb.and(p, categories.get("id").in((Object[]) searchFilter.getCategory()));
         }
 
-        return entityManager.createQuery(criteriaQuery);
+        cq.where(p);
+
+        if (AVAILABLE_SORTERS.contains(searchFilter.getSort())) {
+            if (searchFilter.getOrder().equals(SORTING_ASC)) {
+                cq.orderBy(cb.asc(mr.get(searchFilter.getSort())));
+            }
+            if (searchFilter.getOrder().equals(SORTING_DESC)) {
+                cq.orderBy(cb.desc(mr.get(searchFilter.getSort())));
+            }
+        }
+
+        return entityManager.createQuery(cq);
     }
 
     private void addPagination(TypedQuery<Movie> query, int page) {
@@ -148,7 +146,7 @@ public class MovieRepository {
 
         criteriaQuery.select(categoryRoot);
 
-        criteriaQuery.where(categoryRoot.get("id").in(categoryIds));
+        criteriaQuery.where(categoryRoot.get("id").in((Object[]) categoryIds));
         TypedQuery<Category> query = entityManager.createQuery(criteriaQuery);
         return new HashSet<>(query.getResultList());
     }

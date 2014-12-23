@@ -10,13 +10,13 @@ public class SearchFilter {
     private String title;
     private String sort;
     private String order;
-    private String[] category;
+    private Long[] category;
 
-    public String[] getCategory() {
+    public Long[] getCategory() {
         return category;
     }
 
-    public void setCategory(String[] category) {
+    public void setCategory(Long[] category) {
         this.category = category;
     }
 
