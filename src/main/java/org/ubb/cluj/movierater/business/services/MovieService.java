@@ -23,7 +23,6 @@ import java.util.List;
 @Service
 public class MovieService {
 
-    private static final int DESC_MAX_LENGTH = 100;
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("MMMM dd, yyyy HH:mm");
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
 
@@ -69,7 +68,7 @@ public class MovieService {
     }
 
     public int getNumberOfPages(SearchFilter searchFilter) {
-        return movieRepository.getNumberOfPages(searchFilter);
+        return (int) Math.ceil((double) movieRepository.countResults(searchFilter) / MovieRepository.MAX_ITEMS_PER_PAGE);
     }
 
     public List<MovieCommandObject> findAll(SearchFilter searchFilter) {

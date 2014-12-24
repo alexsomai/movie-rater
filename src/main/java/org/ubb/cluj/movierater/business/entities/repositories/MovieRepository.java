@@ -23,13 +23,15 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class MovieRepository {
 
-    private static final int LIMIT_ITEMS_PER_PAGE = 3;
+    public static final int MAX_ITEMS_PER_PAGE = 3;
     private static final String SORTING_ASC = "asc";
     private static final String SORTING_DESC = "desc";
     private static final List<String> AVAILABLE_SORTERS = Arrays.asList("rate", "numberOfRatings");
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private CriteriaBuilder cb;
 
     @Transactional
     public Movie save(Movie movie, Long[] categoryIds) {
@@ -88,26 +90,34 @@ public class MovieRepository {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<Movie> findAll(SearchFilter searchFilter) {
-        TypedQuery<Movie> query = createQuery(searchFilter);
+        cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Movie> cq = cb.createQuery(Movie.class);
+        Root<Movie> mr = cq.from(Movie.class);
+        cq.select(mr);
 
+        TypedQuery<Movie> query = (TypedQuery<Movie>) applyFilters(cq, mr, searchFilter);
         addPagination(query, searchFilter.getPage());
 
         return query.getResultList();
     }
 
     @Transactional
-    public int getNumberOfPages(SearchFilter searchFilter) {
-        return (int) Math.ceil((double) createQuery(searchFilter).getResultList().size() / LIMIT_ITEMS_PER_PAGE);
+    @SuppressWarnings("unchecked")
+    public Long countResults(SearchFilter searchFilter) {
+        cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<Movie> mr = cq.from(Movie.class);
+        cq.select(cb.count(mr));
+
+        TypedQuery<Long> query = (TypedQuery<Long>) applyFilters(cq, mr, searchFilter);
+
+        return query.getSingleResult();
     }
 
-    private TypedQuery<Movie> createQuery(SearchFilter searchFilter) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Movie> cq = cb.createQuery(Movie.class);
-        Root<Movie> mr = cq.from(Movie.class);
+    private TypedQuery<?> applyFilters(CriteriaQuery<?> cq, Root<Movie> mr, SearchFilter searchFilter) {
         Predicate p = cb.conjunction();
-
-        cq.select(mr);
 
         if (searchFilter.getTitle() != null) {
             p = cb.and(p, cb.like(mr.<String>get("title"), "%" + searchFilter.getTitle() + "%"));
@@ -134,8 +144,8 @@ public class MovieRepository {
     }
 
     private void addPagination(TypedQuery<Movie> query, int page) {
-        query.setMaxResults(LIMIT_ITEMS_PER_PAGE);
-        query.setFirstResult(page * LIMIT_ITEMS_PER_PAGE);
+        query.setMaxResults(MAX_ITEMS_PER_PAGE);
+        query.setFirstResult(page * MAX_ITEMS_PER_PAGE);
     }
 
     private Set<Category> getCategoriesByIds(Long[] categoryIds) {
