@@ -60,12 +60,12 @@ public class MovieService {
         return convertMovieEntityToCommandObject(movieRepository.getMovieById(id));
     }
 
-    public void update(MovieCommandObject movieCommandObject) {
+    public Movie update(MovieCommandObject movieCommandObject) {
         Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
         movie.setTitle(movieCommandObject.getTitle());
         movie.setDescription(movieCommandObject.getDescription());
         movie.setReleaseDate(movieCommandObject.getReleaseDate());
-        movieRepository.update(movie, movieCommandObject.getGenreIds());
+        return movieRepository.update(movie, movieCommandObject.getGenreIds());
     }
 
     public Long countResults(SearchFilter searchFilter) {
@@ -85,8 +85,8 @@ public class MovieService {
         return movieCommandObjects;
     }
 
-    public void deleteMovie(Long movieId) {
-        movieRepository.deleteMovie(movieId);
+    public Movie deleteMovie(Long movieId) {
+        return movieRepository.deleteMovie(movieRepository.getMovieById(movieId));
     }
 
     private MovieCommandObject convertMovieEntityToCommandObject(Movie movie) {

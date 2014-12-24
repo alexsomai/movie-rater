@@ -85,9 +85,11 @@ public class MovieRepository {
     }
 
     @Transactional
-    public void update(Movie movie, Long[] categoryIds) {
+    public Movie update(Movie movie, Long[] categoryIds) {
         movie.setCategories(getCategoriesByIds(categoryIds));
-        entityManager.merge(movie);
+        movie = entityManager.merge(movie);
+        entityManager.persist(movie);
+        return movie;
     }
 
     @Transactional
@@ -118,8 +120,10 @@ public class MovieRepository {
     }
 
     @Transactional
-    public void deleteMovie(Long movieId) {
-        entityManager.remove(entityManager.find(Movie.class, movieId));
+    public Movie deleteMovie(Movie movie) {
+        movie = entityManager.merge(movie);
+        entityManager.remove(movie);
+        return movie;
     }
 
     private TypedQuery<?> applyFilters(CriteriaQuery<?> cq, Root<Movie> mr, SearchFilter searchFilter) {

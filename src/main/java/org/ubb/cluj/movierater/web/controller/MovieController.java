@@ -8,6 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.services.MovieService;
 import org.ubb.cluj.movierater.business.services.PosterService;
 import org.ubb.cluj.movierater.business.services.UserService;
@@ -57,7 +58,8 @@ public class MovieController {
 
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public String save(@Valid @ModelAttribute MovieCommandObject movieCommandObject, Errors errors,
-                       Model model, @RequestParam("poster") MultipartFile poster) {
+                       Model model, @RequestParam("poster") MultipartFile poster,
+                       RedirectAttributes redirectAttrs) {
         String posterErrorMessage = posterService.validatePoster(poster);
         if (errors.hasErrors() || posterErrorMessage != null) {
             model.addAttribute("posterErrMsg", posterErrorMessage);
@@ -66,8 +68,10 @@ public class MovieController {
 
         String posterFileName = posterService.savePoster(poster);
         movieCommandObject.setPosterFile(posterFileName);
-        movieService.save(movieCommandObject);
-        return "admin/admin_page";
+        Movie movie = movieService.save(movieCommandObject);
+        redirectAttrs.addFlashAttribute("message",
+                "You have successfully added the movie \"" + movie.getTitle() + "\"");
+        return "redirect:/movie/index";
     }
 
     @RequestMapping(value = "view", method = RequestMethod.GET)
@@ -92,22 +96,29 @@ public class MovieController {
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public String update(@Valid @ModelAttribute MovieCommandObject movieCommandObject, Errors errors) {
+    public String update(@Valid @ModelAttribute MovieCommandObject movieCommandObject, Errors errors,
+                         RedirectAttributes redirectAttrs) {
         if (errors.hasErrors()) {
             return "movie/edit";
         }
-        movieService.update(movieCommandObject);
-        return "admin/admin_page";
+        Movie movie = movieService.update(movieCommandObject);
+        redirectAttrs.addFlashAttribute("message",
+                "You have successfully updated the movie \"" + movie.getTitle() + "\"");
+        return "redirect:/movie/index";
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
-    public String delete(@RequestParam("movieId") Long movieId, @ModelAttribute SearchFilter searchFilter, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addAttribute("page", searchFilter.getPage());
-        redirectAttributes.addAttribute("category", searchFilter.getCategory());
-        redirectAttributes.addAttribute("title", searchFilter.getTitle());
-        redirectAttributes.addAttribute("sort", searchFilter.getSort());
-        redirectAttributes.addAttribute("order", searchFilter.getOrder());
-        movieService.deleteMovie(movieId);
+    public String delete(@RequestParam("movieId") Long movieId, @ModelAttribute SearchFilter searchFilter,
+                         RedirectAttributes redirectAttrs) {
+        redirectAttrs.addAttribute("page", searchFilter.getPage());
+        redirectAttrs.addAttribute("category", searchFilter.getCategory());
+        redirectAttrs.addAttribute("title", searchFilter.getTitle());
+        redirectAttrs.addAttribute("sort", searchFilter.getSort());
+        redirectAttrs.addAttribute("order", searchFilter.getOrder());
+        Movie movie = movieService.deleteMovie(movieId);
+        redirectAttrs.addFlashAttribute("message",
+                "You have successfully deleted the movie \"" + movie.getTitle() + "\"");
         return "redirect:/movie/index";
     }
+
 }
