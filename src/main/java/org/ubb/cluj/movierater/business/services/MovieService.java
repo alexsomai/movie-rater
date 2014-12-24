@@ -64,7 +64,8 @@ public class MovieService {
         Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
         movie.setTitle(movieCommandObject.getTitle());
         movie.setDescription(movieCommandObject.getDescription());
-        movieRepository.update(movie);
+        movie.setReleaseDate(movieCommandObject.getReleaseDate());
+        movieRepository.update(movie, movieCommandObject.getGenreIds());
     }
 
     public int getNumberOfPages(SearchFilter searchFilter) {
@@ -91,10 +92,15 @@ public class MovieService {
         movieCommandObject.setRate(DECIMAL_FORMAT.format(movie.getRate().doubleValue()));
 
         List<String> genreList = new ArrayList<>();
+        Long[] genreIds = new Long[movie.getCategories().size()];
+        int arrayIndex = 0;
         for (Category category : movie.getCategories()) {
             genreList.add(category.getGenre());
+            genreIds[arrayIndex] = category.getId();
+            arrayIndex++;
         }
         movieCommandObject.setGenreNames(genreList);
+        movieCommandObject.setGenreIds(genreIds);
 
         return movieCommandObject;
     }

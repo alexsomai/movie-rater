@@ -85,7 +85,8 @@ public class MovieRepository {
     }
 
     @Transactional
-    public void update(Movie movie) {
+    public void update(Movie movie, Long[] categoryIds) {
+        movie.setCategories(getCategoriesByIds(categoryIds));
         entityManager.merge(movie);
     }
 

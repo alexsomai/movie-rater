@@ -84,7 +84,7 @@ public class MovieController {
 
     @RequestMapping(value = "edit", method = RequestMethod.GET)
     public String edit(Model model, Long movieId) {
-        model.addAttribute("movie", movieService.getMovieById(movieId));
+        model.addAttribute("movieCommandObject", movieService.getMovieById(movieId));
         return "movie/edit";
     }
 

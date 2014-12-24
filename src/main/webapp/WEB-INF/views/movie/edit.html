@@ -1,27 +1,80 @@
 <!DOCTYPE html>
 <html layout:decorator="fragments/main_layout">
 <head>
-    <title>Edit movie</title>
+    <title>Edit Movie</title>
+    <script th:inline="javascript">
+        // <![CDATA[
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        $(document).ready(function () {
+            $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+
+                var input = $(this).parents('.input-group').find(':text'),
+                        log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                if (input.length) {
+                    input.val(log);
+                } else {
+                    if (log) alert(log);
+                }
+
+            });
+
+            $('#date-picker').datepicker({
+                format: 'dd/mm/yyyy'
+            });
+
+        });
+
+        $.getJSON("/category/getAll", function (result) {
+            var genres = $("#genres");
+
+            /*[+
+             var submittedGenres = [[${movieCommandObject.genreIds}]];
+             +]*/
+
+            $.each(result, function (index, item) {
+                if ($.inArray(item.id, submittedGenres) != -1) {
+                    genres.append($("<option selected='selected'/>").val(item.id).text(item.genre));
+                } else {
+                    genres.append($("<option />").val(item.id).text(item.genre));
+                }
+            });
+
+            genres.multiselect({
+                enableCaseInsensitiveFiltering: true,
+                maxHeight: 300,
+                numberDisplayed: 5,
+                nonSelectedText: 'Choose genre(s)'
+            });
+        });
+        // ]]>
+    </script>
 </head>
 <body>
 <div layout:fragment="content">
-    <form class="form-narrow form-horizontal" method="post"
-          th:action="@{/movie/update}" th:object="${movie}">
+    <form class="form-narrow form-horizontal" method="POST"
+          th:action="@{/movie/update}" th:object="${movieCommandObject}">
 
         <!--/* Show general error task when form contains errors */-->
-        <th:block th:if="${#fields.hasErrors('${movie.*}')}">
+        <th:block th:if="${#fields.hasErrors('${movieCommandObject.*}')}">
             <div th:replace="fragments/alert :: alert (type='danger', message='Form contains errors. Please try again.')">
                 Alert
             </div>
         </th:block>
 
         <fieldset>
-            <input type="hidden" id="id" name="id" th:field="*{id}" value="${movie.id}"/>
+            <input type="hidden" id="id" name="id" th:field="*{id}" value="${movieCommandObject.id}"/>
             <legend>Edit Movie</legend>
             <div class="form-group" th:classappend="${#fields.hasErrors('title')}? 'has-error'">
                 <label for="title" class="control-label" th:text="#{label.movie.title}"></label>
                 <input type="text" class="form-control" id="title" th:field="*{title}"
-                       th:value="${movie.title}"/>
+                       th:value="${movieCommandObject.title}"/>
                     <span class="help-block" th:if="${#fields.hasErrors('title')}"
                           th:errors="*{title}" th:text="#{message.movie.title.incorrect}">
                     </span>
@@ -31,7 +84,7 @@
                        th:text="#{label.movie.description}">
                 </label>
                     <textarea class="form-control" id="description"
-                              th:field="*{description}" th:text="${movie.description}">
+                              th:field="*{description}" th:text="${movieCommandObject.description}">
                     </textarea>
                     <span class="help-block" th:if="${#fields.hasErrors('description')}"
                           th:errors="*{description}">Incorrect description</span>
@@ -41,11 +94,17 @@
                     <div class="form-group" th:classappend="${#fields.hasErrors('releaseDate')} ? 'has-error'">
                         <label for="date-picker" class="control-label" th:text="#{label.movie.releaseDate}"></label>
                         <input th:field="*{releaseDate}" name="releaseDate" id="date-picker"
-                               type="text" class="form-control" th:value="${movie.releaseDate}"/>
+                               type="text" class="form-control" th:value="${movieCommandObject.releaseDate}"/>
                          <span class="help-block" th:if="${#fields.hasErrors('releaseDate')}"
                                th:errors="*{releaseDate}"></span>
                     </div>
                 </div>
+            </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('genreIds')} ? 'has-error'">
+                <label for="genres" class="control-label" th:text="#{label.movie.genres}"></label>
+                <select id="genres" name="genreIds" multiple="multiple" th:field="*{genreIds}"></select>
+                         <span class="help-block" th:if="${#fields.hasErrors('genreIds')}"
+                               th:errors="*{genreIds}"></span>
             </div>
             <div class="form-group">
                 <div class="text-right">
