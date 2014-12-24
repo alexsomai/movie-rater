@@ -29,7 +29,7 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
-    public Movie save(MovieCommandObject movieCommandObject) {
+    public String save(MovieCommandObject movieCommandObject) {
         return movieRepository.save(movieCommandObject.createMovie(), movieCommandObject.getGenreIds());
     }
 
@@ -60,7 +60,7 @@ public class MovieService {
         return convertMovieEntityToCommandObject(movieRepository.getMovieById(id));
     }
 
-    public Movie update(MovieCommandObject movieCommandObject) {
+    public String update(MovieCommandObject movieCommandObject) {
         Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
         movie.setTitle(movieCommandObject.getTitle());
         movie.setDescription(movieCommandObject.getDescription());
@@ -85,7 +85,7 @@ public class MovieService {
         return movieCommandObjects;
     }
 
-    public Movie deleteMovie(Long movieId) {
+    public String deleteMovie(Long movieId) {
         return movieRepository.deleteMovie(movieRepository.getMovieById(movieId));
     }
 

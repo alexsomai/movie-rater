@@ -8,13 +8,13 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.services.MovieService;
 import org.ubb.cluj.movierater.business.services.PosterService;
 import org.ubb.cluj.movierater.business.services.UserService;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
 import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
 import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
+import org.ubb.cluj.movierater.web.support.MessageHelper;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -59,7 +59,7 @@ public class MovieController {
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public String save(@Valid @ModelAttribute MovieCommandObject movieCommandObject, Errors errors,
                        Model model, @RequestParam("poster") MultipartFile poster,
-                       RedirectAttributes redirectAttrs) {
+                       RedirectAttributes ra) {
         String posterErrorMessage = posterService.validatePoster(poster);
         if (errors.hasErrors() || posterErrorMessage != null) {
             model.addAttribute("posterErrMsg", posterErrorMessage);
@@ -68,9 +68,8 @@ public class MovieController {
 
         String posterFileName = posterService.savePoster(poster);
         movieCommandObject.setPosterFile(posterFileName);
-        Movie movie = movieService.save(movieCommandObject);
-        redirectAttrs.addFlashAttribute("message",
-                "You have successfully added the movie \"" + movie.getTitle() + "\"");
+        String movieTitle = movieService.save(movieCommandObject);
+        MessageHelper.addSuccessAttribute(ra, "message.movie.success.save", movieTitle);
         return "redirect:/movie/index";
     }
 
@@ -97,27 +96,25 @@ public class MovieController {
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute MovieCommandObject movieCommandObject, Errors errors,
-                         RedirectAttributes redirectAttrs) {
+                         RedirectAttributes ra) {
         if (errors.hasErrors()) {
             return "movie/edit";
         }
-        Movie movie = movieService.update(movieCommandObject);
-        redirectAttrs.addFlashAttribute("message",
-                "You have successfully updated the movie \"" + movie.getTitle() + "\"");
+        String movieTitle = movieService.update(movieCommandObject);
+        MessageHelper.addSuccessAttribute(ra, "message.movie.success.update", movieTitle);
         return "redirect:/movie/index";
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public String delete(@RequestParam("movieId") Long movieId, @ModelAttribute SearchFilter searchFilter,
-                         RedirectAttributes redirectAttrs) {
-        redirectAttrs.addAttribute("page", searchFilter.getPage());
-        redirectAttrs.addAttribute("category", searchFilter.getCategory());
-        redirectAttrs.addAttribute("title", searchFilter.getTitle());
-        redirectAttrs.addAttribute("sort", searchFilter.getSort());
-        redirectAttrs.addAttribute("order", searchFilter.getOrder());
-        Movie movie = movieService.deleteMovie(movieId);
-        redirectAttrs.addFlashAttribute("message",
-                "You have successfully deleted the movie \"" + movie.getTitle() + "\"");
+                         RedirectAttributes ra) {
+        ra.addAttribute("page", searchFilter.getPage());
+        ra.addAttribute("category", searchFilter.getCategory());
+        ra.addAttribute("title", searchFilter.getTitle());
+        ra.addAttribute("sort", searchFilter.getSort());
+        ra.addAttribute("order", searchFilter.getOrder());
+        String movieTitle = movieService.deleteMovie(movieId);
+        MessageHelper.addInfoAttribute(ra, "message.movie.success.delete", movieTitle);
         return "redirect:/movie/index";
     }
 

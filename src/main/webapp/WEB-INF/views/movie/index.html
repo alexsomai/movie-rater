@@ -116,8 +116,12 @@
         </div>
         <div class="col-md-8">
             <div id="alert-message" class="row" style="display: none">
-                <div th:replace="fragments/alert :: alert('info', ${message})">
-                </div>
+                <!--/* Handle the flash task */-->
+                <th:block th:if="${message != null}">
+                    <!--/* The message code is returned from the @Controller */-->
+                    <div th:replace="fragments/alert :: alert(type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${message.args[0]})})">
+                    </div>
+                </th:block>
             </div>
             <div class="row">
                 <a class="cgray prepend-left-15" href="#" th:href="@{/movie/index}">

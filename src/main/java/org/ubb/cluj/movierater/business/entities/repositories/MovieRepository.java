@@ -34,10 +34,10 @@ public class MovieRepository {
     private CriteriaBuilder cb;
 
     @Transactional
-    public Movie save(Movie movie, Long[] categoryIds) {
+    public String save(Movie movie, Long[] categoryIds) {
         movie.setCategories(getCategoriesByIds(categoryIds));
         entityManager.persist(movie);
-        return movie;
+        return movie.getTitle();
     }
 
     @Transactional
@@ -85,11 +85,11 @@ public class MovieRepository {
     }
 
     @Transactional
-    public Movie update(Movie movie, Long[] categoryIds) {
+    public String update(Movie movie, Long[] categoryIds) {
         movie.setCategories(getCategoriesByIds(categoryIds));
         movie = entityManager.merge(movie);
         entityManager.persist(movie);
-        return movie;
+        return movie.getTitle();
     }
 
     @Transactional
@@ -120,10 +120,10 @@ public class MovieRepository {
     }
 
     @Transactional
-    public Movie deleteMovie(Movie movie) {
+    public String deleteMovie(Movie movie) {
         movie = entityManager.merge(movie);
         entityManager.remove(movie);
-        return movie;
+        return movie.getTitle();
     }
 
     private TypedQuery<?> applyFilters(CriteriaQuery<?> cq, Root<Movie> mr, SearchFilter searchFilter) {
