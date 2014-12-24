@@ -6,22 +6,22 @@
 <body>
 <div layout:fragment="content">
     <form class="form-narrow form-horizontal" method="post"
-          th:action="@{/movie/update}" th:object="${movieCommandObject}">
+          th:action="@{/movie/update}" th:object="${movie}">
 
         <!--/* Show general error task when form contains errors */-->
-        <th:block th:if="${#fields.hasErrors('${movieCommandObject.*}')}">
+        <th:block th:if="${#fields.hasErrors('${movie.*}')}">
             <div th:replace="fragments/alert :: alert (type='danger', message='Form contains errors. Please try again.')">
                 Alert
             </div>
         </th:block>
 
         <fieldset>
-            <input type="hidden" id="id" name="id" th:field="*{id}" value="${movieCommandObject.id}"/>
+            <input type="hidden" id="id" name="id" th:field="*{id}" value="${movie.id}"/>
             <legend>Edit Movie</legend>
             <div class="form-group" th:classappend="${#fields.hasErrors('title')}? 'has-error'">
                 <label for="title" class="control-label" th:text="#{label.movie.title}"></label>
                 <input type="text" class="form-control" id="title" th:field="*{title}"
-                       value="${movieCommandObject.title}"/>
+                       th:value="${movie.title}"/>
                     <span class="help-block" th:if="${#fields.hasErrors('title')}"
                           th:errors="*{title}" th:text="#{message.movie.title.incorrect}">
                     </span>
@@ -31,10 +31,21 @@
                        th:text="#{label.movie.description}">
                 </label>
                     <textarea class="form-control" id="description"
-                              th:field="*{description}" th:text="${movieCommandObject.description}">
+                              th:field="*{description}" th:text="${movie.description}">
                     </textarea>
                     <span class="help-block" th:if="${#fields.hasErrors('description')}"
                           th:errors="*{description}">Incorrect description</span>
+            </div>
+            <div class="row">
+                <div class='col-sm-6'>
+                    <div class="form-group" th:classappend="${#fields.hasErrors('releaseDate')} ? 'has-error'">
+                        <label for="date-picker" class="control-label" th:text="#{label.movie.releaseDate}"></label>
+                        <input th:field="*{releaseDate}" name="releaseDate" id="date-picker"
+                               type="text" class="form-control" th:value="${movie.releaseDate}"/>
+                         <span class="help-block" th:if="${#fields.hasErrors('releaseDate')}"
+                               th:errors="*{releaseDate}"></span>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <div class="text-right">

@@ -31,8 +31,6 @@
                                         stars: ratingInput.val()
                                     },
                                     success: function (result) {
-                                        console.log(result);
-//                                       ratingForm.remove();
                                         if (result.success) {
                                             confirmationBox
                                                     .show("You have rated this movie with "
@@ -115,7 +113,7 @@
         <div class="col-md-5">
             <img class="featurette-image" src=""
                  onError="this.src='/resources/images/default_poster.jpg'"
-                 th:attr="src=${movie.poster}"/>
+                 th:attr="src=${movie.posterFile}"/>
             <!--<img class="featurette-image img-responsive"-->
             <!--src="data:image/png;base64," data-src="holder.js/500x500/auto"/>-->
         </div>
@@ -130,7 +128,7 @@
 
             <p>
                 <span><strong>Genre:</strong></span>
-                <span th:each="category : ${movie.categories}" th:text="${category.genre}+'; '"></span>
+                <span th:each="genre : ${movie.genreNames}" th:text="${genre}+'; '"></span>
             </p>
 
             <p>

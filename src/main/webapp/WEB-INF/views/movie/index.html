@@ -154,7 +154,8 @@
 
                             <p>
                                 <span><strong>Description:</strong></span>
-                                <span th:text="${movie.description}"></span>
+                                <span th:text="${#strings.length(movie.description) > 100} ?
+                                ${#strings.substring(movie.description,0,100)} + ... : ${movie.description} "></span>
                             </p>
 
                             <p>

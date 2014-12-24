@@ -7,8 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.ubb.cluj.movierater.business.entities.Movie;
-import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import org.ubb.cluj.movierater.business.services.MovieService;
 import org.ubb.cluj.movierater.business.services.PosterService;
 import org.ubb.cluj.movierater.business.services.UserService;
@@ -79,10 +77,8 @@ public class MovieController {
     @RequestMapping(value = "view", method = RequestMethod.GET)
     public String view(Model model, Long id) {
         UserService.User user = (UserService.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Movie movie = movieService.getMovieById(id);
-        MovieAccount movieAccount = movieService.getRatingInfo(id, user.getAccount());
-        model.addAttribute("movie", movie);
-        model.addAttribute("movieAccount", movieAccount);
+        model.addAttribute("movie", movieService.getMovieById(id));
+        model.addAttribute("movieAccount", movieService.getRatingInfo(id, user.getAccount()));
         return "movie/view";
     }
 
@@ -95,12 +91,7 @@ public class MovieController {
 
     @RequestMapping(value = "edit", method = RequestMethod.GET)
     public String edit(Model model, Long movieId) {
-        Movie movie = movieService.getMovieById(movieId);
-        MovieCommandObject movieCommandObject = new MovieCommandObject();
-        movieCommandObject.setDescription(movie.getDescription());
-        movieCommandObject.setTitle(movie.getTitle());
-        movieCommandObject.setId(movie.getId());
-        model.addAttribute("movieCommandObject", movieCommandObject);
+        model.addAttribute("movie", movieService.getMovieById(movieId));
         return "movie/edit";
     }
 

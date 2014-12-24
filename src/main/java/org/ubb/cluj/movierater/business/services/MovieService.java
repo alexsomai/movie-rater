@@ -57,10 +57,8 @@ public class MovieService {
         return movieRateResponse;
     }
 
-    public Movie getMovieById(Long id) {
-        Movie movie = movieRepository.getMovieById(id);
-        movie.setPoster(PosterService.getRelativeSavingFolder() + movie.getPoster());
-        return movie;
+    public MovieCommandObject getMovieById(Long id) {
+        return convertMovieEntityToCommandObject(movieRepository.getMovieById(id));
     }
 
     public void update(MovieCommandObject movieCommandObject) {
@@ -86,11 +84,7 @@ public class MovieService {
     private MovieCommandObject convertMovieEntityToCommandObject(Movie movie) {
         MovieCommandObject movieCommandObject = new MovieCommandObject();
         movieCommandObject.setTitle(movie.getTitle());
-        String description = movie.getDescription();
-        if (description.length() > DESC_MAX_LENGTH) {
-            description = description.substring(0, DESC_MAX_LENGTH) + " ...";
-        }
-        movieCommandObject.setDescription(description);
+        movieCommandObject.setDescription(movie.getDescription());
         movieCommandObject.setId(movie.getId());
         movieCommandObject.setPosterFile(PosterService.getRelativeSavingFolder() + movie.getPoster());
         movieCommandObject.setReleaseDate(movie.getReleaseDate());
