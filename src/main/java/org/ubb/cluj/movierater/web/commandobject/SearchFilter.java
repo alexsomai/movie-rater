@@ -41,6 +41,9 @@ public class SearchFilter {
     }
 
     public void setNoPages(int noPages) {
+        if (this.page > noPages - 1) {
+            this.page = noPages - 1;
+        }
         this.noPages = noPages;
     }
 
@@ -57,7 +60,7 @@ public class SearchFilter {
     }
 
     public void setPage(int page) {
-        this.page = page;
+        this.page = page < 0 ? 0 : page;
     }
 
 }
