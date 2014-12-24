@@ -2,6 +2,15 @@
 <html layout:decorator="fragments/main_layout">
 <head>
     <title>View movie</title>
+
+    <link href="../../../resources/css/star-rating.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/star-rating.css}"/>
+
+    <script src="../../../resources/js/bootbox.min.js"
+            th:src="@{/resources/js/bootbox.min.js}"></script>
+    <script src="../../../resources/js/star-rating.js"
+            th:src="@{/resources/js/star-rating.js}"></script>
+
     <script th:inline="javascript">
         // <![CDATA[
         $(document).ready(function () {
@@ -113,8 +122,6 @@
             <img class="featurette-image" src=""
                  onError="this.src='/resources/images/default_poster.jpg'"
                  th:attr="src=${movie.posterFile}"/>
-            <!--<img class="featurette-image img-responsive"-->
-            <!--src="data:image/png;base64," data-src="holder.js/500x500/auto"/>-->
         </div>
 
         <div class="col-md-7">

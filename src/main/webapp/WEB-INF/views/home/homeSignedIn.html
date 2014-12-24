@@ -1,29 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html layout:decorator="fragments/main_layout">
 
 <head>
-    <title th:text="#{view.index.title}">Welcome!</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
-    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <title th:text="#{view.index.title}"></title>
 </head>
 <body>
-<div th:replace="fragments/header :: header">&nbsp;</div>
-<div class="container">
+<div layout:fragment="content">
     <!--/* Handle the flash task */-->
     <th:block th:if="${message != null}">
         <!--/* The message code is returned from the @Controller */-->
-        <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+        <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">
+            &nbsp;</div>
     </th:block>
-    <p>
-        Welcome to the Spring MVC + Thymeleaf application!
+    <h1>Welcome back</h1>
 
-        <div th:include="http://www.thymeleaf.org :: p.notice" />
-
+    <p class="lead">
+        Hello, <em><span th:text="${#authentication.name}"></span></em>.
     </p>
-    <div th:replace="fragments/footer :: ${#authentication.principal.isAdmin()} ? 'footer-admin' : 'footer'">&copy; 2013 The Static Templates</div>
+
+    <p>
+        Please proceed to
+        <a href="#" th:href="@{/movie/index}">movies page </a>
+        in order to check out what's new, or rate your favorite movies.
+    </p>
 </div>
 </body>
 </html>

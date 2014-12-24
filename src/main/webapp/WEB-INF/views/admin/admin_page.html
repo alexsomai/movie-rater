@@ -9,6 +9,9 @@
 
     <p th:text="#{message.welcome.admin.page}"></p>
 
+    <p>If you shouldn't be authorized to access this page, please
+        <a href="/logout" th:href="@{/logout}">logout</a>.
+    </p>
     <a class="btn btn-success" href="#" th:href="@{/movie/add}">
         <span th:text="#{add.new.movie}"></span>
     </a>

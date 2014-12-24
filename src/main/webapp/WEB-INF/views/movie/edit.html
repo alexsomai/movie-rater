@@ -2,6 +2,16 @@
 <html layout:decorator="fragments/main_layout">
 <head>
     <title>Edit Movie</title>
+    <link href="../../../resources/css/datepicker3.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/datepicker3.css}"/>
+    <link href="../../../resources/css/bootstrap-multiselect.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap-multiselect.css}"/>
+
+    <script src="../../../resources/js/bootstrap-datepicker.js"
+            th:src="@{/resources/js/bootstrap-datepicker.js}"></script>
+    <script src="../../../resources/js/bootstrap-multiselect.js"
+            th:src="@{/resources/js/bootstrap-multiselect.js}"></script>
+
     <script th:inline="javascript">
         // <![CDATA[
         $(document).on('change', '.btn-file :file', function () {

@@ -1,14 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html layout:decorator="fragments/main_layout">
 
 <head>
-    <title>Welcome to the Spring MVC Quickstart application! Get started quickly by signing up!</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
-          th:href="@{/resources/css/bootstrap.min.css}"/>
-    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <title>Welcome</title>
     <script>
         /* Fill in modal with content loaded with Ajax */
         $(document).ready(function () {
@@ -25,76 +19,46 @@
     </script>
 </head>
 <body>
-<!-- Modal -->
-<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="signUpModalLabel">Sign Up</h4>
+<div layout:fragment="content">
+    <!-- Modal -->
+    <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="signUpModalLabel">Sign Up</h4>
+                </div>
+                <div class="modal-body" id="signUpModalBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
             </div>
-            <div class="modal-body" id="signUpModalBody"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-content -->
+        <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
-<!-- Header -->
-<div th:replace="fragments/header :: header">
-    <!-- ============================================================================ -->
-    <!-- This content is only used for static prototyping purposes (natural templates)-->
-    <!-- and is therefore entirely optional, as this markup fragment will be included -->
-    <!-- from "fragments/header.html" at runtime.                                     -->
-    <!-- ============================================================================ -->
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Static header</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container">
-
-    VIew movie
-    <!--<span class="glyphicons shredder" aria-hidden="true"></span>-->
-
-    <button type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Rate
-    </button>
-
-    <button type="button" class="btn btn-default" aria-label="Left Align">
-        <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
-    </button>
-
-    <i class="glyphicon glyphicon-search"></i>
-
-    <span class="glyphicon glyphicon-search"></span>
-
+    <!-- /.modal -->
     <div class="hero-unit">
-        <h1>Test</h1>
+        <h1>Welcome</h1>
 
         <p>
-            Welcome to the Spring MVC Quickstart application!
-            Get started quickly by signing up.
-            <small><em>(Please use the following credentials to login: <code>admin/admin</code>, <code>user/demo</code>
-                or create a new account.)</em></small>
+            Welcome to Movie Rater application. By going to the
+            <a href="#" th:href="@{/movie/index}">movies page </a>
+            you can search for your favorite movies, check details about them and if you
+            <a href="#" th:href="@{/signin}">login</a>
+            you can rate them!
+
         </p>
+
+        <p>
+            If you don't have an account yet, you can quickly create one by clicking the sign up button bellow.
+        </p>
+
         <p>
             <a href="#" class="btn btn-large btn-success" data-toggle="modal" data-target="#signUpModal">Sign up</a>
         </p>
     </div>
-    <div th:replace="fragments/footer :: footer">&copy; 2014 The Static Templates</div>
 </div>
 </body>
 </html>

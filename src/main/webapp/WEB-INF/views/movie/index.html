@@ -2,6 +2,10 @@
 <html layout:decorator="fragments/main_layout" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>View movies</title>
+
+    <script src="../../../resources/js/bootbox.min.js"
+            th:src="@{/resources/js/bootbox.min.js}"></script>
+
     <script th:inline="javascript">
         // <![CDATA[
         $(document).ready(function () {
@@ -175,7 +179,7 @@
                     <div class="thumbnail">
                         <img class="thumbnail-image" src="" onError="this.src='/resources/images/default_poster.jpg'"
                              th:attr="src=${movie.posterFile}"/>
-                        <!--<img data-src="holder.js/100%x180" alt="..."/>-->
+
                         <div class="caption">
                             <h4><strong th:text="${movie.title}"></strong>
                             </h4>
