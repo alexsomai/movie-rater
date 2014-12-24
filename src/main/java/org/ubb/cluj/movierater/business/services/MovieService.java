@@ -81,6 +81,10 @@ public class MovieService {
         return movieCommandObjects;
     }
 
+    public void deleteMovie(Long movieId) {
+        movieRepository.deleteMovie(movieId);
+    }
+
     private MovieCommandObject convertMovieEntityToCommandObject(Movie movie) {
         MovieCommandObject movieCommandObject = new MovieCommandObject();
         movieCommandObject.setTitle(movie.getTitle());

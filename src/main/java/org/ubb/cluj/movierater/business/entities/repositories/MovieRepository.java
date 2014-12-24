@@ -117,6 +117,11 @@ public class MovieRepository {
         return query.getSingleResult();
     }
 
+    @Transactional
+    public void deleteMovie(Long movieId) {
+        entityManager.remove(entityManager.find(Movie.class, movieId));
+    }
+
     private TypedQuery<?> applyFilters(CriteriaQuery<?> cq, Root<Movie> mr, SearchFilter searchFilter) {
         Predicate p = cb.conjunction();
 

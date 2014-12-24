@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.ubb.cluj.movierater.business.services.MovieService;
 import org.ubb.cluj.movierater.business.services.PosterService;
 import org.ubb.cluj.movierater.business.services.UserService;
@@ -97,4 +98,14 @@ public class MovieController {
         return "admin/admin_page";
     }
 
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    public String delete(@RequestParam("movieId") Long movieId, @ModelAttribute SearchFilter searchFilter, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAttribute("page", searchFilter.getPage());
+        redirectAttributes.addAttribute("category", searchFilter.getCategory());
+        redirectAttributes.addAttribute("title", searchFilter.getTitle());
+        redirectAttributes.addAttribute("sort", searchFilter.getSort());
+        redirectAttributes.addAttribute("order", searchFilter.getOrder());
+        movieService.deleteMovie(movieId);
+        return "redirect:/movie/index";
+    }
 }

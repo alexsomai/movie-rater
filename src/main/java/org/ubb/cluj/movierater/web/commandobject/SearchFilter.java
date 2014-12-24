@@ -42,7 +42,7 @@ public class SearchFilter {
 
     public void setNoPages(int noPages) {
         if (this.page > noPages - 1) {
-            this.page = noPages - 1;
+            setPage(noPages - 1);
         }
         this.noPages = noPages;
     }

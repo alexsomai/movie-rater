@@ -48,6 +48,12 @@
                     <input type="hidden" name="category"
                            th:each="category : ${searchFilter?.category}"
                            th:value="${category}"/>
+                    <input type="hidden" name="sort"
+                           th:each="sort : ${searchFilter?.sort}"
+                           th:value="${category}"/>
+                    <input type="hidden" name="order"
+                           th:each="order : ${searchFilter?.order}"
+                           th:value="${category}"/>
 
                     <div class="input-group">
                         <input type="text" class="form-control"
