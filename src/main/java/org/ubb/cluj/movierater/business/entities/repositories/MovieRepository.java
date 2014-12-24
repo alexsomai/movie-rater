@@ -110,7 +110,7 @@ public class MovieRepository {
         cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<Movie> mr = cq.from(Movie.class);
-        cq.select(cb.count(mr));
+        cq.select(cb.countDistinct(mr));
 
         TypedQuery<Long> query = (TypedQuery<Long>) applyFilters(cq, mr, searchFilter);
 

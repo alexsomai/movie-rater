@@ -43,7 +43,9 @@ public class MovieController {
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
     public String index(SearchFilter searchFilter, Model model) {
-        searchFilter.setNoPages(movieService.getNumberOfPages(searchFilter));
+        Long numberOfResults = movieService.countResults(searchFilter);
+        searchFilter.setNoPages(movieService.calculateNumberOfPages(numberOfResults));
+        model.addAttribute("results", numberOfResults);
         model.addAttribute("movies", movieService.findAll(searchFilter));
         return "movie/index";
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorator="fragments/main_layout">
+<html layout:decorator="fragments/main_layout" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>View movies</title>
     <script th:inline="javascript">
@@ -103,6 +103,13 @@
                     <strong>Clear filters</strong>
                 </a>
 
+                <div class="pull-right prepend-right-20">
+                    <h4>
+                        <strong>
+                            <em class="text-muted" th:text="${results} + ' movies found'"></em>
+                        </strong>
+                    </h4>
+                </div>
                 <div class="dropdown prepend-left-15">
                     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                         <span class="text-muted">sort:</span>

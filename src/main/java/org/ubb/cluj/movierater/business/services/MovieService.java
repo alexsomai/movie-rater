@@ -68,8 +68,12 @@ public class MovieService {
         movieRepository.update(movie, movieCommandObject.getGenreIds());
     }
 
-    public int getNumberOfPages(SearchFilter searchFilter) {
-        return (int) Math.ceil((double) movieRepository.countResults(searchFilter) / MovieRepository.MAX_ITEMS_PER_PAGE);
+    public Long countResults(SearchFilter searchFilter) {
+        return movieRepository.countResults(searchFilter);
+    }
+
+    public int calculateNumberOfPages(Long numberOfResults) {
+        return (int) Math.ceil((double) numberOfResults / MovieRepository.MAX_ITEMS_PER_PAGE);
     }
 
     public List<MovieCommandObject> findAll(SearchFilter searchFilter) {
