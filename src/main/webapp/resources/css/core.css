@@ -151,3 +151,19 @@ img.featurette-image {
     min-width: 400px;
     max-width: 400px;
 }
+
+#clear-search {
+    position: absolute;
+    right: 47px;
+    top: 0;
+    bottom: 5px;
+    height: 14px;
+    margin: auto;
+    font-size: 14px;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.tooltip-inner {
+    font-size: 14px;
+}

@@ -48,6 +48,9 @@
                     if (item.id % 4 == 0) {
                         color = '#5cb85c';
                     }
+                    if (item.id % 5 == 0) {
+                        color = '#46b8da';
+                    }
 
                     var categoriesList = createCategoriesList(item.id, categoriesArray);
 
@@ -86,7 +89,7 @@
                 categoriesArrayUrl.splice(categoryIndex, 1);
                 category.active = "active";
                 category.extraDiv = "<div class='pull-right'>" +
-                "<i class='glyphicon glyphicon-remove'></div>";
+                "<i class='glyphicon glyphicon-remove'></i></div>";
             }
 
             return category;
@@ -113,9 +116,10 @@
                 </div>
             </div>
             <div class="row">
-                <a class="cgray prepend-left-15" href="#" th:href="@{/movie/index}"><i
-                        class="glyphicon glyphicon-remove"></i>
-                    <strong>Clear filters</strong>
+                <a class="cgray prepend-left-15" href="#" th:href="@{/movie/index}">
+                    <i class="glyphicon glyphicon-remove"></i>
+                    <strong data-toggle="tooltip" data-placement="right"
+                            title="Reset all filters">Clear filters</strong>
                 </a>
 
                 <div class="pull-right prepend-right-20">
