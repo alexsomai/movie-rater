@@ -2,7 +2,6 @@ package org.ubb.cluj.movierater.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -11,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.ubb.cluj.movierater.business.services.MovieService;
 import org.ubb.cluj.movierater.business.services.PosterService;
-import org.ubb.cluj.movierater.business.services.UserService;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
 import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
 import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
@@ -71,10 +69,9 @@ public class MovieController {
     }
 
     @RequestMapping(value = "view", method = RequestMethod.GET)
-    public String view(Model model, Long id) {
-        UserService.User user = (UserService.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public String view(Model model, Long id, Principal principal) {
         model.addAttribute("movie", movieService.getMovieById(id));
-        model.addAttribute("movieAccount", movieService.getRatingInfo(id, user.getAccount()));
+        model.addAttribute("movieAccount", movieService.getRatingInfo(id, principal.getName()));
         return "movie/view";
     }
 

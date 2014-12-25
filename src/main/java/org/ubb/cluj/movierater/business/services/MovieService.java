@@ -41,7 +41,8 @@ public class MovieService {
     }
 
     @Secured("ROLE_USER")
-    public MovieAccount getRatingInfo(long movieId, Account account) {
+    public MovieAccount getRatingInfo(long movieId, String principalName) {
+        Account account = accountRepository.findByEmail(principalName);
         return movieRepository
                 .getRatingInfo(movieRepository.getMovieById(movieId), account);
     }
