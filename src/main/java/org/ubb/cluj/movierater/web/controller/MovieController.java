@@ -18,6 +18,7 @@ import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 import org.ubb.cluj.movierater.web.support.MessageHelper;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 /**
  * Created by somai on 10.12.2014.
@@ -79,9 +80,8 @@ public class MovieController {
 
     @RequestMapping(value = "rate", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public MovieRateResponse rate(long movieId, double stars) {
-        UserService.User user = (UserService.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return movieService.rate(movieId, user.getAccount().getId(), stars);
+    public MovieRateResponse rate(long movieId, double stars, Principal principal) {
+        return movieService.rate(movieId, principal, stars);
     }
 
     @RequestMapping(value = "edit", method = RequestMethod.GET)

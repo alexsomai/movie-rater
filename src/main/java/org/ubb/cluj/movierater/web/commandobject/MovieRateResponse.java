@@ -10,6 +10,15 @@ public class MovieRateResponse {
     private String movieRate;
     private boolean success;
     private int ratings;
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getRatedAt() {
         return ratedAt;

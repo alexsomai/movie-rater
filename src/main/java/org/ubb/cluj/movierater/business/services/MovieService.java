@@ -7,12 +7,14 @@ import org.ubb.cluj.movierater.business.entities.Account;
 import org.ubb.cluj.movierater.business.entities.Category;
 import org.ubb.cluj.movierater.business.entities.Movie;
 import org.ubb.cluj.movierater.business.entities.MovieAccount;
+import org.ubb.cluj.movierater.business.entities.repositories.AccountRepository;
 import org.ubb.cluj.movierater.business.entities.repositories.MovieRepository;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
 import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
 import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
 import javax.persistence.EntityExistsException;
+import java.security.Principal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +32,9 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     @Secured("ROLE_ADMIN")
     public String save(MovieCommandObject movieCommandObject) {
         return movieRepository.save(movieCommandObject.createMovie(), movieCommandObject.getGenreIds());
@@ -41,18 +46,35 @@ public class MovieService {
                 .getRatingInfo(movieRepository.getMovieById(movieId), account);
     }
 
-    @Secured("ROLE_USER")
-    public MovieRateResponse rate(long movieId, long accountId, double stars) {
+    public MovieRateResponse rate(long movieId, Principal principal, double stars) {
         MovieRateResponse movieRateResponse = new MovieRateResponse();
+
+        Account account;
+        if (principal != null) {
+            account = accountRepository.findByEmail(principal.getName());
+            if (account.isAdmin()) {
+                movieRateResponse.setSuccess(false);
+                movieRateResponse.setMessage("As admin, you are not allowed to rate a movie!");
+                return movieRateResponse;
+            }
+        } else {
+            movieRateResponse.setSuccess(false);
+            movieRateResponse.setMessage("You are not logged in!");
+            return movieRateResponse;
+        }
 
         MovieAccount movieAccount;
         try {
-            movieAccount = movieRepository.rate(movieId, accountId, stars);
+            movieAccount = movieRepository.rate(movieId, account, stars);
         } catch (EntityExistsException e) {
             movieRateResponse.setSuccess(false);
+            movieRateResponse.setMessage("You have already rated this movie!");
             return movieRateResponse;
         }
+
         movieRateResponse.setSuccess(true);
+        movieRateResponse.setMessage("You have rated this movie with "
+                + movieAccount.getStars() + " stars");
         movieRateResponse.setRatedAt(SIMPLE_DATE_FORMAT.format(movieAccount.getRatedAt()));
         movieRateResponse.setMovieRate(DECIMAL_FORMAT.format(movieAccount.getMovie().getRate()));
         movieRateResponse.setUserRate(DECIMAL_FORMAT.format(movieAccount.getStars()));

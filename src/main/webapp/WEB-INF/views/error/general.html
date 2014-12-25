@@ -9,7 +9,9 @@
 <div layout:fragment="content">
     <div th:replace="fragments/alert :: alert-with-header (type='danger',
     message=${errorMessage}, header='Oh snap! An error occurred!')"></div>
+    <div class="alert alert-info">
+        <span><a href="#" th:href="@{/}">Return back to home page</a> </span>
+    </div>
 </div>
 </body>
-
 </html>

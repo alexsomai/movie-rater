@@ -41,8 +41,8 @@ public class MovieRepository {
     }
 
     @Transactional
-    public MovieAccount rate(long movieId, long accountId, double stars) throws EntityExistsException {
-        Account account = entityManager.find(Account.class, accountId);
+    public MovieAccount rate(long movieId, Account account, double stars) throws EntityExistsException {
+        account = entityManager.merge(account);
 
         Movie movie = entityManager.find(Movie.class, movieId);
 

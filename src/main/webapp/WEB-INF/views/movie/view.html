@@ -42,8 +42,7 @@
                                     success: function (result) {
                                         if (result.success) {
                                             confirmationBox
-                                                    .show("You have rated this movie with "
-                                                    + result.userRate + " stars");
+                                                    .show(result.message);
 
                                             $('#movie-rate-info')
                                                     .html("Rate: <br/>" +
@@ -59,7 +58,7 @@
                                         } else {
                                             ratingForm.reset();
                                             confirmationBox
-                                                    .show("You have already rated this movie!", true);
+                                                    .show(result.message, true);
                                         }
                                     },
                                     error: function () {
