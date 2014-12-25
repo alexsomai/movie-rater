@@ -172,10 +172,12 @@
                 <div th:replace="fragments/pagination :: pagination(searchFilter = ${searchFilter})">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-4 top3" th:each="movie : ${movies}">
+            <div th:each="movie,iterationStat : ${movies}"
+                 th:class="${iterationStat.count % 3 == 0} ? 'row' : ''">
+                <div class="col-sm-6 col-md-4 top3">
                     <div class="thumbnail">
-                        <img class="thumbnail-image" src="" onError="this.src='/resources/images/default_poster.jpg'"
+                        <img class="thumbnail-image" src=""
+                             onError="this.src='/resources/images/default_poster.jpg'"
                              th:attr="src=${movie.posterFile}"/>
 
                         <div class="caption">
@@ -208,8 +210,8 @@
                                     <input type="hidden" name="movieId" th:value="${movie.id}"/>
                                     <input type="hidden" name="title" th:value="${searchFilter.title}"/>
                                     <input type="hidden" name="page" th:value="${searchFilter.page}"/>
-                                    <input type="hidden" th:each="category : ${searchFilter.category}" name="category"
-                                           th:value="${category}"/>
+                                    <input type="hidden" th:each="category : ${searchFilter.category}"
+                                           name="category" th:value="${category}"/>
                                     <input type="hidden" name="sort" th:value="${searchFilter.sort}"/>
                                     <input type="hidden" name="order" th:value="${searchFilter.order}"/>
                                     <button onclick="deleteMovie(this); return false;" class="btn btn-danger">Delete
