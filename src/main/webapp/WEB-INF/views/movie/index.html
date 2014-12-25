@@ -19,8 +19,15 @@
 
             $.getJSON("/category/getAll", function (result) {
                 var categories = $('#categories'),
-                        categoriesArray = [],
-                        title, sort, order;
+                        categoriesArray = [], categoriesList = {},
+                        title, sort, order, color,
+                        colorMapping = {
+                            0: '#46b8da',
+                            1: '#d9534f',
+                            2: '#f0ad4e',
+                            3: '#446e9b',
+                            4: '#5cb85c'
+                        };
 
                 /*[+
                  categoriesArray = [[${#arrays.toArray(searchFilter.category)}]];
@@ -42,21 +49,8 @@
                 categoriesArray = categoriesArray.filter(Number);
 
                 $.each(result, function (index, item) {
-                    var color = '#d9534f';
-                    if (item.id % 2 == 0) {
-                        color = '#f0ad4e';
-                    }
-                    if (item.id % 3 == 0) {
-                        color = '#446e9b';
-                    }
-                    if (item.id % 4 == 0) {
-                        color = '#5cb85c';
-                    }
-                    if (item.id % 5 == 0) {
-                        color = '#46b8da';
-                    }
-
-                    var categoriesList = createCategoriesList(item.id, categoriesArray);
+                    color = colorMapping[item.id % 5];
+                    categoriesList = createCategoriesList(item.id, categoriesArray);
 
                     categories.append($("<li id='category-" +
                             item.id + "' class='label-filter-item " + categoriesList.active + "' >" +
