@@ -5,6 +5,11 @@
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <span th:text="${message}"></span>
 </div>
+<div th:fragment="alert-with-header (type, message, header)" class="alert"
+     th:classappend="'alert-' + ${type}">
+    <h4 th:text="${header}"></h4>
+    <span th:text="${message}"></span>
+</div>
 </body>
 </html>
 
