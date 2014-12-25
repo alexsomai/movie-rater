@@ -2,19 +2,18 @@ package org.ubb.cluj.movierater.business.entities.repositories;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.ubb.cluj.movierater.business.entities.Account;
 import org.ubb.cluj.movierater.business.entities.Category;
 import org.ubb.cluj.movierater.business.entities.Movie;
-import org.ubb.cluj.movierater.business.entities.MovieAccount;
 import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by somai on 10.12.2014.
@@ -38,45 +37,6 @@ public class MovieRepository {
         movie.setCategories(getCategoriesByIds(categoryIds));
         entityManager.persist(movie);
         return movie.getTitle();
-    }
-
-    @Transactional
-    public MovieAccount rate(long movieId, Account account, double stars) throws EntityExistsException {
-        account = entityManager.merge(account);
-
-        Movie movie = entityManager.find(Movie.class, movieId);
-
-        if (movie.getNumberOfRatings() == 0) {
-            movie.setRate(BigDecimal.valueOf(stars));
-        } else {
-            movie.setRate(BigDecimal.valueOf((movie.getRate().doubleValue() + stars) / 2));
-        }
-        movie.setNumberOfRatings(movie.getNumberOfRatings() + 1);
-
-        MovieAccount movieAccount = new MovieAccount();
-        movieAccount.setAccount(account);
-        movieAccount.setMovie(movie);
-        movieAccount.setStars(BigDecimal.valueOf(stars));
-        movieAccount.setRatedAt(new Date());
-        movie.getMovieAccounts().add(movieAccount);
-
-        entityManager.persist(movie);
-        entityManager.persist(movieAccount);
-        return movieAccount;
-    }
-
-    @Transactional
-    public MovieAccount getRatingInfo(Movie movie, Account account) {
-        TypedQuery<MovieAccount> queryResult = entityManager
-                .createNamedQuery(MovieAccount.GET_RATING_INFO, MovieAccount.class)
-                .setParameter("account", account)
-                .setParameter("movie", movie);
-        MovieAccount movieAccount = null;
-        if (queryResult.getResultList().size() > 0) {
-            movieAccount = queryResult.getSingleResult();
-        }
-
-        return movieAccount;
     }
 
     @Transactional

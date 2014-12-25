@@ -8,6 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.ubb.cluj.movierater.business.services.MovieAccountService;
 import org.ubb.cluj.movierater.business.services.MovieService;
 import org.ubb.cluj.movierater.business.services.PosterService;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
@@ -30,6 +31,9 @@ public class MovieController {
 
     @Autowired
     private PosterService posterService;
+
+    @Autowired
+    private MovieAccountService movieAccountService;
 
     @ModelAttribute("page")
     public String module() {
@@ -71,14 +75,14 @@ public class MovieController {
     @RequestMapping(value = "view", method = RequestMethod.GET)
     public String view(Model model, Long id, Principal principal) {
         model.addAttribute("movie", movieService.getMovieById(id));
-        model.addAttribute("movieAccount", movieService.getRatingInfo(id, principal.getName()));
+        model.addAttribute("movieAccount", movieAccountService.getRatingInfo(id, principal.getName()));
         return "movie/view";
     }
 
     @RequestMapping(value = "rate", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public MovieRateResponse rate(long movieId, double stars, Principal principal) {
-        return movieService.rate(movieId, principal, stars);
+        return movieAccountService.rate(movieId, principal, stars);
     }
 
     @RequestMapping(value = "edit", method = RequestMethod.GET)
