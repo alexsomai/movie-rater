@@ -1,6 +1,5 @@
 package org.ubb.cluj.movierater.web.controller;
 
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 
 @Controller
-@Secured("ROLE_ADMIN")
 public class AdminController {
 
     @ModelAttribute("page")

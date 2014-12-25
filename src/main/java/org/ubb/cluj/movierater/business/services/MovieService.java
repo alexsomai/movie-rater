@@ -1,6 +1,7 @@
 package org.ubb.cluj.movierater.business.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.ubb.cluj.movierater.business.entities.Account;
 import org.ubb.cluj.movierater.business.entities.Category;
@@ -29,15 +30,18 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Secured("ROLE_ADMIN")
     public String save(MovieCommandObject movieCommandObject) {
         return movieRepository.save(movieCommandObject.createMovie(), movieCommandObject.getGenreIds());
     }
 
+    @Secured("ROLE_USER")
     public MovieAccount getRatingInfo(long movieId, Account account) {
         return movieRepository
                 .getRatingInfo(movieRepository.getMovieById(movieId), account);
     }
 
+    @Secured("ROLE_USER")
     public MovieRateResponse rate(long movieId, long accountId, double stars) {
         MovieRateResponse movieRateResponse = new MovieRateResponse();
 
@@ -56,10 +60,12 @@ public class MovieService {
         return movieRateResponse;
     }
 
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public MovieCommandObject getMovieById(Long id) {
         return convertMovieEntityToCommandObject(movieRepository.getMovieById(id));
     }
 
+    @Secured("ROLE_ADMIN")
     public String update(MovieCommandObject movieCommandObject) {
         Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
         movie.setTitle(movieCommandObject.getTitle());
@@ -85,6 +91,7 @@ public class MovieService {
         return movieCommandObjects;
     }
 
+    @Secured("ROLE_ADMIN")
     public String deleteMovie(Long movieId) {
         return movieRepository.deleteMovie(movieRepository.getMovieById(movieId));
     }

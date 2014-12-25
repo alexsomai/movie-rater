@@ -1,6 +1,7 @@
 package org.ubb.cluj.movierater.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,6 @@ import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
 import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 import org.ubb.cluj.movierater.web.support.MessageHelper;
 
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 /**
@@ -32,16 +32,12 @@ public class MovieController {
     @Autowired
     private PosterService posterService;
 
-    @PostConstruct
-    protected void initialize() {
-//        movieService.save(new Movie("title", "desc"));
-    }
-
     @ModelAttribute("page")
     public String module() {
         return "movies";
     }
 
+    @PreAuthorize("USER_ADMIN")
     @RequestMapping(value = "index", method = RequestMethod.GET)
     public String index(SearchFilter searchFilter, Model model) {
         Long numberOfResults = movieService.countResults(searchFilter);

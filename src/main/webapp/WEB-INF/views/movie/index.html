@@ -202,7 +202,8 @@
                                 ${#strings.substring(movie.description,0,100)} + ... : ${movie.description} "></span>
                             </p>
 
-                            <form method="POST" th:action="@{/movie/delete}">
+                            <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                                  method="POST" th:action="@{/movie/delete}">
                                 <p>
                                     <a href="#" th:href="@{/movie/edit(movieId=${movie.id})}"
                                        class="btn btn-primary" role="button">Edit
@@ -219,8 +220,17 @@
                                 </p>
                             </form>
 
-                            <p>
-                                <a class="btn btn-default" href="#" th:href="@{/movie/view(id=${movie.id})}">
+                            <p th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                                <a th:if="${#authorization.expression('isAuthenticated()')}"
+                                   class="btn btn-default"
+                                   href="#" th:href="@{/movie/view(id=${movie.id})}">
+                                    View details &raquo;
+                                </a>
+                                <a th:if="${#authorization.expression('!isAuthenticated()')}"
+                                   class="btn btn-default"
+                                   href="#" th:href="@{/movie/view(id=${movie.id})}"
+                                   data-toggle="tooltip" data-placement="bottom"
+                                   title="Sign in to view details about the movie">
                                     View details &raquo;
                                 </a>
                             </p>

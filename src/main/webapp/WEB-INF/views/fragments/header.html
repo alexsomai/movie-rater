@@ -32,7 +32,8 @@
                 <li th:classappend="${page == 'movies' ? 'active' : ''}">
                     <a href="#" th:href="@{/movie/index}">Movies</a>
                 </li>
-                <li th:classappend="${page == 'admin' ? 'active' : ''}">
+                <li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                    th:classappend="${page == 'admin' ? 'active' : ''}">
                     <a href="#" th:href="@{/admin}">Admin</a>
                 </li>
             </ul>
