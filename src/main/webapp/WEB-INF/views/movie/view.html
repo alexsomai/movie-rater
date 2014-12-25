@@ -108,7 +108,10 @@
     </p>
 
     <p>
-        <a class="btn btn-default" href="javascript:history.back();">
+        <a class="btn btn-default" href="#"
+           th:href="@{/movie/index(category=${#arrays.toArray(searchFilter.category)},
+                       title=${searchFilter.title}, page=${searchFilter.page},
+                       sort=${searchFilter.sort}, order=${searchFilter.order})}">
             &laquo; Back to movies
         </a>
     </p>

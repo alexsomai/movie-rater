@@ -149,27 +149,27 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"
-                               th:href="@{/movie/index(title=${searchFilter?.title},
-                                               page=${searchFilter?.page}, sort='rate', order='desc',
-                                               category=${#arrays.toArray(searchFilter?.category)})}">
+                               th:href="@{/movie/index(category=${#arrays.toArray(searchFilter?.category)},
+                               title=${searchFilter?.title}, page=${searchFilter?.page},
+                               sort='rate', order='desc')}">
                                 <i class="glyphicon glyphicon-circle-arrow-up"></i> Highest rate
                             </a>
                             <a href="#"
-                               th:href="@{/movie/index(title=${searchFilter?.title},
-                                               page=${searchFilter?.page}, sort='rate', order='asc',
-                                               category=${#arrays.toArray(searchFilter?.category)})}">
+                               th:href="@{/movie/index(category=${#arrays.toArray(searchFilter?.category)},
+                               title=${searchFilter?.title}, page=${searchFilter?.page},
+                               sort='rate', order='asc')}">
                                 Lowest rate <i class="glyphicon glyphicon-circle-arrow-down"></i>
                             </a>
                             <a href="#"
-                               th:href="@{/movie/index(title=${searchFilter?.title},
-                                               page=${searchFilter?.page}, sort='numberOfRatings', order='desc',
-                                               category=${#arrays.toArray(searchFilter?.category)})}">
+                               th:href="@{/movie/index(category=${#arrays.toArray(searchFilter?.category)},
+                               title=${searchFilter?.title}, page=${searchFilter?.page},
+                               sort='numberOfRatings', order='desc')}">
                                 <i class="glyphicon glyphicon-circle-arrow-up"></i> Most voted
                             </a>
                             <a href="#"
-                               th:href="@{/movie/index(title=${searchFilter?.title},
-                                               page=${searchFilter?.page}, sort='numberOfRatings', order='asc',
-                                               category=${#arrays.toArray(searchFilter?.category)})}">
+                               th:href="@{/movie/index(category=${#arrays.toArray(searchFilter?.category)},
+                               title=${searchFilter?.title}, page=${searchFilter?.page},
+                               sort='numberOfRatings', order='asc')}">
                                 Less voted <i class="glyphicon glyphicon-circle-arrow-down"></i>
                             </a>
                         </li>
@@ -231,7 +231,10 @@
                             <p th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                                 <a th:if="${#authorization.expression('isAuthenticated()')}"
                                    class="btn btn-default"
-                                   href="#" th:href="@{/movie/view(id=${movie.id})}">
+                                   href="#" th:href="@{/movie/view(id=${movie.id},
+                                    category=${#arrays.toArray(searchFilter.category)},
+                                    title=${searchFilter.title}, page=${searchFilter.page},
+                                    sort=${searchFilter.sort}, order=${searchFilter.order})}">
                                     View details &raquo;
                                 </a>
                                 <a th:if="${#authorization.expression('!isAuthenticated()')}"

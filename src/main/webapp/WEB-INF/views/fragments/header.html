@@ -20,14 +20,14 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li th:classappend="${page == 'home' ? 'active' : ''}">
+                <li th:classappend="${activePage == 'home' ? 'active' : ''}">
                     <a href="#" th:href="@{/}">Home</a>
                 </li>
-                <li th:classappend="${page == 'movies' ? 'active' : ''}">
+                <li th:classappend="${activePage == 'movies' ? 'active' : ''}">
                     <a href="#" th:href="@{/movie/index}">Movies</a>
                 </li>
                 <li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
-                    th:classappend="${page == 'admin' ? 'active' : ''}">
+                    th:classappend="${activePage == 'admin' ? 'active' : ''}">
                     <a href="#" th:href="@{/admin}">Admin</a>
                 </li>
             </ul>
@@ -40,20 +40,22 @@
             </ul>
             <div class="col-sm-3 col-md-3 pull-right">
                 <form th:action="@{/movie/index}" class="navbar-form" role="search">
-                    <input type="hidden" name="category"
-                           th:each="category : ${searchFilter?.category}"
-                           th:value="${category}"/>
-                    <input type="hidden" name="sort"
-                           th:each="sort : ${searchFilter?.sort}"
-                           th:value="${category}"/>
-                    <input type="hidden" name="order"
-                           th:each="order : ${searchFilter?.order}"
-                           th:value="${category}"/>
-
                     <div class="input-group">
+                        <input type="hidden" name="category"
+                               th:each="category : ${searchFilter?.category}"
+                               th:value="${category}"/>
+
                         <input type="text" class="form-control" style="width: 200px;"
                                placeholder="Search movie by title&hellip;"
                                name="title" id="srch-term" th:value="${searchFilter?.title}"/>
+
+                        <input type="hidden" name="sort"
+                               th:each="sort : ${searchFilter?.sort}"
+                               th:value="${category}"/>
+
+                        <input type="hidden" name="order"
+                               th:each="order : ${searchFilter?.order}"
+                               th:value="${category}"/>
 
                         <span id="clear-search" data-toggle="tooltip" data-placement="left"
                               title="Clear title search">

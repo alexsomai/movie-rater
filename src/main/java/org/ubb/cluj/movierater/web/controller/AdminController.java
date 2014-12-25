@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class AdminController {
 
-    @ModelAttribute("page")
+    @ModelAttribute("activePage")
     public String module() {
         return "admin";
     }

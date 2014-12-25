@@ -35,14 +35,14 @@ public class MovieController {
     @Autowired
     private MovieAccountService movieAccountService;
 
-    @ModelAttribute("page")
+    @ModelAttribute("activePage")
     public String module() {
         return "movies";
     }
 
     @PreAuthorize("USER_ADMIN")
     @RequestMapping(value = "index", method = RequestMethod.GET)
-    public String index(SearchFilter searchFilter, Model model) {
+    public String index(@ModelAttribute SearchFilter searchFilter, Model model) {
         Long numberOfResults = movieService.countResults(searchFilter);
         searchFilter.setNoPages(movieService.calculateNumberOfPages(numberOfResults));
         model.addAttribute("results", numberOfResults);
@@ -51,7 +51,7 @@ public class MovieController {
     }
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
-    public String add(MovieCommandObject movieCommandObject) {
+    public String add(@ModelAttribute MovieCommandObject movieCommandObject) {
         return "movie/add";
     }
 
@@ -73,7 +73,7 @@ public class MovieController {
     }
 
     @RequestMapping(value = "view", method = RequestMethod.GET)
-    public String view(Model model, Long id, Principal principal) {
+    public String view(Model model, Long id, @ModelAttribute SearchFilter searchFilter, Principal principal) {
         model.addAttribute("movie", movieService.getMovieById(id));
         model.addAttribute("movieAccount", movieAccountService.getRatingInfo(id, principal.getName()));
         return "movie/view";
