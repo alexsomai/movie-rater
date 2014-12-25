@@ -88,7 +88,8 @@
                         elem.attr("class", "bb-alert alert alert-danger");
                     }
                     elem.find("span").html(text);
-                    elem.delay(200).fadeIn().delay(2000).fadeOut();
+                    elem.removeClass("hidden").delay(200).fadeIn().delay(2000).fadeOut();
+                    $('html,body').animate({scrollTop: 0}, 'slow');
                 };
                 return box;
             }());
@@ -113,7 +114,7 @@
         </a>
     </p>
 
-    <div id="confirmation-box" class="bb-alert alert alert-info" style="display: none">
+    <div id="confirmation-box" class="bb-alert alert alert-info hidden">
         <span>message to be replaced</span>
     </div>
 

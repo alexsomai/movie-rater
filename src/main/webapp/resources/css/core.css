@@ -167,3 +167,17 @@ img.featurette-image {
 .tooltip-inner {
     font-size: 14px;
 }
+
+#top-link-block.affix-top {
+    position: absolute; /* allows it to "slide" up into view */
+    bottom: -82px;
+    right: 10px;
+    z-index: 1000;
+}
+
+#top-link-block.affix {
+    position: fixed; /* keeps it on the bottom once in view */
+    bottom: 70px;
+    right: 10px;
+    z-index: 1000;
+}

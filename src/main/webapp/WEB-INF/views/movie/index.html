@@ -10,12 +10,20 @@
         // <![CDATA[
         $(document).ready(function () {
 
-            /*[+
-             var message = [[${message}]]
-             +]*/
-            if (message != null) {
-                displayAlertMessage();
+            // Only enable if the document has a long scroll bar
+            // Note the window height + offset
+            if (($(window).height() + 100) < $(document).height()) {
+                $('#top-link-block').removeClass('hidden').affix({
+                    // how far to scroll down before link "slides" into view
+                    offset: {top: 100}
+                });
             }
+            $('.back-to-top').click(function () {
+                $('html,body').animate({scrollTop: 0}, 'slow');
+                return false;
+            });
+
+            $('#alert-message').removeClass('hidden').delay(200).fadeIn().delay(2000).fadeOut();
 
             $.getJSON("/category/getAll", function (result) {
                 var categories = $('#categories'),
@@ -109,7 +117,7 @@
             </ul>
         </div>
         <div class="col-md-8">
-            <div id="alert-message" class="row" style="display: none">
+            <div id="alert-message" class="row hidden">
                 <!--/* Handle the flash task */-->
                 <th:block th:if="${message != null}">
                     <!--/* The message code is returned from the @Controller */-->
@@ -242,6 +250,12 @@
                 <div th:replace="fragments/pagination :: pagination(searchFilter = ${searchFilter})">
                 </div>
             </div>
+            <!--Back to top button-->
+            <span id="top-link-block" class="hidden">
+            <a href="#top" class="back-to-top well well-sm">
+                <i class="glyphicon glyphicon-chevron-up"></i> Back to top
+            </a>
+            </span>
         </div>
     </div>
 </div>
