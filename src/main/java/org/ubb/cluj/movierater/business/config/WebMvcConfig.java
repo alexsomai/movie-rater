@@ -17,7 +17,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
 import org.thymeleaf.extras.tiles2.dialect.TilesDialect;
-import org.thymeleaf.extras.tiles2.spring4.web.configurer.ThymeleafTilesConfigurer;
 import org.thymeleaf.extras.tiles2.spring4.web.view.ThymeleafTilesView;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -106,13 +105,6 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
         vr.setCharacterEncoding("UTF-8");
         vr.setOrder(Ordered.LOWEST_PRECEDENCE);
         return vr;
-    }
-
-    @Bean
-    public ThymeleafTilesConfigurer tilesConfigurer() {
-        ThymeleafTilesConfigurer ttc = new ThymeleafTilesConfigurer();
-        ttc.setDefinitions(new String[]{"/WEB-INF/views/message/tiles-defs.xml"});
-        return ttc;
     }
 
     @Override
