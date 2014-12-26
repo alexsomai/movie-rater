@@ -5,6 +5,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.ubb.cluj.movierater.business.entities.Category;
 import org.ubb.cluj.movierater.business.entities.Movie;
+import org.ubb.cluj.movierater.business.entities.repositories.CategoryRepository;
 import org.ubb.cluj.movierater.business.entities.repositories.MovieRepository;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
 import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
@@ -24,9 +25,13 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Secured("ROLE_ADMIN")
     public String save(MovieCommandObject movieCommandObject) {
-        return movieRepository.save(movieCommandObject.createMovie(), movieCommandObject.getGenreIds());
+        return movieRepository.saveOrUpdate(movieCommandObject.createMovie(),
+                categoryRepository.getCategoriesById(movieCommandObject.getGenreIds()));
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
@@ -40,7 +45,8 @@ public class MovieService {
         movie.setTitle(movieCommandObject.getTitle());
         movie.setDescription(movieCommandObject.getDescription());
         movie.setReleaseDate(movieCommandObject.getReleaseDate());
-        return movieRepository.update(movie, movieCommandObject.getGenreIds());
+        return movieRepository
+                .saveOrUpdate(movie, categoryRepository.getCategoriesById(movieCommandObject.getGenreIds()));
     }
 
     public Long countResults(SearchFilter searchFilter) {

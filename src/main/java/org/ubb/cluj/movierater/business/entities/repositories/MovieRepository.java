@@ -33,22 +33,20 @@ public class MovieRepository {
     private CriteriaBuilder cb;
 
     @Transactional
-    public String save(Movie movie, Long[] categoryIds) {
-        movie.setCategories(getCategoriesByIds(categoryIds));
-        entityManager.persist(movie);
-        return movie.getTitle();
-    }
-
-    @Transactional
     public Movie getMovieById(Long id) {
         return entityManager.find(Movie.class, id);
     }
 
     @Transactional
-    public String update(Movie movie, Long[] categoryIds) {
-        movie.setCategories(getCategoriesByIds(categoryIds));
+    public String saveOrUpdate(Movie movie, Set<Category> categories) {
+        Set<Category> categoriesPersistenceContext = new HashSet<>();
+        for (Category category : categories) {
+            categoriesPersistenceContext.add(entityManager.merge(category));
+        }
+        movie.setCategories(categoriesPersistenceContext);
         movie = entityManager.merge(movie);
         entityManager.persist(movie);
+
         return movie.getTitle();
     }
 
@@ -116,19 +114,6 @@ public class MovieRepository {
     private void addPagination(TypedQuery<Movie> query, int page) {
         query.setMaxResults(MAX_ITEMS_PER_PAGE);
         query.setFirstResult(page * MAX_ITEMS_PER_PAGE);
-    }
-
-    private Set<Category> getCategoriesByIds(Long[] categoryIds) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-
-        CriteriaQuery<Category> criteriaQuery = criteriaBuilder.createQuery(Category.class);
-        Root<Category> categoryRoot = criteriaQuery.from(Category.class);
-
-        criteriaQuery.select(categoryRoot);
-
-        criteriaQuery.where(categoryRoot.get("id").in((Object[]) categoryIds));
-        TypedQuery<Category> query = entityManager.createQuery(criteriaQuery);
-        return new HashSet<>(query.getResultList());
     }
 
 }
