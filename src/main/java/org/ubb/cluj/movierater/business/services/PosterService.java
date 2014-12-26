@@ -20,8 +20,8 @@ public class PosterService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PosterService.class);
     private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
-    private static final long MAX_FILE_SIZE = 5096000;
-    private static final String DEFAULT_POSTER = "default_poster.jpg";
+    private static final long MAX_FILE_SIZE = 2048000;
+    private static final String DEFAULT_POSTER = "default_poster.png";
 
     @Autowired
     ServletContext servletContext;
@@ -43,7 +43,7 @@ public class PosterService {
         }
 
         if (poster.getSize() > MAX_FILE_SIZE) {
-            return "Poster file size may not be larger than 5MB!";
+            return "Poster file size may not be larger than 2MB!";
         }
 
         String fileName = poster.getOriginalFilename();
