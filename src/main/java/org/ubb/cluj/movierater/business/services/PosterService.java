@@ -1,5 +1,7 @@
 package org.ubb.cluj.movierater.business.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,8 +18,10 @@ import java.util.regex.Pattern;
 @Service
 public class PosterService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PosterService.class);
     private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
     private static final long MAX_FILE_SIZE = 5096000;
+    private static final String DEFAULT_POSTER = "default_poster.jpg";
 
     @Autowired
     ServletContext servletContext;
@@ -34,12 +38,6 @@ public class PosterService {
     }
 
     public String validatePoster(MultipartFile poster) {
-
-        // TODO
-//        BufferedImage image = ImageIO.read(poster.getInputStream());
-//        Integer width = image.getWidth();
-//        Integer height = image.getHeight();
-        // if width and height doesn't match, will return an error
         if (poster.isEmpty()) {
             return "Poster file may not be empty!";
         }
@@ -61,7 +59,12 @@ public class PosterService {
 
         File savingDirectory = new File(webAppRoot, getRelativeSavingFolder());
         if (!savingDirectory.exists()) {
-            savingDirectory.mkdirs();
+            if (!savingDirectory.mkdirs()) {
+                LOGGER.error("For some reason, the " + savingDirectory.getAbsolutePath() +
+                        " directory could not be created! A default image will be used.");
+                // if any error occurs while making the directory for files, set a default file to be used
+                return DEFAULT_POSTER;
+            }
         }
 
         File savingFile = new File(savingDirectory, fileName);
@@ -69,9 +72,9 @@ public class PosterService {
         try {
             poster.transferTo(savingFile);
         } catch (IOException e) {
+            LOGGER.error("An error occurred while saving the poster file! A default image will be used.", e);
             // if any error occurs while saving the file, set a default file to be used
-            e.printStackTrace();
-            return "default_poster";
+            return DEFAULT_POSTER;
         }
         return fileName;
     }
