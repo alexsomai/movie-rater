@@ -19,6 +19,9 @@ import java.security.Principal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
+import static org.ubb.cluj.movierater.business.entities.Account.ROLE_ADMIN;
+import static org.ubb.cluj.movierater.business.entities.Account.ROLE_USER;
+
 
 @Service
 public class MovieAccountService {
@@ -35,7 +38,7 @@ public class MovieAccountService {
     @Autowired
     private MovieAccountRepository movieAccountRepository;
 
-    @Secured("ROLE_USER")
+    @Secured({ROLE_USER, ROLE_ADMIN})
     public MovieAccount getRatingInfo(long movieId, String username) {
         Account account = accountRepository.findByUsername(username);
         return movieAccountRepository

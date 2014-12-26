@@ -148,17 +148,23 @@
         </div>
     </div>
 
-    <div id="user-rate-info" th:switch="${movieAccount}">
-        <form th:case="null" id="rating-form">
-            <input id="rating-input" min="0" max="5" step="0.5" type="number" data-star-captions="{}"/>
-        </form>
+    <div id="user-rate-info">
+        <th:block th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+            <form th:if="${movieAccount} == null" id="rating-form">
+                <input id="rating-input" min="0" max="5" step="0.5" type="number" data-star-captions="{}"/>
+            </form>
 
-        <p th:case="*" th:inline="text" class="top1">You have rated this movie with
-            <strong> [[${movieAccount.stars}]] </strong>
-            <span class="glyphicon glyphicon-star"></span>
-            on <strong>
-                [[${#dates.format(movieAccount.ratedAt, 'MMMM dd, yyyy HH:mm')}]]
-            </strong>
+            <p th:if="${movieAccount} != null" th:inline="text" class="top1">You have rated this movie with
+                <strong> [[${movieAccount.stars}]] </strong>
+                <span class="glyphicon glyphicon-star"></span>
+                on <strong>
+                    [[${#dates.format(movieAccount.ratedAt, 'MMMM dd, yyyy HH:mm')}]]
+                </strong>
+            </p>
+        </th:block>
+
+        <p th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="top1">
+            <span>As admin, you are not allowed to rate a movie</span>
         </p>
     </div>
 

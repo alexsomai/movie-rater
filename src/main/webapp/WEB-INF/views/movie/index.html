@@ -101,10 +101,6 @@
             return category;
         }
 
-        function displayAlertMessage() {
-            $('#alert-message').delay(200).fadeIn().delay(2000).fadeOut();
-        }
-
         // ]]>
     </script>
 </head>
@@ -181,11 +177,10 @@
                 </div>
             </div>
             <div class="row">
-                <div th:each="movie,iterationStat : ${movies}" class="col-sm-6 col-md-4 top3"
-                     style="min-height: 541px;">
+                <th:block th:each="movie,iterationStat : ${movies}">
                     <div th:replace="fragments/thumbnail :: thumbnail(movie = ${movie})">
                     </div>
-                </div>
+                </th:block>
             </div>
             <div class="row">
                 <div th:replace="fragments/pagination :: pagination(searchFilter = ${searchFilter})">

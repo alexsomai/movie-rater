@@ -14,6 +14,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.ubb.cluj.movierater.business.entities.Account.ROLE_ADMIN;
+import static org.ubb.cluj.movierater.business.entities.Account.ROLE_USER;
+
 /**
  * Created by somai on 11.12.2014.
  */
@@ -28,18 +31,18 @@ public class MovieService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Secured("ROLE_ADMIN")
+    @Secured(ROLE_ADMIN)
     public String save(MovieCommandObject movieCommandObject) {
         return movieRepository.saveOrUpdate(movieCommandObject.createMovie(),
                 categoryRepository.getCategoriesById(movieCommandObject.getGenreIds()));
     }
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({ROLE_USER, ROLE_ADMIN})
     public MovieCommandObject getMovieById(Long id) {
         return convertMovieEntityToCommandObject(movieRepository.getMovieById(id));
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured(ROLE_ADMIN)
     public String update(MovieCommandObject movieCommandObject) {
         Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
         movie.setTitle(movieCommandObject.getTitle());
@@ -66,7 +69,7 @@ public class MovieService {
         return movieCommandObjects;
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured(ROLE_ADMIN)
     public String deleteMovie(Long movieId) {
         return movieRepository.deleteMovie(movieRepository.getMovieById(movieId));
     }

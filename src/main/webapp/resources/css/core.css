@@ -168,6 +168,18 @@ img.featurette-image {
     font-size: 14px;
 }
 
+.absolute {
+    position: absolute;
+}
+
+.absolute.bottom-45 {
+    bottom: 45px;
+}
+
+.absolute.bottom-0 {
+    bottom: 0;
+}
+
 #top-link-block.affix-top {
     position: absolute; /* allows it to "slide" up into view */
     bottom: -82px;
