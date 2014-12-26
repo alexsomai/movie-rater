@@ -180,72 +180,10 @@
                 <div th:replace="fragments/pagination :: pagination(searchFilter = ${searchFilter})">
                 </div>
             </div>
-            <div th:each="movie,iterationStat : ${movies}"
-                 th:class="${iterationStat.count % 3 == 0} ? 'row' : ''">
-                <div class="col-sm-6 col-md-4 top3">
-                    <div class="thumbnail">
-                        <img class="thumbnail-image" src=""
-                             onError="this.src='/resources/images/default_poster.jpg'"
-                             th:attr="src=${movie.posterFile}"/>
-
-                        <div class="caption">
-                            <h4><strong th:text="${movie.title}"></strong>
-                            </h4>
-
-                            <p th:inline="text">
-                                <strong>Rate:</strong>
-                                [[${movie.rate}]]
-                                <span class="text-muted">/5</span> <span class="glyphicon glyphicon-star"></span>
-                                ([[${movie.numberOfRatings}]] votes)
-                            </p>
-
-                            <p>
-                                <span><strong>Genre:</strong></span>
-                                <span th:each="genre : ${movie.genreNames}" th:text="${genre}+'; '"></span>
-                            </p>
-
-                            <p>
-                                <span><strong>Description:</strong></span>
-                                <span th:text="${#strings.length(movie.description) > 100} ?
-                                ${#strings.substring(movie.description,0,100)} + ... : ${movie.description} "></span>
-                            </p>
-
-                            <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
-                                  method="POST" th:action="@{/movie/delete}">
-                                <p>
-                                    <a href="#" th:href="@{/movie/edit(movieId=${movie.id})}"
-                                       class="btn btn-primary" role="button">Edit
-                                    </a>
-                                    <input type="hidden" name="movieId" th:value="${movie.id}"/>
-                                    <input type="hidden" name="title" th:value="${searchFilter.title}"/>
-                                    <input type="hidden" name="page" th:value="${searchFilter.page}"/>
-                                    <input type="hidden" th:each="category : ${searchFilter.category}"
-                                           name="category" th:value="${category}"/>
-                                    <input type="hidden" name="sort" th:value="${searchFilter.sort}"/>
-                                    <input type="hidden" name="order" th:value="${searchFilter.order}"/>
-                                    <button onclick="deleteMovie(this); return false;" class="btn btn-danger">Delete
-                                    </button>
-                                </p>
-                            </form>
-
-                            <p th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                                <a th:if="${#authorization.expression('isAuthenticated()')}"
-                                   class="btn btn-default"
-                                   href="#" th:href="@{/movie/view(id=${movie.id},
-                                    category=${#arrays.toArray(searchFilter.category)},
-                                    title=${searchFilter.title}, page=${searchFilter.page},
-                                    sort=${searchFilter.sort}, order=${searchFilter.order})}">
-                                    View details &raquo;
-                                </a>
-                                <a th:if="${#authorization.expression('!isAuthenticated()')}"
-                                   class="btn btn-default"
-                                   href="#" th:href="@{/movie/view(id=${movie.id})}"
-                                   data-toggle="tooltip" data-placement="bottom"
-                                   title="Sign in to view details about the movie">
-                                    View details &raquo;
-                                </a>
-                            </p>
-                        </div>
+            <div class="row">
+                <div th:each="movie,iterationStat : ${movies}" class="col-sm-6 col-md-4 top3"
+                     style="min-height: 541px;">
+                    <div th:replace="fragments/thumbnail :: thumbnail(movie = ${movie})">
                     </div>
                 </div>
             </div>

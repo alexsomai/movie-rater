@@ -22,7 +22,7 @@ import java.util.Set;
 @Transactional(readOnly = true)
 public class MovieRepository {
 
-    public static final int MAX_ITEMS_PER_PAGE = 3;
+    public static final int MAX_ITEMS_PER_PAGE = 9;
     private static final String SORTING_ASC = "asc";
     private static final String SORTING_DESC = "desc";
     private static final List<String> AVAILABLE_SORTERS = Arrays.asList("rate", "numberOfRatings");
