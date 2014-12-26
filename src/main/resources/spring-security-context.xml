@@ -24,8 +24,7 @@ http://www.springframework.org/schema/security/spring-security-3.2.xsd">
         <security:intercept-url pattern="/movie/view" access="isAuthenticated()"/>
         <security:intercept-url pattern="/movie/index" access="permitAll"/>
 
-        <!--<security:intercept-url pattern="/**" access="isAuthenticated()"/>-->
-        <!--<security:intercept-url pattern="/**" access="permitAll"/>-->
+        <security:intercept-url pattern="/**" access="isAuthenticated()"/>
     </security:http>
 
     <security:authentication-manager erase-credentials="true">
