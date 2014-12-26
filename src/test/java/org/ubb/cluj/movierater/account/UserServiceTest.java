@@ -1,11 +1,5 @@
 package org.ubb.cluj.movierater.account;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.Collection;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -20,17 +14,21 @@ import org.ubb.cluj.movierater.business.entities.Account;
 import org.ubb.cluj.movierater.business.entities.repositories.AccountRepository;
 import org.ubb.cluj.movierater.business.services.UserService;
 
+import java.util.Collection;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
-	@InjectMocks
-	private UserService userService = new UserService();
-
-	@Mock
-	private AccountRepository accountRepositoryMock;
-
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
+	@InjectMocks
+	private UserService userService = new UserService();
+	@Mock
+	private AccountRepository accountRepositoryMock;
 
 	@Test
 	public void shouldInitializeWithTwoDemoUsers() {
@@ -46,7 +44,7 @@ public class UserServiceTest {
 		thrown.expect(UsernameNotFoundException.class);
 		thrown.expectMessage("user not found");
 
-		when(accountRepositoryMock.findByEmail("user@example.com")).thenReturn(null);
+		when(accountRepositoryMock.findByUsername("user@example.com")).thenReturn(null);
 		// act
 		userService.loadUserByUsername("user@example.com");
 	}
@@ -55,13 +53,13 @@ public class UserServiceTest {
 	public void shouldReturnUserDetails() {
 		// arrange
 		Account demoUser = new Account("user@example.com", "demo", "ROLE_USER");
-		when(accountRepositoryMock.findByEmail("user@example.com")).thenReturn(demoUser);
+		when(accountRepositoryMock.findByUsername("user@example.com")).thenReturn(demoUser);
 
 		// act
 		UserDetails userDetails = userService.loadUserByUsername("user@example.com");
 
 		// assert
-		assertThat(demoUser.getEmail()).isEqualTo(userDetails.getUsername());
+		assertThat(demoUser.getUsername()).isEqualTo(userDetails.getUsername());
 		assertThat(demoUser.getPassword()).isEqualTo(userDetails.getPassword());
         assertThat(hasAuthority(userDetails, demoUser.getRole()));
 	}

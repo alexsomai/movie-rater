@@ -36,8 +36,8 @@ public class MovieAccountService {
     private MovieAccountRepository movieAccountRepository;
 
     @Secured("ROLE_USER")
-    public MovieAccount getRatingInfo(long movieId, String principalName) {
-        Account account = accountRepository.findByEmail(principalName);
+    public MovieAccount getRatingInfo(long movieId, String username) {
+        Account account = accountRepository.findByUsername(username);
         return movieAccountRepository
                 .getRatingInfo(movieRepository.getMovieById(movieId), account);
     }
@@ -47,7 +47,7 @@ public class MovieAccountService {
 
         Account account;
         if (principal != null) {
-            account = accountRepository.findByEmail(principal.getName());
+            account = accountRepository.findByUsername(principal.getName());
             if (account.isAdmin()) {
                 movieRateResponse.setSuccess(false);
                 movieRateResponse.setMessage("As admin, you are not allowed to rate a movie!");

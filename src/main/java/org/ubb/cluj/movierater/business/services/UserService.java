@@ -19,7 +19,7 @@ public class UserService implements UserDetailsService {
 
     @PostConstruct
     public void initialize() {
-        if (accountRepository.findByEmail("admin") == null) {
+        if (accountRepository.findByUsername("admin") == null) {
             accountRepository.save(new Account("user", "demo", "ROLE_USER"));
             accountRepository.save(new Account("admin", "admin", "ROLE_ADMIN"));
         }
@@ -27,7 +27,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(username);
+        Account account = accountRepository.findByUsername(username);
         if (account == null) {
             throw new UsernameNotFoundException("user not found");
         }
@@ -46,12 +46,12 @@ public class UserService implements UserDetailsService {
         return new User(account);
     }
 
-    public static class User extends org.springframework.security.core.userdetails.User {
+    private static class User extends org.springframework.security.core.userdetails.User {
 
         private final Account account;
 
         public User(Account account) {
-            super(account.getEmail(), account.getPassword(), account.getAuthorities());
+            super(account.getUsername(), account.getPassword(), account.getAuthorities());
             this.account = account;
         }
 

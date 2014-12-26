@@ -13,10 +13,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "accounts")
-@NamedQuery(name = Account.FIND_BY_EMAIL, query = "select a from Account a where a.email = :email")
+@NamedQuery(name = Account.FIND_BY_USERNAME, query = "SELECT a FROM Account a WHERE a.username = :username")
 public class Account implements Serializable {
 
-    public static final String FIND_BY_EMAIL = "Account.findByEmail";
+    public static final String FIND_BY_USERNAME = "Account.findByUsername";
 
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
@@ -26,7 +26,7 @@ public class Account implements Serializable {
     private Long id;
 
     @Column(unique = true)
-    private String email;
+    private String username;
 
     @JsonIgnore
     private String password;
@@ -40,8 +40,8 @@ public class Account implements Serializable {
 
     }
 
-    public Account(String email, String password, String role) {
-        this.email = email;
+    public Account(String username, String password, String role) {
+        this.username = username;
         this.password = password;
         this.role = role;
     }
@@ -58,12 +58,12 @@ public class Account implements Serializable {
         return id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

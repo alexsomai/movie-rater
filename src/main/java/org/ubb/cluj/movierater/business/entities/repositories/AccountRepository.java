@@ -27,10 +27,10 @@ public class AccountRepository {
         return account;
     }
 
-    public Account findByEmail(String email) {
+    public Account findByUsername(String username) {
         try {
-            return entityManager.createNamedQuery(Account.FIND_BY_EMAIL, Account.class)
-                    .setParameter("email", email)
+            return entityManager.createNamedQuery(Account.FIND_BY_USERNAME, Account.class)
+                    .setParameter("username", username)
                     .getSingleResult();
         } catch (PersistenceException e) {
             return null;
