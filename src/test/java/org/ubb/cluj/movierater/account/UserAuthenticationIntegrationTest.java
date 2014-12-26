@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.ubb.cluj.movierater.business.config.WebSecurityConfigurationAware;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,15 +14,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
-import org.ubb.cluj.movierater.business.config.WebSecurityConfigurationAware;
-
 public class UserAuthenticationIntegrationTest extends WebSecurityConfigurationAware {
 
     private static String SEC_CONTEXT_ATTR = HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
     @Test
     public void requiresAuthentication() throws Exception {
-        mockMvc.perform(get("/account/current"))
+        mockMvc.perform(get("/movie/view"))
                 .andExpect(redirectedUrl("http://localhost/signin"));
     }
 
