@@ -11,6 +11,7 @@ public class Message {
     private final String message;
     private final Type type;
     private final Object[] args;
+
     public Message(String message, Type type) {
         this.message = message;
         this.type = type;

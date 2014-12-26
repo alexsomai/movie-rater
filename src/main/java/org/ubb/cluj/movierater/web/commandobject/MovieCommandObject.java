@@ -15,11 +15,11 @@ import java.util.List;
  */
 public class MovieCommandObject {
 
-    private static final String TITLE_NOT_BLANK = "{message.movie.title.not.blank}";
-    private static final String DESCRIPTION_NOT_BLANK = "{message.movie.description.not.blank}";
-    private static final String RELEASE_DATE_NOT_BLANK = "{message.movie.releaseDate.not.blank}";
-    private static final String RELEASE_DATE_NOT_PAST = "{message.movie.releaseDate.not.past}";
-    private static final String GENRES_NOT_EMPTY = "{message.movie.genres.not.empty}";
+    private static final String TITLE_NOT_BLANK = "{message.movie.title.notBlank}";
+    private static final String DESCRIPTION_NOT_BLANK = "{message.movie.description.notBlank}";
+    private static final String RELEASE_DATE_NOT_BLANK = "{message.movie.releaseDate.notBlank}";
+    private static final String RELEASE_DATE_NOT_PAST = "{message.movie.releaseDate.notPast}";
+    private static final String GENRES_NOT_EMPTY = "{message.movie.genres.notEmpty}";
 
     private Long id;
 

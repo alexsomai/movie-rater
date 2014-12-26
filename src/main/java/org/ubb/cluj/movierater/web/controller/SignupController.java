@@ -1,5 +1,7 @@
 package org.ubb.cluj.movierater.web.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +18,13 @@ import org.ubb.cluj.movierater.web.commandobject.SignupForm;
 import org.ubb.cluj.movierater.web.support.AjaxUtils;
 import org.ubb.cluj.movierater.web.support.MessageHelper;
 
+import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 
 @Controller
 public class SignupController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SignupController.class);
 
     private static final String SIGNUP_VIEW_NAME = "signup/signup";
 
@@ -43,7 +48,28 @@ public class SignupController {
         if (errors.hasErrors()) {
             return SIGNUP_VIEW_NAME;
         }
-        Account account = accountRepository.save(signupForm.createAccount());
+
+        Account account;
+        try {
+            account = accountRepository.save(signupForm.createAccount());
+        } catch (PersistenceException e) {
+            if (e.getCause().getCause().getLocalizedMessage().matches(MessageHelper.DUPLICATE_ENTRY_MESSAGE)) {
+                LOGGER.warn("Trying to create account with the same username", e);
+                errors.rejectValue("username", "message.error.username.unique",
+                        "There is already another account with the same username");
+                return SIGNUP_VIEW_NAME;
+            }
+            LOGGER.error("An unexpected error occurred while creating account", e);
+            errors.rejectValue("username", "message.error.unexpected",
+                    "An unexpected error occurred!");
+            return SIGNUP_VIEW_NAME;
+        } catch (Exception e) {
+            LOGGER.error("An unexpected error occurred while creating account", e);
+            errors.rejectValue("username", "message.error.unexpected",
+                    "An unexpected error occurred!");
+            return SIGNUP_VIEW_NAME;
+        }
+
         userService.signin(account);
         // see /WEB-INF/i18n/messages.properties and /WEB-INF/views/homeSignedIn.html
         MessageHelper.addSuccessAttribute(ra, "signup.success");

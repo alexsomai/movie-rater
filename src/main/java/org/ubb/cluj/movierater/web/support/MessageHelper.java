@@ -5,6 +5,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public final class MessageHelper {
 
+    public static final String DUPLICATE_ENTRY_MESSAGE = "Duplicate entry (.*) for key (.*)";
+
     private MessageHelper() {
 
     }

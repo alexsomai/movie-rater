@@ -1,6 +1,9 @@
 package org.ubb.cluj.movierater.web.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +19,7 @@ import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
 import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 import org.ubb.cluj.movierater.web.support.MessageHelper;
 
+import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -25,6 +29,14 @@ import java.security.Principal;
 @Controller
 @RequestMapping(value = "movie")
 public class MovieController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MovieController.class);
+
+    private static final String ADD_PAGE = "movie/add";
+    private static final String EDIT_PAGE = "movie/edit";
+    private static final String VIEW_PAGE = "movie/view";
+    private static final String INDEX_PAGE = "movie/index";
+    private static final String REDIRECT_INDEX = "redirect:/movie/index";
 
     @Autowired
     private MovieService movieService;
@@ -47,12 +59,12 @@ public class MovieController {
         searchFilter.setNoPages(movieService.calculateNumberOfPages(numberOfResults));
         model.addAttribute("results", numberOfResults);
         model.addAttribute("movies", movieService.findAll(searchFilter));
-        return "movie/index";
+        return INDEX_PAGE;
     }
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String add(@ModelAttribute MovieCommandObject movieCommandObject) {
-        return "movie/add";
+        return ADD_PAGE;
     }
 
     @RequestMapping(value = "save", method = RequestMethod.POST)
@@ -62,21 +74,37 @@ public class MovieController {
         String posterErrorMessage = posterService.validatePoster(poster);
         if (errors.hasErrors() || posterErrorMessage != null) {
             model.addAttribute("posterErrMsg", posterErrorMessage);
-            return "movie/add";
+            return ADD_PAGE;
         }
 
         String posterFileName = posterService.savePoster(poster);
         movieCommandObject.setPosterFile(posterFileName);
-        String movieTitle = movieService.save(movieCommandObject);
+        String movieTitle;
+        try {
+            movieTitle = movieService.save(movieCommandObject);
+        } catch (PersistenceException e) {
+            if (e.getCause().getCause().getLocalizedMessage().matches(MessageHelper.DUPLICATE_ENTRY_MESSAGE)) {
+                LOGGER.warn("Error while saving movie, title must be unique", e);
+                errors.rejectValue("title", "message.movie.title.unique", "Movie title must be unique");
+                return ADD_PAGE;
+            }
+            LOGGER.error("An unexpected error occurred", e);
+            errors.rejectValue("title", "message.error.unexpected", "An unexpected error occurred!");
+            return ADD_PAGE;
+        } catch (Exception e) {
+            LOGGER.error("An unexpected error occurred", e);
+            errors.rejectValue("title", "message.error.unexpected", "An unexpected error occurred!");
+            return ADD_PAGE;
+        }
         MessageHelper.addSuccessAttribute(ra, "message.movie.success.save", movieTitle);
-        return "redirect:/movie/index";
+        return REDIRECT_INDEX;
     }
 
     @RequestMapping(value = "view", method = RequestMethod.GET)
     public String view(Model model, Long id, @ModelAttribute SearchFilter searchFilter, Principal principal) {
         model.addAttribute("movie", movieService.getMovieById(id));
         model.addAttribute("movieAccount", movieAccountService.getRatingInfo(id, principal.getName()));
-        return "movie/view";
+        return VIEW_PAGE;
     }
 
     @RequestMapping(value = "rate", method = RequestMethod.POST, produces = "application/json")
@@ -88,18 +116,35 @@ public class MovieController {
     @RequestMapping(value = "edit", method = RequestMethod.GET)
     public String edit(Model model, Long movieId) {
         model.addAttribute("movieCommandObject", movieService.getMovieById(movieId));
-        return "movie/edit";
+        return EDIT_PAGE;
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute MovieCommandObject movieCommandObject, Errors errors,
                          RedirectAttributes ra) {
         if (errors.hasErrors()) {
-            return "movie/edit";
+            return EDIT_PAGE;
         }
-        String movieTitle = movieService.update(movieCommandObject);
+
+        String movieTitle;
+        try {
+            movieTitle = movieService.update(movieCommandObject);
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMostSpecificCause().getMessage().matches(MessageHelper.DUPLICATE_ENTRY_MESSAGE)) {
+                LOGGER.warn("Error while updating movie, title must be unique", e);
+                errors.rejectValue("title", "message.movie.title.unique", "Movie title must be unique");
+                return EDIT_PAGE;
+            }
+            LOGGER.error("An unexpected error occurred", e);
+            errors.rejectValue("title", "message.error.unexpected", "An unexpected error occurred!");
+            return EDIT_PAGE;
+        } catch (Exception e) {
+            LOGGER.error("An unexpected error occurred", e);
+            errors.rejectValue("title", "message.error.unexpected", "An unexpected error occurred!");
+            return EDIT_PAGE;
+        }
         MessageHelper.addSuccessAttribute(ra, "message.movie.success.update", movieTitle);
-        return "redirect:/movie/index";
+        return REDIRECT_INDEX;
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
@@ -112,7 +157,7 @@ public class MovieController {
         ra.addAttribute("order", searchFilter.getOrder());
         String movieTitle = movieService.deleteMovie(movieId);
         MessageHelper.addInfoAttribute(ra, "message.movie.success.delete", movieTitle);
-        return "redirect:/movie/index";
+        return REDIRECT_INDEX;
     }
 
 }
