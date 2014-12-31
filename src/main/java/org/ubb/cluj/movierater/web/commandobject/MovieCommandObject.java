@@ -1,5 +1,6 @@
 package org.ubb.cluj.movierater.web.commandobject;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,6 +17,7 @@ import java.util.List;
 public class MovieCommandObject {
 
     private static final String TITLE_NOT_BLANK = "{message.movie.title.notBlank}";
+    private static final String TITLE_LENGTH_TO_LONG = "{message.movie.title.toLong}";
     private static final String DESCRIPTION_NOT_BLANK = "{message.movie.description.notBlank}";
     private static final String RELEASE_DATE_NOT_BLANK = "{message.movie.releaseDate.notBlank}";
     private static final String RELEASE_DATE_NOT_PAST = "{message.movie.releaseDate.notPast}";
@@ -24,6 +26,7 @@ public class MovieCommandObject {
     private Long id;
 
     @NotBlank(message = MovieCommandObject.TITLE_NOT_BLANK)
+    @Length(max = 255, message = MovieCommandObject.TITLE_LENGTH_TO_LONG)
     private String title;
 
     @NotBlank(message = MovieCommandObject.DESCRIPTION_NOT_BLANK)
