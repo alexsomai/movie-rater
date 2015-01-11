@@ -1,12 +1,12 @@
 <div th:fragment="thumbnail (movie)"
      class="col-sm-6 col-md-4 top3">
-    <div class="thumbnail" style="min-height: 585px;">
+    <div class="thumbnail">
         <img class="thumbnail-image" src=""
              onError="this.src='/resources/images/default_poster.png'"
              th:attr="src=${movie.posterFile}"/>
 
-        <div class="caption">
-            <h4><strong th:text="${movie.title}"></strong>
+        <div class="caption" style="min-height: 310px;">
+        <h4><strong th:text="${movie.title}"></strong>
             </h4>
 
             <p th:inline="text">
