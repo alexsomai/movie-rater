@@ -34,6 +34,7 @@ public class Movie implements Serializable {
     private String poster;
 
     @NotNull
+    @Column(name = "release_date")
     private Date releaseDate;
 
     @Column(name = "no_of_ratings")

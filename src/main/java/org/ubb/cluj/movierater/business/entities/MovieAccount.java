@@ -14,20 +14,17 @@ import java.util.Date;
 @Table(name = "movies_to_accounts")
 @AssociationOverrides({
         @AssociationOverride(name = "pk.account",
-                joinColumns = @JoinColumn(name = "ACCOUNT_ID")),
+                joinColumns = @JoinColumn(name = "account_id")),
         @AssociationOverride(name = "pk.movie",
-                joinColumns = @JoinColumn(name = "MOVIE_ID"))})
+                joinColumns = @JoinColumn(name = "movie_id"))})
 @NamedQuery(name = MovieAccount.GET_RATING_INFO, query = "SELECT ma FROM MovieAccount ma WHERE ma.pk.account = :account AND ma.pk.movie = :movie")
 public class MovieAccount implements Serializable {
 
     public static final String GET_RATING_INFO = "MovieAccount.getRating";
     private MovieAccountId pk = new MovieAccountId();
 
-    @Column(precision = 10, scale = 2)
     private BigDecimal stars;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "RATED_AT", nullable = false, length = 10)
     private Date ratedAt;
 
     @EmbeddedId
@@ -57,6 +54,7 @@ public class MovieAccount implements Serializable {
         getPk().setMovie(movie);
     }
 
+    @Column(precision = 10, scale = 2)
     public BigDecimal getStars() {
         return stars;
     }
@@ -65,6 +63,8 @@ public class MovieAccount implements Serializable {
         this.stars = stars;
     }
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "rated_at", nullable = false, length = 10)
     public Date getRatedAt() {
         return ratedAt;
     }
