@@ -32,6 +32,7 @@ public class CategoryService {
             categoryRepository.save(new Category("Adventure"));
             categoryRepository.save(new Category("Animation"));
             categoryRepository.save(new Category("Comedy"));
+            categoryRepository.save(new Category("Crime"));
             categoryRepository.save(new Category("Documentary"));
             categoryRepository.save(new Category("Drama"));
             categoryRepository.save(new Category("Family"));
