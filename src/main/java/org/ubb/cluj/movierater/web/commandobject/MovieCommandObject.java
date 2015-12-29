@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.ubb.cluj.movierater.business.entities.Movie;
+import org.ubb.cluj.movierater.business.model.Movie;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;

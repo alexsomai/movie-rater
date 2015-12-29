@@ -1,4 +1,4 @@
-package org.ubb.cluj.movierater.business.services;
+package org.ubb.cluj.movierater.business.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class PosterService {
     private static final String DEFAULT_POSTER = "default_poster.png";
 
     @Autowired
-    ServletContext servletContext;
+    private ServletContext servletContext;
 
     private Pattern pattern;
 

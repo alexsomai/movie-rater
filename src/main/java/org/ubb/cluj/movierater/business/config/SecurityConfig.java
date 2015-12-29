@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
-import org.ubb.cluj.movierater.business.services.UserService;
+import org.ubb.cluj.movierater.business.service.UserService;
 
 @Configuration
 @ImportResource(value = "classpath:spring-security-context.xml")

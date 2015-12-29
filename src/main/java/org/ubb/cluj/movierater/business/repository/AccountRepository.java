@@ -1,9 +1,9 @@
-package org.ubb.cluj.movierater.business.entities.repositories;
+package org.ubb.cluj.movierater.business.repository;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.ubb.cluj.movierater.business.entities.Account;
+import org.ubb.cluj.movierater.business.model.Account;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;

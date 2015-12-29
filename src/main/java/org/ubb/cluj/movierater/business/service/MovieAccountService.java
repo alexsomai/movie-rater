@@ -1,4 +1,4 @@
-package org.ubb.cluj.movierater.business.services;
+package org.ubb.cluj.movierater.business.service;
 
 /**
  * Created by somai on 25.12.2014.
@@ -7,11 +7,11 @@ package org.ubb.cluj.movierater.business.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.ubb.cluj.movierater.business.entities.Account;
-import org.ubb.cluj.movierater.business.entities.MovieAccount;
-import org.ubb.cluj.movierater.business.entities.repositories.AccountRepository;
-import org.ubb.cluj.movierater.business.entities.repositories.MovieAccountRepository;
-import org.ubb.cluj.movierater.business.entities.repositories.MovieRepository;
+import org.ubb.cluj.movierater.business.model.Account;
+import org.ubb.cluj.movierater.business.model.MovieAccount;
+import org.ubb.cluj.movierater.business.repository.AccountRepository;
+import org.ubb.cluj.movierater.business.repository.MovieAccountRepository;
+import org.ubb.cluj.movierater.business.repository.MovieRepository;
 import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
 
 import javax.persistence.EntityExistsException;
@@ -19,8 +19,8 @@ import java.security.Principal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
-import static org.ubb.cluj.movierater.business.entities.Account.ROLE_ADMIN;
-import static org.ubb.cluj.movierater.business.entities.Account.ROLE_USER;
+import static org.ubb.cluj.movierater.business.model.Account.ROLE_ADMIN;
+import static org.ubb.cluj.movierater.business.model.Account.ROLE_USER;
 
 
 @Service

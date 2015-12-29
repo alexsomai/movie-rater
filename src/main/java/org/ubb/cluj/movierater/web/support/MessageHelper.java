@@ -7,9 +7,7 @@ public final class MessageHelper {
 
     public static final String DUPLICATE_ENTRY_MESSAGE = "Duplicate entry (.*) for key (.*)";
 
-    private MessageHelper() {
-
-    }
+    private MessageHelper() {/**/}
 
     public static void addSuccessAttribute(RedirectAttributes ra, String message, Object... args) {
         addAttribute(ra, message, Message.Type.SUCCESS, args);

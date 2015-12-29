@@ -1,4 +1,4 @@
-package org.ubb.cluj.movierater.business.entities;
+package org.ubb.cluj.movierater.business.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 

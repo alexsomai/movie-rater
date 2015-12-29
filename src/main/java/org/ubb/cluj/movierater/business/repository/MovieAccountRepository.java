@@ -1,10 +1,10 @@
-package org.ubb.cluj.movierater.business.entities.repositories;
+package org.ubb.cluj.movierater.business.repository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.ubb.cluj.movierater.business.entities.Account;
-import org.ubb.cluj.movierater.business.entities.Movie;
-import org.ubb.cluj.movierater.business.entities.MovieAccount;
+import org.ubb.cluj.movierater.business.model.Account;
+import org.ubb.cluj.movierater.business.model.Movie;
+import org.ubb.cluj.movierater.business.model.MovieAccount;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;

@@ -2,7 +2,7 @@ package org.ubb.cluj.movierater.web.commandobject;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
-import org.ubb.cluj.movierater.business.entities.Account;
+import org.ubb.cluj.movierater.business.model.Account;
 
 public class SignupForm {
 

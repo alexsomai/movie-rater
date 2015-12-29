@@ -1,4 +1,4 @@
-package org.ubb.cluj.movierater.business.error;
+package org.ubb.cluj.movierater.web.support;
 
 import com.google.common.base.Throwables;
 import org.slf4j.Logger;
@@ -11,7 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
  * General error handler for the application.
  */
 @ControllerAdvice
-class ExceptionHandler {
+public class ExceptionHandler {
+
     private static final Logger LOGGER = LoggerFactory.getLogger("ErrorLog");
 
     /**

@@ -1,7 +1,4 @@
-package org.ubb.cluj.movierater.business.entities.embeddable;
-
-import org.ubb.cluj.movierater.business.entities.Account;
-import org.ubb.cluj.movierater.business.entities.Movie;
+package org.ubb.cluj.movierater.business.model;
 
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;

@@ -1,4 +1,4 @@
-package org.ubb.cluj.movierater.signup;
+package org.ubb.cluj.movierater.web.controller;
 
 import org.junit.Ignore;
 import org.junit.Test;

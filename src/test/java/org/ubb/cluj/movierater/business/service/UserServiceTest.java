@@ -1,4 +1,4 @@
-package org.ubb.cluj.movierater.account;
+package org.ubb.cluj.movierater.business.service;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,9 +10,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.ubb.cluj.movierater.business.entities.Account;
-import org.ubb.cluj.movierater.business.entities.repositories.AccountRepository;
-import org.ubb.cluj.movierater.business.services.UserService;
+import org.ubb.cluj.movierater.business.model.Account;
+import org.ubb.cluj.movierater.business.repository.AccountRepository;
 
 import java.util.Collection;
 
@@ -62,6 +61,14 @@ public class UserServiceTest {
 		assertThat(demoUser.getUsername()).isEqualTo(userDetails.getUsername());
 		assertThat(demoUser.getPassword()).isEqualTo(userDetails.getPassword());
         assertThat(hasAuthority(userDetails, demoUser.getRole()));
+	}
+
+	@Test
+	public void shouldSignIn() {
+		// arrange
+		Account demoUser = new Account("user@example.com", "demo", "ROLE_USER");
+		// act
+		userService.signin(demoUser);
 	}
 
 	private boolean hasAuthority(UserDetails userDetails, String role) {

@@ -1,6 +1,4 @@
-package org.ubb.cluj.movierater.business.entities;
-
-import org.ubb.cluj.movierater.business.entities.embeddable.MovieAccountId;
+package org.ubb.cluj.movierater.business.model;
 
 import javax.persistence.*;
 import java.io.Serializable;

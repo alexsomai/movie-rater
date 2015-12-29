@@ -1,4 +1,4 @@
-package org.ubb.cluj.movierater.business.services;
+package org.ubb.cluj.movierater.business.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -7,11 +7,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.ubb.cluj.movierater.business.entities.Account;
-import org.ubb.cluj.movierater.business.entities.repositories.AccountRepository;
+import org.springframework.stereotype.Service;
+import org.ubb.cluj.movierater.business.model.Account;
+import org.ubb.cluj.movierater.business.repository.AccountRepository;
 
 import javax.annotation.PostConstruct;
 
+@Service
 public class UserService implements UserDetailsService {
 
     @Autowired

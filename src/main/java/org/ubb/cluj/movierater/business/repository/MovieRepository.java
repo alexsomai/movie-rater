@@ -1,9 +1,9 @@
-package org.ubb.cluj.movierater.business.entities.repositories;
+package org.ubb.cluj.movierater.business.repository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.ubb.cluj.movierater.business.entities.Category;
-import org.ubb.cluj.movierater.business.entities.Movie;
+import org.ubb.cluj.movierater.business.model.Category;
+import org.ubb.cluj.movierater.business.model.Movie;
 import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
 import javax.persistence.EntityManager;

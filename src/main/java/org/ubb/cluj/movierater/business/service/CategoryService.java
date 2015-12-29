@@ -1,11 +1,11 @@
-package org.ubb.cluj.movierater.business.services;
+package org.ubb.cluj.movierater.business.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.ubb.cluj.movierater.business.entities.Category;
-import org.ubb.cluj.movierater.business.entities.repositories.CategoryRepository;
+import org.ubb.cluj.movierater.business.model.Category;
+import org.ubb.cluj.movierater.business.repository.CategoryRepository;
 import org.ubb.cluj.movierater.web.commandobject.CategoryCommandObject;
 
 import javax.annotation.PostConstruct;
@@ -21,7 +21,7 @@ public class CategoryService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @PostConstruct
     public void initialize() {

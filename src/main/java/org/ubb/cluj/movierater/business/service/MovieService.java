@@ -1,12 +1,12 @@
-package org.ubb.cluj.movierater.business.services;
+package org.ubb.cluj.movierater.business.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.ubb.cluj.movierater.business.entities.Category;
-import org.ubb.cluj.movierater.business.entities.Movie;
-import org.ubb.cluj.movierater.business.entities.repositories.CategoryRepository;
-import org.ubb.cluj.movierater.business.entities.repositories.MovieRepository;
+import org.ubb.cluj.movierater.business.model.Category;
+import org.ubb.cluj.movierater.business.model.Movie;
+import org.ubb.cluj.movierater.business.repository.CategoryRepository;
+import org.ubb.cluj.movierater.business.repository.MovieRepository;
 import org.ubb.cluj.movierater.web.commandobject.MovieCommandObject;
 import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
@@ -14,8 +14,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.ubb.cluj.movierater.business.entities.Account.ROLE_ADMIN;
-import static org.ubb.cluj.movierater.business.entities.Account.ROLE_USER;
+import static org.ubb.cluj.movierater.business.model.Account.ROLE_ADMIN;
+import static org.ubb.cluj.movierater.business.model.Account.ROLE_USER;
 
 /**
  * Created by somai on 11.12.2014.

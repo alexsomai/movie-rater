@@ -1,11 +1,10 @@
 package org.ubb.cluj.movierater.web.support;
 
-public class AjaxUtils {
+public final class AjaxUtils {
 
-    private AjaxUtils() {
-    }
+    private AjaxUtils() {/**/}
 
     public static boolean isAjaxRequest(String requestedWith) {
-        return requestedWith != null ? "XMLHttpRequest".equals(requestedWith) : false;
+        return requestedWith != null && "XMLHttpRequest".equals(requestedWith);
     }
 }

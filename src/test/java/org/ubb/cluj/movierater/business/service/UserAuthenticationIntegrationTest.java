@@ -1,4 +1,4 @@
-package org.ubb.cluj.movierater.account;
+package org.ubb.cluj.movierater.business.service;
 
 import org.junit.Assert;
 import org.junit.Test;
