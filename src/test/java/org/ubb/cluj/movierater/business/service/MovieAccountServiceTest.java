@@ -46,7 +46,7 @@ public class MovieAccountServiceTest {
         Movie movie = new Movie();
         Account account = new Account("user", "demo", "ROLE_USER");
         when(accountRepository.findByUsername("user")).thenReturn(account);
-        when(movieRepository.getMovieById(1)).thenReturn(movie);
+        when(movieRepository.getMovieById(1L)).thenReturn(movie);
         when(movieAccountRepository.getRatingInfo(movie, account)).thenReturn(expectedMovieAccount);
 
         // act
@@ -90,7 +90,7 @@ public class MovieAccountServiceTest {
         Movie movie = new Movie();
         when(principal.getName()).thenReturn("admin");
         when(accountRepository.findByUsername("admin")).thenReturn(account);
-        when(movieRepository.getMovieById(1)).thenReturn(movie);
+        when(movieRepository.getMovieById(1L)).thenReturn(movie);
         when(movieAccountRepository.rate(movie, account, 2)).thenThrow(new EntityExistsException());
 
         // act
@@ -114,7 +114,7 @@ public class MovieAccountServiceTest {
 
         when(principal.getName()).thenReturn("admin");
         when(accountRepository.findByUsername("admin")).thenReturn(account);
-        when(movieRepository.getMovieById(1)).thenReturn(movie);
+        when(movieRepository.getMovieById(1L)).thenReturn(movie);
         when(movieAccountRepository.rate(movie, account, 2)).thenReturn(movieAccount);
 
         // act

@@ -13,6 +13,8 @@ import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.ubb.cluj.movierater.business.model.Account.ROLE_ADMIN;
 import static org.ubb.cluj.movierater.business.model.Account.ROLE_USER;
@@ -33,23 +35,27 @@ public class MovieService {
 
     @Secured(ROLE_ADMIN)
     public String save(MovieCommandObject movieCommandObject) {
-        return movieRepository.saveOrUpdate(movieCommandObject.createMovie(),
-                categoryRepository.getCategoriesById(movieCommandObject.getGenreIds()));
+        Movie movie = movieCommandObject.createMovie();
+        Set<Category> categories = categoryRepository.getCategoriesById(movieCommandObject.getGenreIds());
+
+        return movieRepository.saveOrUpdate(movie, categories);
     }
 
     @Secured({ROLE_USER, ROLE_ADMIN})
     public MovieCommandObject getMovieById(Long id) {
-        return convertMovieEntityToCommandObject(movieRepository.getMovieById(id));
+        Movie movie = movieRepository.getMovieById(id);
+        return convertMovieEntityToCommandObject(movie);
     }
 
     @Secured(ROLE_ADMIN)
     public String update(MovieCommandObject movieCommandObject) {
+        Set<Category> categories = categoryRepository.getCategoriesById(movieCommandObject.getGenreIds());
         Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
         movie.setTitle(movieCommandObject.getTitle());
         movie.setDescription(movieCommandObject.getDescription());
         movie.setReleaseDate(movieCommandObject.getReleaseDate());
-        return movieRepository
-                .saveOrUpdate(movie, categoryRepository.getCategoriesById(movieCommandObject.getGenreIds()));
+
+        return movieRepository.saveOrUpdate(movie, categories);
     }
 
     public Long countResults(SearchFilter searchFilter) {
@@ -61,20 +67,19 @@ public class MovieService {
     }
 
     public List<MovieCommandObject> findAll(SearchFilter searchFilter) {
-        List<MovieCommandObject> movieCommandObjects = new ArrayList<>();
         List<Movie> movieEntities = movieRepository.findAll(searchFilter);
-        for (Movie movie : movieEntities) {
-            movieCommandObjects.add(convertMovieEntityToCommandObject(movie));
-        }
-        return movieCommandObjects;
+        return movieEntities.stream()
+                .map(MovieService::convertMovieEntityToCommandObject)
+                .collect(Collectors.toList());
     }
 
     @Secured(ROLE_ADMIN)
     public String deleteMovie(Long movieId) {
-        return movieRepository.deleteMovie(movieRepository.getMovieById(movieId));
+        Movie movie = movieRepository.getMovieById(movieId);
+        return movieRepository.deleteMovie(movie);
     }
 
-    private MovieCommandObject convertMovieEntityToCommandObject(Movie movie) {
+    private static MovieCommandObject convertMovieEntityToCommandObject(Movie movie) {
         MovieCommandObject movieCommandObject = new MovieCommandObject();
         movieCommandObject.setTitle(movie.getTitle());
         movieCommandObject.setDescription(movie.getDescription());
@@ -97,5 +102,4 @@ public class MovieService {
 
         return movieCommandObject;
     }
-
 }

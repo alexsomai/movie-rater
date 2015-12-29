@@ -10,16 +10,16 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 import org.ubb.cluj.movierater.Application;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackageClasses = Application.class)
-class JpaConfig implements TransactionManagementConfigurer {
+class JpaConfig {
 
     @Value("${dataSource.driverClassName}")
     private String driver;
@@ -45,22 +45,25 @@ class JpaConfig implements TransactionManagementConfigurer {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean configureEntityManagerFactory() {
+    public EntityManagerFactory entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(configureDataSource());
         entityManagerFactoryBean.setPackagesToScan("org.ubb.cluj.movierater");
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        entityManagerFactoryBean.afterPropertiesSet();
 
         Properties jpaProperties = new Properties();
         jpaProperties.put(org.hibernate.cfg.Environment.DIALECT, dialect);
         jpaProperties.put(org.hibernate.cfg.Environment.HBM2DDL_AUTO, hbm2ddlAuto);
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
-        return entityManagerFactoryBean;
+        return entityManagerFactoryBean.getObject();
     }
 
     @Bean
-    public PlatformTransactionManager annotationDrivenTransactionManager() {
-        return new JpaTransactionManager();
+    public PlatformTransactionManager transactionManager() {
+        JpaTransactionManager txManager = new JpaTransactionManager();
+        txManager.setEntityManagerFactory(entityManagerFactory());
+        return txManager;
     }
 }

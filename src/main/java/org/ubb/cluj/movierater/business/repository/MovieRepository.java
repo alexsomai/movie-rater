@@ -33,7 +33,7 @@ public class MovieRepository {
     private CriteriaBuilder cb;
 
     @Transactional
-    public Movie getMovieById(long id) {
+    public Movie getMovieById(Long id) {
         return entityManager.find(Movie.class, id);
     }
 
