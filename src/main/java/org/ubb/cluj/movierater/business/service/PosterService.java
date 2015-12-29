@@ -20,8 +20,8 @@ public class PosterService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PosterService.class);
     private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
-    private static final long MAX_FILE_SIZE = 2048000;
     private static final String DEFAULT_POSTER = "default_poster.png";
+    private static final long MAX_FILE_SIZE = 2048000;
 
     @Autowired
     private ServletContext servletContext;
@@ -89,5 +89,4 @@ public class PosterService {
         Matcher matcher = pattern.matcher(image);
         return matcher.matches();
     }
-
 }
