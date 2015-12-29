@@ -12,7 +12,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Created by somai on 10.12.2014.
+ * @author Alexandru Somai
+ *         date 10.12.2014
  */
 @Entity
 @Table(name = "movies")

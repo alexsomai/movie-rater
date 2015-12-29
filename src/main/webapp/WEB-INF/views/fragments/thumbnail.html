@@ -1,5 +1,5 @@
 <div th:fragment="thumbnail (movie)"
-     class="col-sm-6 col-md-4 top3">
+     class="col-sm-6 col-md-4 top3" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="thumbnail">
         <img class="thumbnail-image" src=""
              onError="this.src='/resources/images/default_poster.png'"
@@ -34,6 +34,7 @@
                        class="btn btn-primary" role="button">Edit
                     </a>
                     <input type="hidden" name="movieId" th:value="${movie.id}"/>
+                    <input type="hidden" name="movieTitle" th:value="${movie.title}"/>
                     <input type="hidden" name="title" th:value="${searchFilter.title}"/>
                     <input type="hidden" name="page" th:value="${searchFilter.page}"/>
                     <input type="hidden" th:each="category : ${searchFilter.category}"

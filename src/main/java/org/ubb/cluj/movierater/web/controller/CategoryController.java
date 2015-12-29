@@ -11,7 +11,8 @@ import org.ubb.cluj.movierater.web.commandobject.CategoryCommandObject;
 import java.util.List;
 
 /**
- * Created by somai on 22.12.2014.
+ * @author Alexandru Somai
+ *         date 22.12.2014
  */
 @Controller
 @RequestMapping(value = "category")

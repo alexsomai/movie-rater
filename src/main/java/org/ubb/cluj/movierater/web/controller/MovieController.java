@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,8 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 /**
- * Created by somai on 10.12.2014.
+ * @author Alexandru Somai
+ *         date 10.12.2014
  */
 @Controller
 @RequestMapping(value = "movie")
@@ -55,10 +57,11 @@ public class MovieController {
     @PreAuthorize("USER_ADMIN")
     @RequestMapping(value = "index", method = RequestMethod.GET)
     public String index(@ModelAttribute SearchFilter searchFilter, Model model) {
-        Long numberOfResults = movieService.countResults(searchFilter);
-        searchFilter.setNoPages(movieService.calculateNumberOfPages(numberOfResults));
-        model.addAttribute("results", numberOfResults);
-        model.addAttribute("movies", movieService.findAll(searchFilter));
+        Page<MovieCommandObject> page = movieService.findAll(searchFilter);
+        searchFilter.setNoPages(page.getTotalPages());
+
+        model.addAttribute("results", page.getTotalElements());
+        model.addAttribute("movies", page.getContent());
         return INDEX_PAGE;
     }
 
@@ -148,14 +151,19 @@ public class MovieController {
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
-    public String delete(@RequestParam("movieId") Long movieId, @ModelAttribute SearchFilter searchFilter,
+    public String delete(@RequestParam("movieId") Long movieId,
+                         @RequestParam("movieTitle") String movieTitle,
+                         @ModelAttribute SearchFilter searchFilter,
                          RedirectAttributes ra) {
+
         ra.addAttribute("page", searchFilter.getPage());
         ra.addAttribute("category", searchFilter.getCategory());
         ra.addAttribute("title", searchFilter.getTitle());
         ra.addAttribute("sort", searchFilter.getSort());
         ra.addAttribute("order", searchFilter.getOrder());
-        String movieTitle = movieService.deleteMovie(movieId);
+
+        movieService.deleteMovie(movieId);
+
         MessageHelper.addInfoAttribute(ra, "message.movie.success.delete", movieTitle);
         return REDIRECT_INDEX;
     }

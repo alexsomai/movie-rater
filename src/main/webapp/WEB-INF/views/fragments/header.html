@@ -1,5 +1,6 @@
 <!-- Navbar -->
-<nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="header" role="navigation">
+<nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="header" role="navigation"
+     xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -46,12 +47,10 @@
                                name="title" id="srch-term" th:value="${searchFilter?.title}"/>
 
                         <input type="hidden" name="sort"
-                               th:each="sort : ${searchFilter?.sort}"
-                               th:value="${category}"/>
+                               th:value="${searchFilter?.sort}"/>
 
                         <input type="hidden" name="order"
-                               th:each="order : ${searchFilter?.order}"
-                               th:value="${category}"/>
+                               th:value="${searchFilter?.order}"/>
 
                         <span id="clear-search" data-toggle="tooltip" data-placement="left"
                               title="Clear title search">

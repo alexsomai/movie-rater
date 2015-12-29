@@ -20,7 +20,8 @@ import static org.ubb.cluj.movierater.business.model.Account.ROLE_ADMIN;
 import static org.ubb.cluj.movierater.business.model.Account.ROLE_USER;
 
 /**
- * Created by somai on 25.12.2014.
+ * @author Alexandru Somai
+ *         date 25.12.2014
  */
 @Service
 public class MovieAccountService {
@@ -40,7 +41,7 @@ public class MovieAccountService {
     @Secured({ROLE_USER, ROLE_ADMIN})
     public MovieAccount getRatingInfo(long movieId, String username) {
         Account account = accountRepository.findByUsername(username);
-        Movie movie = movieRepository.getMovieById(movieId);
+        Movie movie = movieRepository.findOne(movieId);
 
         return movieAccountRepository.getRatingInfo(movie, account);
     }
@@ -64,7 +65,7 @@ public class MovieAccountService {
 
         MovieAccount movieAccount;
         try {
-            Movie movie = movieRepository.getMovieById(movieId);
+            Movie movie = movieRepository.findOne(movieId);
             movieAccount = movieAccountRepository.rate(movie, account, stars);
         } catch (EntityExistsException e) {
             movieRateResponse.setSuccess(false);

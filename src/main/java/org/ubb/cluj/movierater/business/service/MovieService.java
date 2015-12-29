@@ -1,6 +1,8 @@
 package org.ubb.cluj.movierater.business.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,12 +24,17 @@ import static org.ubb.cluj.movierater.business.model.Account.ROLE_ADMIN;
 import static org.ubb.cluj.movierater.business.model.Account.ROLE_USER;
 
 /**
- * Created by somai on 11.12.2014.
+ * @author Alexandru Somai
+ *         date 11.12.2014
  */
 @Service
 public class MovieService {
 
+    private static final int MAX_ITEMS_PER_PAGE = 9;
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
+    private static final String SORTING_ASC = "asc";
+    private static final String SORTING_DESC = "desc";
+    private static final List<String> AVAILABLE_SORTERS = Arrays.asList("rate", "numberOfRatings");
 
     @Autowired
     private MovieRepository movieRepository;
@@ -37,54 +45,62 @@ public class MovieService {
     @Secured(ROLE_ADMIN)
     @Transactional
     public String save(MovieCommandObject movieCommandObject) {
-        Movie movie = movieCommandObject.createMovie();
         List<Category> categories = categoryRepository.findAll(movieCommandObject.getGenreIds());
+        Movie movie = movieCommandObject.createMovie();
         movie.setCategories(new HashSet<>(categories));
 
-        return movieRepository.saveOrUpdate(movie);
+        return movieRepository.save(movie).getTitle();
     }
 
     @Secured({ROLE_USER, ROLE_ADMIN})
     public MovieCommandObject getMovieById(Long id) {
-        Movie movie = movieRepository.getMovieById(id);
-        return convertMovieEntityToCommandObject(movie);
+        Movie movie = movieRepository.findOne(id);
+        return convertEntityToCommandObject(movie);
     }
 
     @Secured(ROLE_ADMIN)
     @Transactional
     public String update(MovieCommandObject movieCommandObject) {
         List<Category> categories = categoryRepository.findAll(movieCommandObject.getGenreIds());
-        Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
+        Movie movie = movieRepository.findOne(movieCommandObject.getId());
         movie.setTitle(movieCommandObject.getTitle());
         movie.setDescription(movieCommandObject.getDescription());
         movie.setReleaseDate(movieCommandObject.getReleaseDate());
         movie.setCategories(new HashSet<>(categories));
 
-        return movieRepository.saveOrUpdate(movie);
+        return movieRepository.save(movie).getTitle();
     }
 
-    public Long countResults(SearchFilter searchFilter) {
-        return movieRepository.countResults(searchFilter);
-    }
+    @SuppressWarnings("unchecked")
+    public Page<MovieCommandObject> findAll(SearchFilter searchFilter) {
+        Sort sort = null;
+        if (AVAILABLE_SORTERS.contains(searchFilter.getSort())) {
+            Sort.Direction direction = Sort.DEFAULT_DIRECTION;
+            if (SORTING_ASC.equals(searchFilter.getOrder())) {
+                direction = Sort.Direction.ASC;
+            } else if (SORTING_DESC.equals(searchFilter.getOrder())) {
+                direction = Sort.Direction.DESC;
+            }
+            sort = new Sort(direction, searchFilter.getSort());
+        }
 
-    public int calculateNumberOfPages(Long numberOfResults) {
-        return (int) Math.ceil((double) numberOfResults / MovieRepository.MAX_ITEMS_PER_PAGE);
-    }
+        Pageable pageable = new PageRequest(searchFilter.getPage(), MAX_ITEMS_PER_PAGE, sort);
+        Specification specification = new MovieSpecification(searchFilter.getTitle(), searchFilter.getCategory());
+        Page<Movie> moviePage = movieRepository.findAll(specification, pageable);
 
-    public List<MovieCommandObject> findAll(SearchFilter searchFilter) {
-        List<Movie> movieEntities = movieRepository.findAll(searchFilter);
-        return movieEntities.stream()
-                .map(MovieService::convertMovieEntityToCommandObject)
+        List<MovieCommandObject> movieCommandObjects = moviePage.getContent().stream()
+                .map(MovieService::convertEntityToCommandObject)
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(movieCommandObjects, pageable, moviePage.getTotalElements());
     }
 
     @Secured(ROLE_ADMIN)
-    public String deleteMovie(Long movieId) {
-        Movie movie = movieRepository.getMovieById(movieId);
-        return movieRepository.deleteMovie(movie);
+    public void deleteMovie(Long movieId) {
+        movieRepository.delete(movieId);
     }
 
-    private static MovieCommandObject convertMovieEntityToCommandObject(Movie movie) {
+    private static MovieCommandObject convertEntityToCommandObject(Movie movie) {
         MovieCommandObject movieCommandObject = new MovieCommandObject();
         movieCommandObject.setTitle(movie.getTitle());
         movieCommandObject.setDescription(movie.getDescription());
