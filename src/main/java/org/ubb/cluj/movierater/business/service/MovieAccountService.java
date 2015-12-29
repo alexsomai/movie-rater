@@ -1,13 +1,10 @@
 package org.ubb.cluj.movierater.business.service;
 
-/**
- * Created by somai on 25.12.2014.
- */
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.ubb.cluj.movierater.business.model.Account;
+import org.ubb.cluj.movierater.business.model.Movie;
 import org.ubb.cluj.movierater.business.model.MovieAccount;
 import org.ubb.cluj.movierater.business.repository.AccountRepository;
 import org.ubb.cluj.movierater.business.repository.MovieAccountRepository;
@@ -22,7 +19,9 @@ import java.text.SimpleDateFormat;
 import static org.ubb.cluj.movierater.business.model.Account.ROLE_ADMIN;
 import static org.ubb.cluj.movierater.business.model.Account.ROLE_USER;
 
-
+/**
+ * Created by somai on 25.12.2014.
+ */
 @Service
 public class MovieAccountService {
 
@@ -41,8 +40,9 @@ public class MovieAccountService {
     @Secured({ROLE_USER, ROLE_ADMIN})
     public MovieAccount getRatingInfo(long movieId, String username) {
         Account account = accountRepository.findByUsername(username);
-        return movieAccountRepository
-                .getRatingInfo(movieRepository.getMovieById(movieId), account);
+        Movie movie = movieRepository.getMovieById(movieId);
+
+        return movieAccountRepository.getRatingInfo(movie, account);
     }
 
     public MovieRateResponse rate(long movieId, Principal principal, double stars) {
@@ -64,8 +64,8 @@ public class MovieAccountService {
 
         MovieAccount movieAccount;
         try {
-            movieAccount = movieAccountRepository
-                    .rate(movieRepository.getMovieById(movieId), account, stars);
+            Movie movie = movieRepository.getMovieById(movieId);
+            movieAccount = movieAccountRepository.rate(movie, account, stars);
         } catch (EntityExistsException e) {
             movieRateResponse.setSuccess(false);
             movieRateResponse.setMessage("You have already rated this movie!");
@@ -81,5 +81,4 @@ public class MovieAccountService {
         movieRateResponse.setRatings(movieAccount.getMovie().getNumberOfRatings());
         return movieRateResponse;
     }
-
 }
