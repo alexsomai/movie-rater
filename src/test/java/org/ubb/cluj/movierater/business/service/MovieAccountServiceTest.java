@@ -11,9 +11,16 @@ import org.ubb.cluj.movierater.business.model.MovieAccount;
 import org.ubb.cluj.movierater.business.repository.AccountRepository;
 import org.ubb.cluj.movierater.business.repository.MovieAccountRepository;
 import org.ubb.cluj.movierater.business.repository.MovieRepository;
+import org.ubb.cluj.movierater.web.commandobject.MovieRateResponse;
+
+import javax.persistence.EntityExistsException;
+import java.math.BigDecimal;
+import java.security.Principal;
+import java.util.Date;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -47,5 +54,75 @@ public class MovieAccountServiceTest {
 
         // assert
         assertThat(actualMovieAccount, is(expectedMovieAccount));
+    }
+
+    @Test
+    public void shouldNotRateWhenNotLoggedIn() {
+        // act
+        MovieRateResponse response = movieAccountService.rate(1, null, 2);
+
+        // assert
+        assertThat(response.isSuccess(), is(false));
+        assertThat(response.getMessage(), is("You are not logged in!"));
+    }
+
+    @Test
+    public void shouldNotRateWhenIsAdmin() {
+        // arrange
+        Principal principal = mock(Principal.class);
+        Account account = new Account("admin", "admin", Account.ROLE_ADMIN);
+        when(principal.getName()).thenReturn("admin");
+        when(accountRepository.findByUsername("admin")).thenReturn(account);
+
+        // act
+        MovieRateResponse response = movieAccountService.rate(1, principal, 2);
+
+        // assert
+        assertThat(response.isSuccess(), is(false));
+        assertThat(response.getMessage(), is("As admin, you are not allowed to rate a movie!"));
+    }
+
+    @Test
+    public void shouldNotRateTwice() {
+        // arrange
+        Principal principal = mock(Principal.class);
+        Account account = new Account("admin", "admin", Account.ROLE_USER);
+        Movie movie = new Movie();
+        when(principal.getName()).thenReturn("admin");
+        when(accountRepository.findByUsername("admin")).thenReturn(account);
+        when(movieRepository.getMovieById(1)).thenReturn(movie);
+        when(movieAccountRepository.rate(movie, account, 2)).thenThrow(new EntityExistsException());
+
+        // act
+        MovieRateResponse response = movieAccountService.rate(1, principal, 2);
+
+        // assert
+        assertThat(response.isSuccess(), is(false));
+        assertThat(response.getMessage(), is("You have already rated this movie!"));
+    }
+
+    @Test
+    public void shouldSuccessfullyRate() {
+        // arrange
+        Principal principal = mock(Principal.class);
+        Account account = new Account("admin", "admin", Account.ROLE_USER);
+        Movie movie = new Movie();
+        MovieAccount movieAccount = new MovieAccount();
+        movieAccount.setStars(BigDecimal.ONE);
+        movieAccount.setMovie(movie);
+        movieAccount.setRatedAt(new Date());
+
+        when(principal.getName()).thenReturn("admin");
+        when(accountRepository.findByUsername("admin")).thenReturn(account);
+        when(movieRepository.getMovieById(1)).thenReturn(movie);
+        when(movieAccountRepository.rate(movie, account, 2)).thenReturn(movieAccount);
+
+        // act
+        MovieRateResponse response = movieAccountService.rate(1, principal, 2);
+
+        // assert
+        assertThat(response.isSuccess(), is(true));
+        assertThat(response.getMessage(), is("You have rated this movie with 1 stars"));
+        assertThat(response.getRatings(), is(movie.getNumberOfRatings()));
     }
 }
