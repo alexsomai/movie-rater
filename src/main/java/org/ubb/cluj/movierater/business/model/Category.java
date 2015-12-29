@@ -13,7 +13,7 @@ public class Category implements Serializable, Comparable {
     @GeneratedValue
     private Long id;
 
-    @Column(length = 32)
+    @Column(length = 32, unique = true)
     private String genre;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")

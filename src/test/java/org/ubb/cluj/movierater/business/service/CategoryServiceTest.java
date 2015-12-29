@@ -44,7 +44,7 @@ public class CategoryServiceTest {
     public void shouldReturnAListOfCategories() {
         // arrange
         List<Category> categories = buildCategories();
-        when(categoryRepository.getAllCategories()).thenReturn(categories);
+        when(categoryRepository.findAll()).thenReturn(categories);
 
         // act
         List<CategoryCommandObject> categoryCommandObjects = categoryService.getAllCategories();

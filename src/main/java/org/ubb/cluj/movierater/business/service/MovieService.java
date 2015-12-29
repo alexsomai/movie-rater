@@ -3,6 +3,7 @@ package org.ubb.cluj.movierater.business.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.ubb.cluj.movierater.business.model.Category;
 import org.ubb.cluj.movierater.business.model.Movie;
 import org.ubb.cluj.movierater.business.repository.CategoryRepository;
@@ -12,8 +13,8 @@ import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.ubb.cluj.movierater.business.model.Account.ROLE_ADMIN;
@@ -34,11 +35,13 @@ public class MovieService {
     private CategoryRepository categoryRepository;
 
     @Secured(ROLE_ADMIN)
+    @Transactional
     public String save(MovieCommandObject movieCommandObject) {
         Movie movie = movieCommandObject.createMovie();
-        Set<Category> categories = categoryRepository.getCategoriesById(movieCommandObject.getGenreIds());
+        List<Category> categories = categoryRepository.findAll(movieCommandObject.getGenreIds());
+        movie.setCategories(new HashSet<>(categories));
 
-        return movieRepository.saveOrUpdate(movie, categories);
+        return movieRepository.saveOrUpdate(movie);
     }
 
     @Secured({ROLE_USER, ROLE_ADMIN})
@@ -48,14 +51,16 @@ public class MovieService {
     }
 
     @Secured(ROLE_ADMIN)
+    @Transactional
     public String update(MovieCommandObject movieCommandObject) {
-        Set<Category> categories = categoryRepository.getCategoriesById(movieCommandObject.getGenreIds());
+        List<Category> categories = categoryRepository.findAll(movieCommandObject.getGenreIds());
         Movie movie = movieRepository.getMovieById(movieCommandObject.getId());
         movie.setTitle(movieCommandObject.getTitle());
         movie.setDescription(movieCommandObject.getDescription());
         movie.setReleaseDate(movieCommandObject.getReleaseDate());
+        movie.setCategories(new HashSet<>(categories));
 
-        return movieRepository.saveOrUpdate(movie, categories);
+        return movieRepository.saveOrUpdate(movie);
     }
 
     public Long countResults(SearchFilter searchFilter) {
@@ -89,15 +94,13 @@ public class MovieService {
         movieCommandObject.setNumberOfRatings(movie.getNumberOfRatings());
         movieCommandObject.setRate(DECIMAL_FORMAT.format(movie.getRate().doubleValue()));
 
-        List<String> genreList = new ArrayList<>();
-        Long[] genreIds = new Long[movie.getCategories().size()];
-        int arrayIndex = 0;
-        for (Category category : movie.getCategories()) {
-            genreList.add(category.getGenre());
-            genreIds[arrayIndex] = category.getId();
-            arrayIndex++;
-        }
-        movieCommandObject.setGenreNames(genreList);
+        List<String> genreNames = new ArrayList<>(movie.getCategories().size());
+        List<Long> genreIds = new ArrayList<>(movie.getCategories().size());
+        movie.getCategories().forEach(category -> {
+            genreNames.add(category.getGenre());
+            genreIds.add(category.getId());
+        });
+        movieCommandObject.setGenreNames(genreNames);
         movieCommandObject.setGenreIds(genreIds);
 
         return movieCommandObject;

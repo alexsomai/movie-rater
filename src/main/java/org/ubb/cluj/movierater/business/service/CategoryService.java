@@ -26,8 +26,7 @@ public class CategoryService {
     @PostConstruct
     public void initialize() {
         // create categories if there aren't any
-        if (categoryRepository.getAllCategories().size() == 0) {
-            LOGGER.warn("Creating categories...");
+        if (categoryRepository.findAll().isEmpty()) {
             categoryRepository.save(new Category("Action"));
             categoryRepository.save(new Category("Adventure"));
             categoryRepository.save(new Category("Animation"));
@@ -54,7 +53,7 @@ public class CategoryService {
     }
 
     public List<CategoryCommandObject> getAllCategories() {
-        List<Category> categories = categoryRepository.getAllCategories();
+        List<Category> categories = categoryRepository.findAll();
 
         return categories.stream()
                 .map(CategoryService::convertCategoryEntityToCommandObject)

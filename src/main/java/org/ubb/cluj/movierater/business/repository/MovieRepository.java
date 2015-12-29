@@ -11,7 +11,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,14 +36,26 @@ public class MovieRepository {
         return entityManager.find(Movie.class, id);
     }
 
-    @Transactional
+    //    @Transactional
     public String saveOrUpdate(Movie movie, Set<Category> categories) {
-        Set<Category> categoriesPersistenceContext = new HashSet<>();
-        for (Category category : categories) {
-            categoriesPersistenceContext.add(entityManager.merge(category));
-        }
-        movie.setCategories(categoriesPersistenceContext);
-        movie = entityManager.merge(movie);
+//        Set<Category> categoriesPersistenceContext = new HashSet<>();
+//        for (Category category : categories) {
+//            categoriesPersistenceContext.add(entityManager.merge(category));
+//        }
+//        movie.setCategories(categoriesPersistenceContext);
+//        movie = entityManager.merge(movie);
+        entityManager.persist(movie);
+
+        return movie.getTitle();
+    }
+
+    public String saveOrUpdate(Movie movie) {
+//        Set<Category> categoriesPersistenceContext = new HashSet<>();
+//        for (Category category : categories) {
+//            categoriesPersistenceContext.add(entityManager.merge(category));
+//        }
+//        movie.setCategories(categoriesPersistenceContext);
+//        movie = entityManager.merge(movie);
         entityManager.persist(movie);
 
         return movie.getTitle();

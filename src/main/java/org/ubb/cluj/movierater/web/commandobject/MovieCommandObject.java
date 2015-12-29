@@ -44,7 +44,7 @@ public class MovieCommandObject {
     private String rate;
 
     @NotEmpty(message = MovieCommandObject.GENRES_NOT_EMPTY)
-    private Long[] genreIds;
+    private List<Long> genreIds;
 
     private List<String> genreNames;
 
@@ -60,11 +60,11 @@ public class MovieCommandObject {
         this.genreNames = genreNames;
     }
 
-    public Long[] getGenreIds() {
+    public List<Long> getGenreIds() {
         return genreIds;
     }
 
-    public void setGenreIds(Long[] genreIds) {
+    public void setGenreIds(List<Long> genreIds) {
         this.genreIds = genreIds;
     }
 
