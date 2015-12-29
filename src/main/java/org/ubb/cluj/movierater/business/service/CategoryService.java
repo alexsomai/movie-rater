@@ -9,8 +9,8 @@ import org.ubb.cluj.movierater.business.repository.CategoryRepository;
 import org.ubb.cluj.movierater.web.commandobject.CategoryCommandObject;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by somai on 22.12.2014.
@@ -31,6 +31,7 @@ public class CategoryService {
             categoryRepository.save(new Category("Action"));
             categoryRepository.save(new Category("Adventure"));
             categoryRepository.save(new Category("Animation"));
+            // categoryRepository.save(new Category("Biography"));
             categoryRepository.save(new Category("Comedy"));
             categoryRepository.save(new Category("Crime"));
             categoryRepository.save(new Category("Documentary"));
@@ -54,20 +55,17 @@ public class CategoryService {
 
     public List<CategoryCommandObject> getAllCategories() {
         List<Category> categories = categoryRepository.getAllCategories();
-        List<CategoryCommandObject> categoryCommandObjects = new ArrayList<>();
-        for (Category category : categories) {
-            categoryCommandObjects.add(convertCategoryEntityToCommandObject(category));
-        }
 
-        return categoryCommandObjects;
+        return categories.stream()
+                .map(CategoryService::convertCategoryEntityToCommandObject)
+                .collect(Collectors.toList());
     }
 
-    private CategoryCommandObject convertCategoryEntityToCommandObject(Category category) {
+    private static CategoryCommandObject convertCategoryEntityToCommandObject(Category category) {
         CategoryCommandObject categoryCommandObject = new CategoryCommandObject();
         categoryCommandObject.setGenre(category.getGenre());
         categoryCommandObject.setId(category.getId());
 
         return categoryCommandObject;
     }
-
 }
