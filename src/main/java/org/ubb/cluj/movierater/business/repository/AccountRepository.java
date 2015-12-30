@@ -1,41 +1,33 @@
 package org.ubb.cluj.movierater.business.repository;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.ubb.cluj.movierater.business.model.Account;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-
 @Repository
-@Transactional(readOnly = true)
-public class AccountRepository {
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Inject
-    private PasswordEncoder passwordEncoder;
-
-    @Transactional
-    public Account save(Account account) {
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        entityManager.persist(account);
-        return account;
-    }
-
-    public Account findByUsername(String username) {
-        try {
-            return entityManager.createNamedQuery(Account.FIND_BY_USERNAME, Account.class)
-                    .setParameter("username", username)
-                    .getSingleResult();
-        } catch (PersistenceException e) {
-            return null;
-        }
-    }
-
-
+//@Transactional(readOnly = true)
+public interface AccountRepository extends JpaRepository<Account, Long> {
+    //
+//    @PersistenceContext
+//    private EntityManager entityManager;
+//
+//    @Inject
+//    private PasswordEncoder passwordEncoder;
+//
+//    @Transactional
+//    public Account save(Account account) {
+//        account.setPassword(passwordEncoder.encode(account.getPassword()));
+//        entityManager.persist(account);
+//        return account;
+//    }
+//
+    Account findByUsername(String username);
+//        try {
+//            return entityManager.createNamedQuery(Account.FIND_BY_USERNAME, Account.class)
+//                    .setParameter("username", username)
+//                    .getSingleResult();
+//        } catch (PersistenceException e) {
+//            return null;
+//        }
+//    }
 }

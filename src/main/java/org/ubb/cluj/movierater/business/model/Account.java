@@ -13,10 +13,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "accounts")
-@NamedQuery(name = Account.FIND_BY_USERNAME, query = "SELECT a FROM Account a WHERE a.username = :username")
+//@NamedQuery(name = Account.FIND_BY_USERNAME, query = "SELECT a FROM Account a WHERE a.username = :username")
 public class Account implements Serializable {
 
-    public static final String FIND_BY_USERNAME = "Account.findByUsername";
+//    public static final String FIND_BY_USERNAME = "Account.findByUsername";
 
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
