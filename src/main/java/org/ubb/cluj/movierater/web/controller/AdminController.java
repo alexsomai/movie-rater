@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * @author Alex Somai on 09.12.2014
+ * @author Alexandru Somai
+ *         date 09.12.2014
  */
-
 @Controller
 public class AdminController {
 

@@ -6,7 +6,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * Created by somai on 14.12.2014.
+ * @author Alexandru Somai
+ *         date 14.12.2014
  */
 @Entity
 @Table(name = "movies_to_accounts")

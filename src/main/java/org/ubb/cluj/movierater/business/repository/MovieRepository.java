@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by somai on 10.12.2014.
+ * @author Alexandru Somai
+ *         date 10.12.2014
  */
 @Repository
 @Transactional(readOnly = true)

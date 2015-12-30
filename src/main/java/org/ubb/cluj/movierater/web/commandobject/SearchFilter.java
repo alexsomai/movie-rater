@@ -1,7 +1,8 @@
 package org.ubb.cluj.movierater.web.commandobject;
 
 /**
- * Created by somai on 21.12.2014.
+ * @author Alexandru Somai
+ *         date 21.12.2014
  */
 public class SearchFilter {
 

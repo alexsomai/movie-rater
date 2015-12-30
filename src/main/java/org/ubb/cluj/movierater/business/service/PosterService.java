@@ -13,7 +13,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by somai on 20.12.2014.
+ * @author Alexandru Somai
+ *         date 20.12.2014
  */
 @Service
 public class PosterService {

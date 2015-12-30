@@ -24,7 +24,8 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 /**
- * Created by somai on 10.12.2014.
+ * @author Alexandru Somai
+ *         date 10.12.2014
  */
 @Controller
 @RequestMapping(value = "movie")

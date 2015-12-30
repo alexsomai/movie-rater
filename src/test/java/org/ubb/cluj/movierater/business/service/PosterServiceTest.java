@@ -9,11 +9,16 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
+import java.io.File;
+import java.io.IOException;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.spy;
 
 /**
  * @author Alexandru Somai
@@ -38,6 +43,20 @@ public class PosterServiceTest {
         // assert
         assertThat(result, containsString("originalFileName"));
     }
+
+    @Test
+    public void savePosterShouldThrowIoException() throws IOException {
+        // arrange
+        MultipartFile multipartFile = spy(new MockMultipartFile("name", "originalFileName", "content", new byte[2]));
+        doThrow(new IOException()).when(multipartFile).transferTo(any(File.class));
+
+        // act
+        String result = posterService.savePoster(multipartFile);
+
+        // assert
+        assertThat(result, is("default_poster.png"));
+    }
+
 
     @Test
     public void shouldValidatePoster() {

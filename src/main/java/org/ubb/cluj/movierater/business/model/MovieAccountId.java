@@ -5,7 +5,8 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 /**
- * Created by somai on 15.12.2014.
+ * @author Alexandru Somai
+ *         date 15.12.2014
  */
 @Embeddable
 public class MovieAccountId implements Serializable {

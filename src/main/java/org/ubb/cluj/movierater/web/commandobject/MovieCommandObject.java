@@ -12,7 +12,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by somai on 10.12.2014.
+ * @author Alexandru Somai
+ *         date 10.12.2014
  */
 public class MovieCommandObject {
 

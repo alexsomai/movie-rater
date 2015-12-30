@@ -20,7 +20,8 @@ import static org.ubb.cluj.movierater.business.model.Account.ROLE_ADMIN;
 import static org.ubb.cluj.movierater.business.model.Account.ROLE_USER;
 
 /**
- * Created by somai on 11.12.2014.
+ * @author Alexandru Somai
+ *         date 11.12.2014
  */
 @Service
 public class MovieService {

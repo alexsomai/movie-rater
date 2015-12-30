@@ -14,7 +14,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * Created by somai on 25.12.2014.
+ * @author Alexandru Somai
+ *         date 25.12.2014
  */
 @Repository
 @Transactional(readOnly = true)

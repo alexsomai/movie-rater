@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by somai on 22.12.2014.
+ * @author Alexandru Somai
+ *         date 22.12.2014
  */
 @Service
 public class CategoryService {

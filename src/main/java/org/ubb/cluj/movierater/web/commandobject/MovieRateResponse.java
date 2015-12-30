@@ -1,7 +1,8 @@
 package org.ubb.cluj.movierater.web.commandobject;
 
 /**
- * Created by somai on 20.12.2014.
+ * @author Alexandru Somai
+ *         date 20.12.2014
  */
 public class MovieRateResponse {
 
