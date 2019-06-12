@@ -12,6 +12,7 @@ import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 
+import static java.io.File.separator;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.StringContains.containsString;
@@ -19,6 +20,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Alexandru Somai
@@ -29,6 +31,7 @@ public class PosterServiceTest {
 
     @InjectMocks
     private PosterService posterService = new PosterService();
+
     @Mock
     private ServletContext servletContext;
 
@@ -36,6 +39,7 @@ public class PosterServiceTest {
     public void shouldSavePoster() {
         // arrange
         MultipartFile multipartFile = new MockMultipartFile("name", "originalFileName", "content", new byte[2]);
+        when(servletContext.getRealPath("/")).thenReturn(System.getProperty("user.dir"));
 
         // act
         String result = posterService.savePoster(multipartFile);
@@ -112,6 +116,7 @@ public class PosterServiceTest {
         String result = PosterService.getRelativeSavingFolder();
 
         // assert
-        assertThat(result, is("\\resources\\images\\movie-poster\\"));
+        String expectedPath = separator + "resources" + separator + "images" + separator + "movie-poster" + separator;
+        assertThat(result, is(expectedPath));
     }
 }

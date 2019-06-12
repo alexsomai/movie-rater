@@ -14,6 +14,7 @@ import org.ubb.cluj.movierater.web.commandobject.SearchFilter;
 
 import java.util.*;
 
+import static java.io.File.separator;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -62,9 +63,10 @@ public class MovieServiceTest {
         MovieCommandObject mco = movieService.getMovieById(1L);
 
         // assert
+        String expectedPath = separator + "resources" + separator + "images" + separator + "movie-poster" + separator + "poster";
         assertThat(mco.getTitle(), is("title"));
         assertThat(mco.getDescription(), is("desc"));
-        assertThat(mco.getPosterFile(), is("\\resources\\images\\movie-poster\\poster"));
+        assertThat(mco.getPosterFile(), is(expectedPath));
         assertThat(mco.getGenreIds().length, is(1));
         assertThat(mco.getGenreNames(), contains("action"));
     }
@@ -118,11 +120,12 @@ public class MovieServiceTest {
         List<MovieCommandObject> mcos = movieService.findAll(searchFilter);
 
         // assert
+        String expectedPath = separator + "resources" + separator + "images" + separator + "movie-poster" + separator + "poster";
         assertThat(mcos.size(), is(1));
         MovieCommandObject mco = mcos.get(0);
         assertThat(mco.getTitle(), is(movie.getTitle()));
         assertThat(mco.getDescription(), is(movie.getDescription()));
-        assertThat(mco.getPosterFile(), is("\\resources\\images\\movie-poster\\poster"));
+        assertThat(mco.getPosterFile(), is(expectedPath));
     }
 
     @Test
